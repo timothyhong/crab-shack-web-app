@@ -1,0 +1,36 @@
+<nav class="navbar">
+	<div id="sidenav-open" class="body">
+		<span onclick="openNav()">&#9776; Menu</span>
+	<div id="sidenav-menu" class="sidenav">
+		<ul>
+			<li><a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a></li>
+			<li><a href="javascript:void(0)" onclick="openSubMenu(this.nextElementSibling.id);">Customers</a>
+				<ul id="customers-menu" class="submenu">
+					<li><a href="/customers/add">Add Customer</a></li>
+					<li><a href="/customers/lookup">Lookup Customer</a></li>
+				</ul>
+			</li>
+			<li><a href="javascript:void(0)" onclick="openSubMenu(this.nextElementSibling.id);">Products</a>
+				<ul id="products-menu" class="submenu">
+					<li><a href="/products/add">Add Product</a></li>
+					<li><a href="/products/lookup">Lookup Product</a></li>
+				</ul>
+			</li>
+			<li><a href="javascript:void(0)" onclick="openSubMenu(this.nextElementSibling.id);">Orders</a>
+				<ul id="orders-menu" class="submenu">
+					<li><a href="/orders/create">Create Order</a></li>
+					<li><a href="/orders/add">Add to Existing Order</a></li>
+					<li><a href="/orders/lookup">Lookup Order</a></li>
+				</ul>
+			</li>
+			<li><a href="javascript:void(0)" onclick="openSubMenu(this.nextElementSibling.id);">References</a>
+				<ul id="references-menu" class="submenu">
+					<li><a href="/references/products/add">Add New Product Type Code</a></li>
+					<li><a href="/references/products/lookup">Search Product Type Codes</a></li>
+					<li><a href="/references/cards/add">Add New Card Type Code</a></li>
+					<li><a href="/references/cards/lookup">Search Card Type Codes</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</nav>

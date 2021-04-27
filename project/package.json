@@ -1,0 +1,27 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "Crab Shack on the Bay",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timothyhong/cs340.git"
+  },
+  "author": "Timothy Hong <hongti@oregonstate.edu> (https://github.com/timothyhong)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/timothyhong/cs340/issues"
+  },
+  "homepage": "https://github.com/timothyhong/cs340#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.0",
+    "mongoose": "^5.12.5",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.7"
+  }
+}
