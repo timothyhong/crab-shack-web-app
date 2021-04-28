@@ -31,8 +31,6 @@ app.get('/', function(req, res, next) {
     res.render('home');
 });
 
-
-
 app.listen(app.get("port"), () => {
   console.log("Express started on port: " + app.get("port") + "; press Ctrl-C to terminate.");
 });
@@ -41,20 +39,15 @@ app.listen(app.get("port"), () => {
 // SQL queries
 
 // fetches entire table from MYSQL database
-function getData() {
+module.exports.getData = (tableName) => {
     return new Promise((resolve, reject) => {
-        mysql.pool.query('SELECT * FROM customers;', (err, results) => {
+        mysql.pool.query('SELECT * FROM ??;', [tableName], (err, results) => {
             if (err) {
-            	console.log("Error with Query");
                 return reject(err);
             }
-            /*
             let rows = [];
-            for (let i = 0; i < results.length; i++) {
-                rows.push(results[i]);
-            }
-            */
-            resolve(results);
+            Array.prototype.forEach.call(results, result => rows.push(result));
+            resolve(rows);
         })
     })
 }
