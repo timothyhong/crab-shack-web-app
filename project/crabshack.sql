@@ -101,12 +101,6 @@ CREATE TABLE customer_orders_products(
 
 -- TO DO: Need to add some data into the `customer_orders_products` table
 
-  INSERT INTO `customer_orders` (`customer_id`, `card_type`, `card_last_four`, `datetime_order_placed`,
-  `order_picked_up_yn`, `order_paid_yn`)
-     SELECT `customer_id`, (SELECT `card_type_code` FROM `ref_card_types` WHERE `card_type_description` = 'Visa'), '1234', '2021-05-01 12:34:33', 0, 1
-     FROM `customers`
-     WHERE `first_name` = 'Boog' AND `last_name` = 'Powell';
-
 -- Insertion Statements for Sample DB Data (Optional):
 
   INSERT INTO `ref_card_types` (`card_type_description`) VALUES
@@ -208,3 +202,10 @@ CREATE TABLE customer_orders_products(
             '1234', '2021-05-01 12:34:33', 0, 1
      FROM `customers`
      WHERE `first_name` = 'Boog' AND `last_name` = 'Powell';
+
+  INSERT INTO `customer_orders` (`customer_id`, `card_type`, `card_last_four`, `datetime_order_placed`,
+  `order_picked_up_yn`, `order_paid_yn`)
+     SELECT `customer_id`, (SELECT `card_type_code` FROM `ref_card_types` WHERE `card_type_description` = 'Visa'),
+            '1234', '2021-05-01 16:04:25', 0, 1
+     FROM `customers`
+     WHERE `first_name` = 'Kevin' AND `last_name` = 'Plank';
