@@ -17,10 +17,11 @@
 
 <body>
 	{{>navbar}}
-	<div id="main-body" class="body">
-		{{>header}}
+	{{>header}}
+	<div class="body push">
 		{{{body}}}
 	</div>
+	{{>footer}}
 	<script src="/assets/scripts/index.js"></script>
 </body>
 

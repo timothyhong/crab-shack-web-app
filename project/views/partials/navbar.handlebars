@@ -1,40 +1,33 @@
-<nav class="navbar">
+<nav class="navbar push">
 	<div id="sidenav-open" class="body">
 		<span onclick="openNav()">&#9776; Menu</span>
+	</div>
 	<div id="sidenav-menu" class="sidenav">
 		<ul>
-			<li><a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a></li>
-			<li><a class="home" href="/">Home</a></li>
-			<li><a href="javascript:void(0)" onclick="openSubMenu(this.nextElementSibling.id);">Customers</a>
+			<li class="closebtn" onclick="closeNav()">&times;</li>
+			<li><a href="/">Home</a></li>
+			<li onclick="toggleSubMenu(this.nextElementSibling.id);">Customers</li>
 				<ul id="customers-menu" class="submenu">
 					<li><a href="/customers/add">Add Customer</a></li>
 					<li><a href="/customers/lookup">Lookup Customer</a></li>
 				</ul>
 			</li>
-			<li><a href="javascript:void(0)" onclick="openSubMenu(this.nextElementSibling.id);">Products</a>
-				<ul id="products-menu" class="submenu">
-					<li><a href="/products/add">Add Product</a></li>
-					<li><a href="/products/lookup">Lookup Product</a></li>
-				</ul>
-			</li>
-			<li><a href="javascript:void(0)" onclick="openSubMenu(this.nextElementSibling.id);">Orders</a>
+			<li><a href="/products">Products</a></li>
+			<li onclick="toggleSubMenu(this.nextElementSibling.id);">Orders</li>
 				<ul id="orders-menu" class="submenu">
 					<li><a href="/orders/create">Create Order</a></li>
 					<li><a href="/orders/add">Add to Existing Order</a></li>
 					<li><a href="/orders/lookup">Lookup Order</a></li>
 				</ul>
 			</li>
-			<li><a href="javascript:void(0)" onclick="openSubMenu(this.nextElementSibling.id);">References</a>
+			<li onclick="toggleSubMenu(this.nextElementSibling.id);">References</li>
 				<ul id="references-menu" class="submenu">
-					<li><a href="/references/products/add">Add New Product Type Code</a></li>
-					<li><a href="/references/products/lookup">Search Product Type Codes</a></li>
-					<li><a href="/references/cards/add">Add New Card Type Code</a></li>
-					<li><a href="/references/cards/lookup">Search Card Type Codes</a></li>
+					<li><a href="/references/products">Product Type Codes</a></li>
+					<li><a href="/references/cards">Card Type Codes</a></li>
 				</ul>
 			</li>
-			<li></li>
-			<li></li>
-			<li></li>
+			<br>
+			<br>
 			<li><img src="/img/mdflag.gif" alt="MD Flag" width="128" height="90" style="float:middle; margin:0px 0px 0px 0px; padding-left:30px;"></li>
 		</ul>
 	</div>

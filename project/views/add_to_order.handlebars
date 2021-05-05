@@ -7,4 +7,18 @@
 -->
 
 <h2>Add to Existing Order</h2>
-<p>Here we can add some forms!</p>
+<p>Add products to an existing order.</p>
+<div class="form-container">
+    <form id="addToOrderForm">
+        <fieldset>
+            <legend>*Starred* Fields are Required</legend>
+            <label for="addToOrderOrderID">*Order ID</label>
+            <input class="add-to-order" type="number" id="addToOrderOrderID" name="orderID" required>
+            <label for="addToOrderProductID">*Product ID</label>
+			<input class="add-to-order" type="number" id="addToOrderProductID" name="productID" required>
+			<label for="addToOrderQuantity">*Quantity</label>
+			<input class="add-to-order" type="number" id="addToOrderQuantity" name="quantity" required>
+            <input class="add-to-order" id="addToOrderButton" type="submit" value="Add to Order">
+        </fieldset>
+    </form>
+</div>

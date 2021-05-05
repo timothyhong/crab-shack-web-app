@@ -7,4 +7,36 @@
 -->
 
 <h2>Add Customer</h2>
-<p>Here we can add some forms!</p>
+<p>Add a new customer.</p>
+<div class="form-container">
+    <form id="addCustomerForm">
+        <fieldset>
+            <legend>*Starred* Fields are Required</legend>
+            <label for="addFirstName">*First Name</label>
+            <input class="add-customer" type="text" id="addFirstName" name="fName" required>
+            <label for="addMiddleName">Middle Name</label>
+            <input class="add-customer" type="text" id="addMiddleName" name="mName">
+            <label for="addLastName">*Last Name</label>
+            <input class="add-customer" type="text" id="addLastName" name="lName" required>
+            <label for="addPrimaryPhone">*Primary Phone</label>
+            <input class="add-customer" type="tel" id="addPrimaryPhone" name="pPhone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required title="123-456-7890">
+            <label for="addSecondaryPhone">Secondary Phone</label>
+            <input class="add-customer" type="tel" id="addSecondaryPhone" name="sPhone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="123-456-7890">
+            <label for="addEmail">Email</label>
+            <input class="add-customer" type="email" id="addEmail" name="email">
+            <label for="addAddress1">Address Line 1</label>
+            <input class="add-customer" type="text" id="addAddress1" name="address1">
+            <label for="addAddress2">Address Line 2</label>
+            <input class="add-customer" type="text" id="addAddress2" name="address2">
+            <label for="addCity">City</label>
+            <input class="add-customer" type="text" id="addCity" name="city">
+			<label for="addZipCode">Zip Code</label>
+            <input class="add-customer" type="text" pattern="[0-9]{5}" id="addZipCode" name="zipCode" title="5 digit numeric zip code">
+            <label for="addState">State</label>
+            <input class="add-customer" type="text" pattern="[a-zA-Z]{2}" id="addState" name="state" title="2 letter state code">
+            <label for="addInfo">Additional Info</label>
+            <textarea class="add-customer" id="addInfo" name="info" rows="4" cols="50">Add additional customer details here!</textarea>
+            <input class="add-customer" id="addCustomerButton" type="submit" value="submit">
+        </fieldset>
+    </form>
+</div>

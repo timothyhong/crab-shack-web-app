@@ -6,8 +6,17 @@
     Description: Stylesheet for Crabshack Database website.
 */
 
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300&display=swap');
+
 body {
-  font-family: "Lato", sans-serif;
+  font-family: 'Open Sans Condensed', sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.body {
+  flex: 1 0 auto;
 }
 
 .sidenav {
@@ -23,8 +32,8 @@ body {
   padding-top: 60px;
 }
 
-.sidenav a {
-  padding: 8px 8px 8px 32px;
+.sidenav :is(li, a) {
+  padding: 3px 3px 3px 0;
   text-decoration: none;
   font-size: 25px;
   color: #818181;
@@ -32,8 +41,9 @@ body {
   transition: 0.3s;
 }
 
-.sidenav a:hover {
+.sidenav :is(li:hover, a:hover) {
   color: white;
+  cursor: pointer;
 }
 
 .sidenav .closebtn {
@@ -62,7 +72,7 @@ body {
   height:50px;
 }
 
-.body {
+.push {
   transition: margin-left .5s;
   padding: 16px;
 }
@@ -79,4 +89,122 @@ body {
 
 .submenu a {
   font-size: 15px;
+}
+
+.footer {
+  text-align: center;
+  flex-shrink: 0;
+  font-size: 10px;
+}
+
+/* table styling */
+
+tbody tr:nth-child(odd) {
+  background-color: #d4d4d4;
+}
+
+tbody tr:hover {
+  background-color: #cfffff;
+  cursor: default;
+}
+
+th, td {
+  border-bottom: 1px solid black;
+}
+
+.hidden {
+  display:none;
+}
+
+/* Add Product page */
+
+.linked-option {
+  font-style: italic;
+  font-weight: bold;
+}
+
+/* form styling */
+
+.form-container {
+  font-family: 'Open Sans Condensed', sans-serif;
+  width: 90%;
+  padding: 30px;
+  background: #FFFFFF;
+  margin: 50px auto;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+  -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+  -webkit-box-shadow:  0px 0px 15px rgba(0, 0, 0, 0.22);
+
+}
+
+.form-container h2 {
+  background: #4D4D4D;
+  text-transform: uppercase;
+  color: #797979;
+  font-size: 18px;
+  font-weight: 100;
+  padding: 20px;
+  margin: -30px -30px 30px -30px;
+}
+
+.form-container input[type="text"],
+.form-container input[type="date"],
+.form-container input[type="datetime"],
+.form-container input[type="email"],
+.form-container input[type="number"],
+.form-container input[type="search"],
+.form-container input[type="time"],
+.form-container input[type="url"],
+.form-container input[type="password"],
+.form-container textarea,
+.form-container select 
+{
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  outline: none;
+  display: block;
+  width: 100%;
+  padding: 7px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  background: transparent;
+  margin-bottom: 10px;
+  font-family: 'Open Sans Condensed', sans-serif;
+  height: 45px;
+}
+
+.form-container textarea {
+  resize:none;
+  overflow: hidden;
+}
+
+.form-container input[type="button"], 
+.form-container input[type="submit"] {
+  -moz-box-shadow: inset 0px 1px 0px 0px #45D6D6;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #45D6D6;
+  box-shadow: inset 0px 1px 0px 0px #45D6D6;
+  background-color: #2CBBBB;
+  border: 1px solid #27A0A0;
+  display: inline-block;
+  cursor: pointer;
+  color: #FFFFFF;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-size: 14px;
+  padding: 8px 18px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.form-container input[type="button"]:hover, 
+.form-container input[type="submit"]:hover {
+  background:linear-gradient(to bottom, #34CACA 5%, #30C9C9 100%);
+  background-color:#34CACA;
+}
+
+/* table styling */
+
+.table {
+  margin-left: auto;
+  margin-right: auto;
 }

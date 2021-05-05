@@ -1,4 +1,6 @@
 const express = require("express");
+const mysql = require('../dbcon.js');
+const funcs = require('../index.js');
 let router = express.Router();
 
 router.route("/add").get((req, res) => {
@@ -6,7 +8,11 @@ router.route("/add").get((req, res) => {
 });
 
 router.route("/lookup").get((req, res) => {
-	res.render("lookup_customer");
+	let context = {};
+	funcs.getData("Customers").then(rows => {
+    	context.rows = rows;
+    	res.render('lookup_customer', context);
+    }).catch(err => console.error(err));
 })
 
 module.exports = router;

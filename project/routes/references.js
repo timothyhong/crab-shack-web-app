@@ -1,20 +1,22 @@
 const express = require("express");
+const mysql = require('../dbcon.js');
+const funcs = require('../index.js');
 let router = express.Router();
 
-router.route("/products/add").get((req, res) => {
-	res.render("add_product_type");
+router.route("/products").get((req, res) => {
+	let context = {};
+	funcs.getData("Ref_Product_Types").then(rows => {
+        context.rows = rows;
+        res.render('ref_products', context);
+    }).catch(err => console.error(err));
 });
 
-router.route("/products/lookup").get((req, res) => {
-	res.render("search_product_type");
+router.route("/cards").get((req, res) => {
+	let context = {};
+	funcs.getData("Ref_Card_Types").then(rows => {
+        context.rows = rows;
+        res.render('ref_cards', context);
+    }).catch(err => console.error(err));
 });
-
-router.route("/cards/add").get((req, res) => {
-	res.render("add_card_type");
-})
-
-router.route("/cards/lookup").get((req, res) => {
-	res.render("search_card_type");
-})
 
 module.exports = router;

@@ -1,0 +1,43 @@
+<!--
+    Author: Timothy Hong, Antonio Irizarry
+    Class: CS 340
+    Date: 04/26/21
+    Title: Crab Shack on the Bay
+    Description: Add Product Type
+-->
+
+<h2>Product Type Codes</h2>
+<p>Here you can see the current product type codes and add/remove product type codes.</p>
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Description</th>
+                <th>Parent Code</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each rows}}
+            <tr class="table-row">
+                <td class="cell-data">{{this.product_type_code}}</td>
+                <td class="cell-data">{{this.product_type_description}}</td>
+                <td class="cell-data">{{this.parent_product_type_code}}</td>
+                <td><input class="delete-button" type="submit" value="Delete" onclick="deleteRow(this.parent)"></td>
+                <td><input class="edit-button" type="submit" value="Edit" onclick="setDefaults(this.parent)"></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+<div class="form-container">
+    <form id="addProductTypeForm">
+        <fieldset>
+            <label for="addProductTypeDescription">Product Type Description</label>
+            <textarea class="add-product-type"  id="addProductTypeDescription" name="productTypeDescription" rows="4" cols="50">Add product type description here!</textarea>
+            <label for="addProductTypeParentType">Parent Product Type Code</label>
+            <input class="add-product-type" type="number" id="addProductTypeParentType" name="parentType">
+            <input class="add-product-type" id="addProductTypeButton" type="submit" value="Submit">
+        </fieldset>
+    </form>
+</div>

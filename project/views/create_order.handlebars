@@ -7,4 +7,27 @@
 -->
 
 <h2>Create New Order</h2>
-<p>Here we can add some forms!</p>
+<p>Create a new order for an existing customer.</p>
+<div class="form-container">
+    <form id="createOrderForm">
+        <fieldset>
+            <legend>*Starred* Fields are Required</legend>
+            <label for="createOrderCustID">*Customer ID</label>
+            <input class="create-order" type="number" id="createOrderCustID" name="custID" required>
+            <label for="createOrderCardType">*Payment Method</label>
+			<select class="create-order" name="cardType" id="createOrderCardType">
+				{{#each rows}}
+			  	<option value={{this.card_type_code}}>{{this.card_type_description}}</option>
+			  	{{/each}}
+			</select>
+            <label for="createOrderCardLastFour">Card Last Four Digits</label>
+            <input class="create-order" type="number" pattern="[0-9]{4}" title="e.g. 0123" id="createOrderCardLastFour" name="cardLastFour">
+            <label for="createOrderPaid">*Order Paid?</label>
+			<select class="create-order" name="orderPaid" id="createOrderPaid">
+			  <option value=0 selected>No</option>
+			  <option value=1>Yes</option>
+			</select>
+            <input class="create-order" id="createOrderButton" type="submit" value="Create">
+        </fieldset>
+    </form>
+</div>
