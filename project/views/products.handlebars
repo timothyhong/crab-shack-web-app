@@ -7,9 +7,59 @@
 -->
 
 <div class="form-container">
+    <h2>Product Search</h2>
+    <p>Search products by product type.</p>
+    <form id="lookupProductForm" method="get" action="/products/search">
+        <fieldset>
+            <label for="lookupProductTypeCode">Product Type</label>
+            <select class="lookup-product-data" id="lookupProductTypeCode" name="product_type_code" onchange="addNewProductType(event)">
+                <option value=""></option>
+                {{#each productTypes}}
+                <option value={{this.product_type_code}}>{{this.product_type_description}}</option>
+                {{/each}}
+                <option value="Add New Product Type">Add New Product Type</option>
+            </select>
+            <input class="lookup-product" id="lookupProductButton" type="submit" value="Search">
+        </fieldset>
+    </form>
+</div>
+<div class="table-container form-container">
+    <h2>Products</h2>
+    <form action="/products/search">
+        <input type="submit" value="Show All">
+    </form>
+    <br>
+    <table class="products">
+        <thead>
+            <tr>
+                <th id="product_id" class="hidden">Product ID</th>
+                <th id="product_type_code">Product Type</th>
+                <th id="product_name">Product Name</th>
+                <th id="product_unit_price">Unit Price</th>
+                <th id="product_unit_size">Unit Size</th>
+                <th id="product_description">Product Description</th>
+            </tr>
+        </thead>
+        <tbody class="products">
+            {{#each rows}}
+            <tr class="table-row">
+                <td headers="product_id" class="hidden">{{this.product_id}}</td>
+                <td headers="product_type_code">{{this.product_type_description}}</td>
+                <td headers="product_name">{{this.product_name}}</td>
+                <td headers="product_unit_price">{{this.product_unit_price}}</td>
+                <td headers="product_unit_size">{{this.product_unit_size}}</td>
+                <td headers="product_description">{{this.product_description}}</td>
+                <td><input class="deleteProduct" type="submit" value="Delete" onclick="deleteRowAJAX(this)"></td>
+                <td><input class="editProduct" type="submit" value="Edit" onclick="setDefaults(this)"></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+<div class="form-container">
 	<h2>Add/Edit Product</h2>
 	<p>Add a new product or edit an existing product.</p>
-	<form id="addEditProductForm" method="get" action="/products/modify">
+	<form id="addEditProductForm">
         <fieldset>
             <legend>*Starred* Fields are Required</legend>
             <label for="addEditProductId" class="hidden">Product ID</label>
@@ -29,57 +79,8 @@
             <input class="edit-field" type="text" id="addEditProductUnitSize" name="product_unit_size">
             <label for="addEditProductDescription">Product Description</label>
             <input class="edit-field" type="text" id="addEditProductDescription" name="product_description">
-            <input id="addEditProductButton" type="submit" value="Submit">
+            <input class="addProduct" type="submit" value="Add" onclick="addRowAJAX(this)">
+            <input class="editProduct" type="submit" value="Edit" onclick="editRowAJAX(this)">
         </fieldset>
     </form>
-</div>
-<div class="form-container">
-	<h2>Product Search</h2>
-	<p>Search products by product type.</p>
-    <form id="lookupProductForm" method="get" action="/products/search">
-        <fieldset>
-            <label for="lookupProductTypeCode">Product Type</label>
-            <select class="lookup-product-data" id="lookupProductTypeCode" name="product_type_code" onchange="addNewProductType(event)">
-            	<option value=""></option>
-				{{#each productTypes}}
-			  	<option value={{this.product_type_code}}>{{this.product_type_description}}</option>
-			  	{{/each}}
-			  	<option value="Add New Product Type">Add New Product Type</option>
-			</select>
-            <input class="lookup-product" id="lookupProductButton" type="submit" value="Search">
-        </fieldset>
-    </form>
-</div>
-<div class="table-container form-container">
-	<h2>Results</h2>
-	<form action="/products/search">
-    	<input type="submit" value="Show All">
-	</form>
-	<br>
-    <table class="table">
-        <thead>
-            <tr>
-                <th id="product_id" class="hidden">Product ID</th>
-                <th id="product_type_code">Product Type</th>
-                <th id="product_name">Product Name</th>
-                <th id="product_unit_price">Unit Price</th>
-                <th id="product_unit_size">Unit Size</th>
-                <th id="product_description">Product Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each rows}}
-            <tr class="table-row">
-                <td headers="product_id" class="cell-data hidden">{{this.product_id}}</td>
-                <td headers="product_type_code" class="cell-data">{{this.product_type_description}}</td>
-                <td headers="product_name" class="cell-data">{{this.product_name}}</td>
-                <td headers="product_unit_price" class="cell-data">{{this.product_unit_price}}</td>
-                <td headers="product_unit_size" class="cell-data">{{this.product_unit_size}}</td>
-                <td headers="product_description" class="cell-data">{{this.product_description}}</td>
-                <td><input class="delete-product" type="submit" value="Delete" onclick="deleteRow(this)"></td>
-                <td><input class="edit-product" type="submit" value="Edit" onclick="setDefaults(this)"></td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
 </div>

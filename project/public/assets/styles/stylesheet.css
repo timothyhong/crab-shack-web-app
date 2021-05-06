@@ -204,7 +204,9 @@ th, td {
 
 /* table styling */
 
-.table {
+table {
   margin-left: auto;
   margin-right: auto;
+  border-width: 2px;
+  border-style: groove;
 }

@@ -31,11 +31,19 @@ app.get('/', function(req, res, next) {
     res.render('home');
 });
 
-// deletes and edits through POST
+// row modification through POST
 app.post('/', function(req, res, next) {
-    let context = {};
-    if (req.body.action == "delete-product") {
-        deleteRow(req.body.id, "product_id", "Products").then((msg) => res.send(msg)).catch((err) => console.error(err));
+    if (req.body.action == "deleteProduct") {
+        delete req.body["action"];
+        deleteRowServer(req.body, "Products").then((msg) => res.send(msg)).catch((err) => console.error(err));
+    }
+    else if (req.body.action == "editProduct") {
+        delete req.body["action"];
+        editRowServer(req.body, "Products").then((msg) => res.send(msg)).catch((err) => console.error(err));
+    }
+    else if (req.body.action == "addProduct") {
+        delete req.body["action"];
+        addRowServer(req.body, "Products").then((msg) => res.send(msg)).catch((err) => console.error(err));
     }
 });
 
@@ -45,14 +53,128 @@ app.listen(app.get("port"), () => {
 
 // SQL queries
 
-// deletes row with columnId from columnName of tableName
-function deleteRow(columnId, columnName, tableName) {
+// Deletes row from server
+function deleteRowServer(data, tableName) {
+    let idKeys = Object.keys(data.ids);
+    let idVals = Object.values(data.ids);
+
+    let numKeys = idKeys.length;
+
+    let query = "DELETE FROM ?? WHERE ";
+
+    for (let i = 0; i < numKeys; i++) {
+        if (i == numKeys - 1) {
+            query += "??=?;";
+        }
+        else {
+            query += "??=? AND ";
+        }
+    }
+
+    let queryVals = [];
+    queryVals.push(tableName);
+    for (let i = 0; i < numKeys; i++) {
+        queryVals.push(idKeys[i]);
+        queryVals.push(idVals[i]);
+    }
+
     return new Promise((resolve, reject) => {
-        mysql.pool.query("DELETE FROM ?? WHERE ?? = ?;", [tableName, columnName, columnId], (err, results) => {
+        mysql.pool.query(query, queryVals, (err, results) => {
             if (err) {
                 return reject(err);
             }
-            resolve("Success");
+            resolve("Successfully deleted!");
+        })
+    })
+}
+
+// Edits row from server
+function editRowServer(data, tableName) {
+    let idKeys = Object.keys(data.ids);
+    let idVals = Object.values(data.ids);
+    let colKeys = Object.keys(data.cols);
+    let colVals = Object.values(data.cols);
+
+    let numKeys = idKeys.length;
+    let numCols = colKeys.length;
+    // form query
+    let query = "UPDATE ?? SET ";
+    for (let i = 0; i < numCols; i++) {
+        if (i == numCols - 1) {
+            query += "??=? WHERE ";
+        }
+        else {
+            query += "??=?, ";
+        }
+    }
+    for (let i = 0; i < numKeys; i++) {
+        if (i == numKeys - 1) {
+            query += "??=?;";
+        }
+        else {
+            query += "??=? AND ";
+        }
+    }
+    let queryVals = [];
+    queryVals.push(tableName);
+    for (let i = 0; i < numCols; i++) {
+        queryVals.push(colKeys[i]);
+        queryVals.push(colVals[i]);
+    }
+    for (let i = 0; i < numKeys; i++) {
+        queryVals.push(idKeys[i]);
+        queryVals.push(idVals[i]);
+    }
+    return new Promise((resolve, reject) => {
+        mysql.pool.query(query, queryVals, (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve("Successfully edited!");
+        })
+    })
+}
+
+// Adds row to server
+function addRowServer(data, tableName) {
+    let colKeys = Object.keys(data.cols);
+    let colVals = Object.values(data.cols);
+
+    let numCols = colKeys.length;
+    // form query
+    let query = "INSERT INTO ?? (";
+    for (let i = 0; i < numCols; i++) {
+        if (i == numCols - 1) {
+            query += "??) VALUES ("
+        }
+        else {
+            query += "??, ";
+        }
+    }
+    for (let i = 0; i < numCols; i++) {
+        if (i == numCols - 1) {
+            query += "?);";
+        }
+        else {
+            query += "?, ";
+        }
+    }
+
+    let queryVals = [];
+    queryVals.push(tableName);
+    for (let i = 0; i < numCols; i++) {
+        queryVals.push(colKeys[i]);
+    }
+    for (let i = 0; i < numCols; i++) {
+        queryVals.push(colVals[i]);
+    }
+
+    return new Promise((resolve, reject) => {
+        mysql.pool.query(query, queryVals, (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve("Successfully added!");
         })
     })
 }
