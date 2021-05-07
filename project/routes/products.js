@@ -3,34 +3,27 @@ const mysql = require('../dbcon.js');
 const funcs = require('../index.js');
 let router = express.Router();
 
+// main page route
 router.route("/").get((req, res) => {
 	let context = {};
+	let data = {};
+	data.cols = ["product_type_description", "product_type_code"];
 	getProducts().then(rows => {
 		context.rows = rows;
-	}).then(() => funcs.getColumns("Ref_Product_Types", "product_type_description", "product_type_code")).then(rows => {
+	}).then(() => funcs.getColumns(data, "Ref_Product_Types", false)).then(rows => {
 		context.productTypes = rows;
 		res.render('products', context);
 	}).catch(err => console.error(err));
 });
 
-router.route("/").post((req, res) => {
-	if (req.body.action == "editProduct") {
-		editProduct(req.body).then(msg => {
-			res.send(msg);
-		}).catch(err => console.error(err));
-	}
-	else if (req.body.action == "insertProduct") {
-		insertProduct(req.body).then(msg => {
-			res.send(msg);
-		}).catch(err => console.error(err));
-	}	
-})
-
+// route for recursive search
 router.route("/search").get((req, res) => {
 	let context = {};
+	let data = {};
+	data.cols = ["product_type_description", "product_type_code"];
 	getProducts(req.query.product_type_code).then(rows => {
 		context.rows = rows;
-	}).then(() => funcs.getColumns("Ref_Product_Types", "product_type_description", "product_type_code")).then(rows => {
+	}).then(() => funcs.getColumns(data, "Ref_Product_Types", false)).then(rows => {
 		context.productTypes = rows;
 		res.render('products', context);
 	}).catch(err => console.error(err));
@@ -72,6 +65,5 @@ function getProducts(productTypeCode) {
         })
     }
 }
-
 
 module.exports = router;

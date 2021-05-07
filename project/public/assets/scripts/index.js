@@ -67,7 +67,6 @@ function deleteRowAJAX(deleteButton) {
     xhr.addEventListener("load", () => {
         if (xhr.response == "Successfully deleted!") {
             row.remove();
-            alert(xhr.response);
         }
         else {
             console.error(xhr.statusText);
@@ -106,14 +105,12 @@ function editRowAJAX(editButton) {
     data.ids = ids;
     data.cols = cols;
     data.action = editButton.className;
-    console.log(data);
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/");
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.addEventListener("load", () => {
         if (xhr.response == "Successfully edited!") {
             editRowClient(data);
-            alert(xhr.response);
         }
         else {
             console.error(xhr.statusText);
@@ -147,14 +144,12 @@ function addRowAJAX(addButton) {
     });
     data.cols = cols;
     data.action = addButton.className;
-    console.log(data);
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/");
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.addEventListener("load", () => {
         if (xhr.response == "Successfully added!") {
             addRowClient(data);
-            alert(xhr.response);
         }
         else {
             console.error(xhr.statusText);
@@ -191,22 +186,27 @@ function setDefaults(editButton) {
 
 // Edits a row client-side
 function editRowClient(data) {
-    // get the row element to be modified
-    let idCells = document.querySelectorAll("td[headers='" + Object.keys(data)[0] + "']");
-    let cell;
-    for (let i = 0; i < idCells.length; i++) {
-        if (idCells[i].innerHTML == Object.values(data)[0]) {
-            cell = idCells[i];
-            break;
+    let rows = document.getElementsByClassName("table-row");
+    let selectedRow;
+    // get the row that has hidden cells matching idKeys
+    Array.prototype.forEach.call(rows, row => {
+        let count = 0;
+        let cells = row.querySelectorAll(".hidden");
+        for (let i = 0; i < cells.length; i++) {
+            if (data.ids[cells[i].getAttribute("headers")] == cells[i].innerHTML) {
+                count += 1;
+            }
+        if (count == cells.length) {
+            selectedRow = row;
         }
-    }
-    let row = cell.parentElement;
+        }
+    });
     // get the cells to be modified in that row
-    let cells = row.children;
+    let cells = selectedRow.querySelectorAll("[headers]");
     Array.prototype.forEach.call(cells, cell => {
         let cellKey = cell.getAttribute("headers");
-        if (Array.prototype.includes(Object.keys(data), cellKey)) {
-            cell.innerHTML = data[cellKey];
+        if (Array.prototype.includes(Object.keys(data.cols), cellKey)) {
+            cell.innerHTML = data.cols[cellKey];
         }
     });
 }

@@ -7,12 +7,12 @@
 -->
 
 <div class="form-container">
-    <h2>Product Search</h2>
+    <h2>Search Products</h2>
     <p>Search products by product type.</p>
     <form id="lookupProductForm" method="get" action="/products/search">
         <fieldset>
             <label for="lookupProductTypeCode">Product Type</label>
-            <select class="lookup-product-data" id="lookupProductTypeCode" name="product_type_code" onchange="addNewProductType(event)">
+            <select id="lookupProductTypeCode" name="product_type_code" onchange="addNewProductType(event)">
                 <option value=""></option>
                 {{#each productTypes}}
                 <option value={{this.product_type_code}}>{{this.product_type_description}}</option>
@@ -24,13 +24,13 @@
     </form>
 </div>
 <div class="table-container form-container">
-    <h2>Products</h2>
+    <h2>Browse Products</h2>
     <form action="/products/search">
         <input type="submit" value="Show All">
     </form>
     <br>
     <table class="products">
-        <thead>
+        <thead class="products">
             <tr>
                 <th id="product_id" class="hidden">Product ID</th>
                 <th id="product_type_code">Product Type</th>
@@ -57,7 +57,7 @@
     </table>
 </div>
 <div class="form-container">
-	<h2>Add/Edit Product</h2>
+	<h2>Add/Edit Products</h2>
 	<p>Add a new product or edit an existing product.</p>
 	<form id="addEditProductForm">
         <fieldset>
