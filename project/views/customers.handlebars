@@ -40,7 +40,7 @@
     <table class="customers">
         <thead class="customers">
             <tr>
-                <th id="customer_id" class="hidden">Customer ID</th>
+                <th id="customer_id" class="hidden key">Customer ID</th>
                 <th id="first_name">First Name</th>
                 <th id="middle_name">Middle Name</th>
                 <th id="last_name">Last Name</th>
@@ -58,7 +58,7 @@
         <tbody class="customers">
             {{#each rows}}
             <tr class="table-row">
-                <td headers="customer_id" class="hidden">{{this.customer_id}}</td>
+                <td headers="customer_id" class="hidden key">{{this.customer_id}}</td>
                 <td headers="first_name">{{this.first_name}}</td>
                 <td headers="middle_name">{{this.middle_name}}</td>
                 <td headers="last_name">{{this.last_name}}</td>
@@ -84,8 +84,8 @@
     <form id="addEditCustomerForm">
         <fieldset>
             <legend>*Starred* Fields are Required</legend>
-            <label for="addEditCustomerId" class="hidden">Customer ID</label>
-            <input class="edit-field hidden" type="hidden" id="addEditCustomerId" name="customer_id">
+            <label for="addEditCustomerId" class="hidden key">Customer ID</label>
+            <input class="edit-field hidden key" type="hidden" id="addEditCustomerId" name="customer_id">
             <label for="addEditFirstName">*First Name</label>
             <input class="edit-field" type="text" id="addEditFirstName" name="first_name" required>
 

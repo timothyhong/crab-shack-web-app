@@ -32,7 +32,7 @@
     <table class="products">
         <thead class="products">
             <tr>
-                <th id="product_id" class="hidden">Product ID</th>
+                <th id="product_id" class="hidden key">Product ID</th>
                 <th id="product_type_code">Product Type</th>
                 <th id="product_name">Product Name</th>
                 <th id="product_unit_price">Unit Price</th>
@@ -43,7 +43,7 @@
         <tbody class="products">
             {{#each rows}}
             <tr class="table-row">
-                <td headers="product_id" class="hidden">{{this.product_id}}</td>
+                <td headers="product_id" class="hidden key">{{this.product_id}}</td>
                 <td headers="product_type_code">{{this.product_type_description}}</td>
                 <td headers="product_name">{{this.product_name}}</td>
                 <td headers="product_unit_price">{{this.product_unit_price}}</td>
@@ -62,8 +62,8 @@
 	<form id="addEditProductForm">
         <fieldset>
             <legend>*Starred* Fields are Required</legend>
-            <label for="addEditProductId" class="hidden">Product ID</label>
-            <input class="edit-field hidden" type="hidden" id="addEditProductId" name="product_id">
+            <label for="addEditProductId" class="hidden key">Product ID</label>
+            <input class="edit-field hidden key" type="hidden" id="addEditProductId" name="product_id">
             <label for="addEditProductName">*Product Name</label>
             <input class="edit-field" type="text" id="addEditProductName" name="product_name" required>
             <label for="addEditProductTypeCode">*Product Type</label>
