@@ -33,6 +33,7 @@ app.get('/', function(req, res, next) {
 
 // row modification through POST
 app.post('/', function(req, res, next) {
+    // Products
     if (req.body.action == "deleteProduct") {
         delete req.body["action"];
         deleteRowServer(req.body, "Products").then((msg) => res.send(msg)).catch((err) => console.error(err));
@@ -45,6 +46,7 @@ app.post('/', function(req, res, next) {
         delete req.body["action"];
         addRowServer(req.body, "Products").then((msg) => res.send(msg)).catch((err) => console.error(err));
     }
+    // Customers
     else if (req.body.action == "deleteCustomer") {
         delete req.body["action"];
         console.log(req.body);
@@ -53,6 +55,23 @@ app.post('/', function(req, res, next) {
     else if (req.body.action == "editCustomer") {
         delete req.body["action"];
         editRowServer(req.body, "Customers").then((msg) => res.send(msg)).catch((err) => console.error(err));
+    }
+    else if (req.body.action == "addCustomer") {
+        delete req.body["action"];
+        addRowServer(req.body, "Customers").then((msg) => res.send(msg)).catch((err) => console.error(err));
+    }
+    // Orders
+    else if (req.body.action == "deleteOrder") {
+        delete req.body["action"];
+        deleteRowServer(req.body, "Customer_Orders").then((msg) => res.send(msg)).catch((err) => console.error(err));
+    }
+    else if (req.body.action == "editOrder") {
+        delete req.body["action"];
+        editRowServer(req.body, "Customer_Orders").then((msg) => res.send(msg)).catch((err) => console.error(err));
+    }
+    else if (req.body.action == "addOrder") {
+        delete req.body["action"];
+        addRowServer(req.body, "Customer_Orders").then((msg) => res.send(msg)).catch((err) => console.error(err));
     }
 });
 

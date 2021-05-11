@@ -52,10 +52,9 @@ function addNewProductType(event) {
 // AJAX delete row call
 function deleteRowAJAX(deleteButton) {
     let row = deleteButton.parentElement.parentElement;
-    let cells = row.querySelectorAll(".hidden");
+    let cells = row.querySelectorAll(".key");
     let data = {};
     let ids = {};
-    // cells that are hidden contain ids so append to data first
     Array.prototype.forEach.call(cells, cell => {
         ids[cell.getAttribute("headers")] = cell.innerHTML;
     });
@@ -95,7 +94,7 @@ function editRowAJAX(editButton) {
     let cols = {};
     Array.prototype.forEach.call(editFields, element => {
         // get ids (hidden)
-        if (element.classList.contains("hidden")) {
+        if (element.classList.contains("key")) {
             ids[element.getAttribute("name")] = element.value;
         }
         else {
@@ -138,7 +137,7 @@ function addRowAJAX(addButton) {
     let cols = {};
     Array.prototype.forEach.call(editFields, element => {
         // get only non-keys
-        if (!element.classList.contains("hidden")) {
+        if (!element.classList.contains("key")) {
             cols[element.getAttribute("name")] = element.value;
         }
     });
@@ -191,7 +190,7 @@ function editRowClient(data) {
     // get the row that has hidden cells matching idKeys
     Array.prototype.forEach.call(rows, row => {
         let count = 0;
-        let cells = row.querySelectorAll(".hidden");
+        let cells = row.querySelectorAll(".key");
         for (let i = 0; i < cells.length; i++) {
             if (data.ids[cells[i].getAttribute("headers")] == cells[i].innerHTML) {
                 count += 1;
@@ -223,7 +222,7 @@ function addRowClient(data) {
             append(td, tr);
         }
         // set first id cell to hidden
-        tr.firstElementChild.className += " hidden";
+        tr.firstElementChild.className += " key";
 
         // delete button
         let deleteTd = create("td");

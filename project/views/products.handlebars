@@ -17,7 +17,7 @@
                 {{#each productTypes}}
                 <option value={{this.product_type_code}}>{{this.product_type_description}}</option>
                 {{/each}}
-                <option value="Add New Product Type">Add New Product Type</option>
+                <option class="linked-option" value="Add New Product Type">Add New Product Type</option>
             </select>
             <input class="lookup-product" id="lookupProductButton" type="submit" value="Search">
         </fieldset>

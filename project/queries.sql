@@ -1,9 +1,13 @@
 -- SQL Queries for Website
 
 -- Products page
-
+-- SELECT
 SELECT `product_id`, `product_type_description`, `product_name`, `product_unit_price`, `product_unit_size`, `product_description`
      FROM `Products` LEFT JOIN `Ref_Product_Types` ON Products.product_type_code = Ref_Product_Types.product_type_code;
+-- DELETE
+  -- DELETE FROM Customer_Orders WHERE 
+
+
 
 -- Orders page
 

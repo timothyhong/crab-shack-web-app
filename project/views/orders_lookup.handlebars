@@ -33,7 +33,7 @@
 </div>
 <div class="table-container form-container">
     <h2>Browse Orders</h2>
-    <form action="/orders/search">
+    <form action="/orders/lookup">
         <input type="submit" value="Show All">
     </form>
     <br>
@@ -41,7 +41,7 @@
         <thead class="orders">
             <tr>
                 <th id="order_id" class="key">Order ID</th>
-                <th id="customer_id" class="key hidden">Customer ID</th>
+                <th id="customer_id" class="hidden">Customer ID</th>
                 <th id="first_name">First Name</th>
                 <th id="last_name">Last Name</th>
                 <th id="customer_phone_primary">Phone 1</th>
@@ -58,7 +58,7 @@
             {{#each orders}}
             <tr class="table-row">
                 <td headers="order_id" class="key">{{this.order_id}}</td>
-                <td headers="customer_id" class="key hidden">{{this.customer_id}}</td>
+                <td headers="customer_id" class="hidden">{{this.customer_id}}</td>
                 <td headers="first_name">{{this.first_name}}</td>
                 <td headers="last_name">{{this.last_name}}</td>
                 <td headers="customer_phone_primary">{{this.customer_phone_primary}}</td>
@@ -84,8 +84,8 @@
             <legend>*Starred* Fields are Required</legend>
             <label for="addEditOrderId" class="hidden key">Order ID</label>
             <input class="edit-field hidden key" type="hidden" id="addEditOrderId" name="order_id">
-            <label for="addEditCustomerID" class="hidden key">Customer ID</label>
-            <input class="edit-field hidden key" type="hidden" id="addEditCustomerID" name="customer_id">
+            <label for="addEditCustomerID" class="hidden">Customer ID</label>
+            <input class="edit-field hidden" type="hidden" id="addEditCustomerID" name="customer_id">
             <label for="addEditFirstName">*First Name</label>
             <input class="edit-field" type="text" id="addEditFirstName" name="first_name" required>
             <label for="addEditLastName">*Last Name</label>

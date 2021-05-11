@@ -36,19 +36,19 @@ CREATE TABLE `Ref_Product_Types` (
   `product_type_code` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `product_type_description` varchar(255),
   `parent_product_type_code` int(11),
-   FOREIGN KEY (parent_product_type_code) REFERENCES Ref_Product_Types(product_type_code)
+   FOREIGN KEY (parent_product_type_code) REFERENCES Ref_Product_Types(product_type_code) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Products Table Setup:
 
 CREATE TABLE `Products` (
   `product_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `product_type_code` int(11) NOT NULL,
+  `product_type_code` int(11),
   `product_unit_price` decimal(10, 2),
   `product_name` varchar(255) NOT NULL UNIQUE,
   `product_description` varchar(255),
   `product_unit_size` varchar(255),
-   FOREIGN KEY (product_type_code) REFERENCES Ref_Product_Types(product_type_code)
+   FOREIGN KEY (product_type_code) REFERENCES Ref_Product_Types(product_type_code) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Ref_Card_Types Table Setup:
@@ -69,8 +69,8 @@ CREATE TABLE Customer_Orders(
   `order_picked_up_yn` tinyint(1) NOT NULL DEFAULT 0,
   `order_paid_yn` tinyint(1) NOT NULL DEFAULT 0,
   `order_detail` varchar(255),
-   FOREIGN KEY (customer_id) REFERENCES Customers(customer_id),
-   FOREIGN KEY (card_type) REFERENCES Ref_Card_Types(card_type_code)
+   FOREIGN KEY (customer_id) REFERENCES Customers(customer_id) ON DELETE CASCADE,
+   FOREIGN KEY (card_type) REFERENCES Ref_Card_Types(card_type_code) ON DELETE SET NULL
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 -- Customer_Orders_Products Table Setup:
@@ -78,8 +78,8 @@ CREATE TABLE Customer_Orders(
 CREATE TABLE Customer_Orders_Products(
   `order_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
-   FOREIGN KEY (order_id) REFERENCES Customer_Orders(order_id),
-   FOREIGN KEY (product_id) REFERENCES Products(product_id),
+   FOREIGN KEY (order_id) REFERENCES Customer_Orders(order_id) ON DELETE CASCADE,
+   FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE CASCADE,
   `quantity` int(11) NOT NULL
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
@@ -102,10 +102,6 @@ CREATE TABLE Customer_Orders_Products(
 -- e.g. SUM(Customer_Orders_Products.quantity * Products.product_unit_price) AS der_total_order_price
 -- GROUP BY Customer_Orders.order_id
 
--- TO DO: Need to add some data into the `Customer_Orders_Products` table
-
--- Insertion Statements for Sample DB Data (Optional):
-
 -- Ref_Card_Types
 
   INSERT INTO `Ref_Card_Types` (`card_type_description`) VALUES
@@ -122,7 +118,7 @@ CREATE TABLE Customer_Orders_Products(
 
   INSERT INTO `Customers` (`first_name`, `middle_name`, `last_name`, `customer_phone_primary`, `customer_phone_secondary`,
   `customer_email`, `address_line_1`, `address_line_2`, `city`, `zip_code`, `state`, `customer_info`) VALUES
-  ('Earl', 'Papa Bear', 'Banks', '410-111-2222', '410-222-1111', 'papabear@morganstate.edu', '17 Roland Avenue', 'Apt. 2B', 'Baltimore', '21211', 'MD', 'Regular on Saturdays, extra napkins.'),
+  ('Earl', 'Papa Bear', 'Banks', '410-111-2222', '410-222-1111', 'papabear@morganstate.edu', '17 Roland Avenue', 'Apt. 2B', 'Baltimore', '21211', 'MD', 'extra napkins, utensils'),
   ('Thurgood', null, 'Marshall', '111-222-3333', null, 'thurgoodmarshall@supremecourt.gov', '120 Martin Luther King Blvd', null, 'Baltimore', '21201', 'MD', null),
   ('Earl', null, 'Grey', '410-999-8765', null, 'earlgrey@besttea.com', '122 Union Avenue', 'Apt 17', 'Baltimore', '21212', 'MD', null);
 
