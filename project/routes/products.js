@@ -16,7 +16,7 @@ router.route("/").get((req, res) => {
 	}).catch(err => console.error(err));
 });
 
-// route for recursive search
+// route for product type search
 router.route("/search").get((req, res) => {
 	let context = {};
 	let data = {};

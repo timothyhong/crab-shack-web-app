@@ -45,29 +45,106 @@
                 <th id="first_name">First Name</th>
                 <th id="last_name">Last Name</th>
                 <th id="customer_phone_primary">Phone 1</th>
-                <th id="card_type">Payment Type</th>
+                <th id="card_type_description">Payment Type</th>
                 <th id="card_last_four">Card Last Four</th>
                 <th id="order_picked_up_yn">Order Picked Up</th>
                 <th id="order_paid_yn">Order Paid</th>
                 <th id="datetime_order_placed">Datetime Order Placed</th>
                 <th id="der_total_order_price">Total Price</th>
-                <th id="order_detail">Order Detail</th>
+                <th id="order_detail">Order Details</th>
             </tr>
         </thead>
-        <tbody>
-            {{#each rows}}
+        <tbody class="orders">
+            {{#each orders}}
             <tr class="table-row">
-                <td class="cell-data">{{this.order_id}}</td>
-                <td class="cell-data">{{this.customer_id}}</td>
-                <td class="cell-data">{{this.card_type}}</td>
-                <td class="cell-data">{{this.card_last_four}}</td>
-                <td class="cell-data">{{this.order_picked_up_yn}}</td>
-                <td class="cell-data">{{this.order_paid_yn}}</td>
-                <td class="cell-data">{{this.datetime_order_placed}}</td>
-                <td class="cell-data">{{this.der_total_order_price}}</td>
-                <td class="cell-data">{{this.order_detail}}</td>
-                <td><input class="delete-button" type="submit" value="Delete" onclick="deleteRow(this.parent.parent)"></td>
-                <td><input class="edit-button" type="submit" value="Edit" onclick="setDefaults(this.parent.parent)"></td>
+                <td headers="order_id" class="key">{{this.order_id}}</td>
+                <td headers="customer_id" class="key hidden">{{this.customer_id}}</td>
+                <td headers="first_name">{{this.first_name}}</td>
+                <td headers="last_name">{{this.last_name}}</td>
+                <td headers="customer_phone_primary">{{this.customer_phone_primary}}</td>
+                <td headers="card_type_description">{{this.card_type_description}}</td>
+                <td headers="card_last_four">{{this.card_last_four}}</td>
+                <td headers="order_picked_up_yn">{{this.order_picked_up_yn}}</td>
+                <td headers="order_paid_yn">{{this.order_paid_yn}}</td>
+                <td headers="datetime_order_placed">{{this.datetime_order_placed}}</td>
+                <td headers="der_total_order_price">{{this.der_total_order_price}}</td>
+                <td headers="order_detail">{{this.order_detail}}</td>
+                <td><input class="deleteOrder" type="submit" value="Delete" onclick="deleteRowAJAX(this)"></td>
+                <td><input class="editOrder" type="submit" value="Edit" onclick="setDefaults(this)"></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+<div class="form-container">
+    <h2>Add/Edit Orders</h2>
+    <p>Add a new order or edit an existing order.</p>
+    <form id="addEditOrderForm">
+        <fieldset>
+            <legend>*Starred* Fields are Required</legend>
+            <label for="addEditOrderId" class="hidden key">Order ID</label>
+            <input class="edit-field hidden key" type="hidden" id="addEditOrderId" name="order_id">
+            <label for="addEditCustomerID" class="hidden key">Customer ID</label>
+            <input class="edit-field hidden key" type="hidden" id="addEditCustomerID" name="customer_id">
+            <label for="addEditFirstName">*First Name</label>
+            <input class="edit-field" type="text" id="addEditFirstName" name="first_name" required>
+            <label for="addEditLastName">*Last Name</label>
+            <input class="edit-field" type="text" id="addEditLastName" name="last_name" required>
+            <label for="addEditPrimaryPhone">*Primary Phone</label>
+            <input class="edit-field" type="tel" id="addEditPrimaryPhone" name="customer_phone_primary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required title="123-456-7890">
+            <label for="addEditCardType">*Payment Method</label>
+            <select class="edit-field" id="addEditCardType" name="card_type_code">
+                {{#each paymentMethods}}
+                <option value={{this.card_type_code}}>{{this.card_type_description}}</option>
+                {{/each}}
+                <option class="linked-option" value="Add New Payment Type">Add New Payment Type</option>
+            </select>
+            <label for="addEditCardLastFour">Card Last Four Digits</label>
+            <input class="edit-field" type="number" pattern="[0-9]{4}" title="e.g. 0123" id="addEditCardLastFour" name="card_last_four">
+            <label for="addEditOrderPaid">*Order Paid?</label>
+            <select class="edit-field" id="addEditOrderPaid" name="order_paid_yn">
+              <option value=0 selected>No</option>
+              <option value=1>Yes</option>
+            </select>
+            <label for="addEditDatetimeOrderPlaced">Datetime Order Placed</label>
+            <input class="edit-field" type="datetime-local" id="addEditDatetimeOrderPlaced" name="datetime_order_placed">
+            <label for="addEditDerOrderPrice">Total Order Price</label>
+            <input class="edit-field" type="number" id="addEditDerOrderPrice" name="der_total_order_price" min="0.01" step="0.01" max="5000">
+            <label for="addEditOrderDetail">Order Details</label>
+            <input class="edit-field" type="text" id="addEditOrderDetail" name="order_detail">
+            <input class="addOrder" type="submit" value="Add" onclick="addRowAJAX(this)">
+            <input class="editOrder" type="submit" value="Edit" onclick="editRowAJAX(this)">
+        </fieldset>
+    </form>
+</div>
+<div class="table-container form-container">
+    <h2>Order Products</h2>
+    <form action="/orders/search/products">
+        <input type="submit" value="Show All">
+    </form>
+    <br>
+    <table class="order-products">
+        <thead class="order-products">
+            <tr>
+                <th id="order_id" class="key">Order ID</th>
+                <th id="customer_id" class="key hidden">Customer ID</th>
+                <th id="product_id" class="key hidden">Product ID</th>
+                <th id="product_name">Product Name</th>
+                <th id="product_unit_price">Unit Price</th>
+                <th id="quantity">Quantity</th>
+            </tr>
+        </thead>
+        <tbody class="order-products">
+            {{#each orderProducts}}
+            <tr class="table-row">
+                <td headers="order_id" class="key">{{this.order_id}}</td>
+                <td headers="customer_id" class="key hidden">{{this.customer_id}}</td>
+                <td headers="product_id" class="key hidden">{{this.product_id}}</td>
+                <td headers="product_name">{{this.product_name}}</td>
+                <td headers="product_unit_price">{{this.product_unit_price}}</td>
+                <td headers="quantity">{{this.quantity}}</td>
+                <td><input class="deleteOrderProduct" type="submit" value="Delete" onclick="deleteRowAJAX(this)"></td>
+                <td><input class="editOrderProduct" type="submit" value="Edit" onclick="setDefaults(this)"></td>
             </tr>
             {{/each}}
         </tbody>
@@ -79,38 +156,20 @@
     <form id="addToOrderForm">
         <fieldset>
             <legend>*Starred* Fields are Required</legend>
-            <label for="addToOrderOrderID">*Order ID</label>
-            <input class="add-to-order" type="number" id="addToOrderOrderID" name="orderID" required>
-            <label for="addToOrderProductID">*Product ID</label>
-            <input class="add-to-order" type="number" id="addToOrderProductID" name="productID" required>
-            <label for="addToOrderQuantity">*Quantity</label>
-            <input class="add-to-order" type="number" id="addToOrderQuantity" name="quantity" required>
-            <input class="add-to-order" id="addToOrderButton" type="submit" value="Add to Order">
-        </fieldset>
-    </form>
-</div>
-<div class="form-container">
-    <h2>Create New Order</h2>
-    <p>Create a new order for an existing customer.</p>
-    <form id="createOrderForm">
-        <fieldset>
-            <legend>*Starred* Fields are Required</legend>
-            <label for="createOrderCustID">*Customer ID</label>
-            <input class="create-order" type="number" id="createOrderCustID" name="custID" required>
-            <label for="createOrderCardType">*Payment Method</label>
-            <select class="create-order" name="cardType" id="createOrderCardType">
-                {{#each rows}}
-                <option value={{this.card_type_code}}>{{this.card_type_description}}</option>
-                {{/each}}
-            </select>
-            <label for="createOrderCardLastFour">Card Last Four Digits</label>
-            <input class="create-order" type="number" pattern="[0-9]{4}" title="e.g. 0123" id="createOrderCardLastFour" name="cardLastFour">
-            <label for="createOrderPaid">*Order Paid?</label>
-            <select class="create-order" name="orderPaid" id="createOrderPaid">
-              <option value=0 selected>No</option>
-              <option value=1>Yes</option>
-            </select>
-            <input class="create-order" id="createOrderButton" type="submit" value="Create">
+            <label for="addEditOrderProductsOrderId" class="key">Order ID</label>
+            <input class="edit-field key" type="number" id="addEditOrderProductsOrderId" name="order_id">
+            <label for="addEditOrderProductsCustomerID" class="hidden key">Customer ID</label>
+            <input class="edit-field hidden key" type="hidden" id="addEditOrderProductsCustomerID" name="customer_id">
+            <label for="addEditOrderProductsProductId" class="hidden key">Product ID</label>
+            <input class="edit-field hidden key" type="hidden" id="addEditOrderProductsProductId" name="product_id">
+            <label for="addEditOrderProductsProductName">*Product Name</label>
+            <input class="edit-field key" type="text" id="addEditOrderProductsProductName" name="product_name" required>
+            <label for="addEditOrderProductsProductUnitPrice">Product Unit Price</label>
+            <input class="edit-field" type="number" id="addEditOrderProductsProductUnitPrice" name="product_unit_price" min="0.01" step="0.01" max="5000">
+            <label for="addEditOrderProductsQuantity">Quantity</label>
+            <input class="edit-field" type="number" id="addEditOrderProductsQuantity" name="product_unit_price" min="0.01" step="0.01" max="5000">
+            <input class="addOrderProducts" type="submit" value="Add" onclick="addRowAJAX(this)">
+            <input class="editOrderProducts" type="submit" value="Edit" onclick="editRowAJAX(this)">
         </fieldset>
     </form>
 </div>
