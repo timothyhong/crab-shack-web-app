@@ -157,6 +157,7 @@ th, td {
 .form-container input[type="url"],
 .form-container input[type="tel"],
 .form-container input[type="password"],
+.form-container input[type="datetime-local"],
 .form-container textarea,
 .form-container select 
 {

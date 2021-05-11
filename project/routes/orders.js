@@ -4,7 +4,7 @@ const funcs = require('../index.js');
 let router = express.Router();
 
 // main page route
-router.route("/").get((req, res) => {
+router.route("/lookup").get((req, res) => {
 	let context = {};
 	let firstNames = {};
 	firstNames.cols = ["first_name"];
@@ -12,16 +12,20 @@ router.route("/").get((req, res) => {
 	lastNames.cols = ["last_name"];
 	let paymentMethods = {};
 	paymentMethods.cols = ["card_type_code", "card_type_description"];
-	let orderProducts = {};
 	// need to write two SQL queries for orders and orderProducts
-	getProducts().then(rows => {
-		context.rows = rows;
-	}).then(() => funcs.getColumns(data, "Ref_Product_Types", false)).then(rows => {
-		context.productTypes = rows;
-		res.render('products', context);
+	getOrders(req.query.first_name, req.query.last_name, req.query.customer_phone_primary).then(rows => {
+		context.orders = rows;
+	}).then(() => funcs.getColumns(firstNames, "Customers", true)).then(rows => {
+		context.firstNames = rows;
+	}).then(() => funcs.getColumns(lastNames, "Customers", true)).then(rows => {
+		context.lastNames = rows;
+	}).then(() => funcs.getColumns(paymentMethods, "Ref_Card_Types", true)).then(rows => {
+		context.paymentMethods = rows;
+		res.render('orders_lookup', context);
 	}).catch(err => console.error(err));
 });
 
+/*
 router.route("/create").get((req, res) => {
 	let context = {};
 	funcs.getData("Ref_Card_Types").then(rows => {
@@ -41,6 +45,7 @@ router.route("/lookup").get((req, res) => {
 		 res.render('lookup_order', context);
     }).catch(err => console.error(err));
 });
+*/
 
 // lookup orders
 function getOrders(firstName, lastName, phoneNumber) {
