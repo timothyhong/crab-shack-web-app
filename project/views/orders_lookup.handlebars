@@ -62,7 +62,7 @@
                 <td headers="first_name">{{this.first_name}}</td>
                 <td headers="last_name">{{this.last_name}}</td>
                 <td headers="customer_phone_primary">{{this.customer_phone_primary}}</td>
-                <td headers="card_type_description">{{this.card_type_description}}</td>
+                <td headers="card_type_code">{{this.card_type_description}}</td>
                 <td headers="card_last_four">{{this.card_last_four}}</td>
                 <td headers="order_picked_up_yn">{{this.order_picked_up_yn}}</td>
                 <td headers="order_paid_yn">{{this.order_paid_yn}}</td>
@@ -93,7 +93,7 @@
             <label for="addEditPrimaryPhone">*Primary Phone</label>
             <input class="edit-field" type="tel" id="addEditPrimaryPhone" name="customer_phone_primary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required title="123-456-7890">
             <label for="addEditCardType">*Payment Method</label>
-            <select class="edit-field" id="addEditCardType" name="card_type_code">
+            <select class="edit-field description" id="addEditCardType" name="card_type_code">
                 {{#each paymentMethods}}
                 <option value={{this.card_type_code}}>{{this.card_type_description}}</option>
                 {{/each}}
@@ -101,15 +101,18 @@
             </select>
             <label for="addEditCardLastFour">Card Last Four Digits</label>
             <input class="edit-field" type="number" pattern="[0-9]{4}" title="e.g. 0123" id="addEditCardLastFour" name="card_last_four">
+            <label for="addEditOrderPaid">*Order Picked Up?</label>
+            <select class="edit-field description" id="addEditOrderPickedUp" name="order_picked_up_yn">
+              <option value=0 selected>No</option>
+              <option value=1>Yes</option>
+            </select>
             <label for="addEditOrderPaid">*Order Paid?</label>
-            <select class="edit-field" id="addEditOrderPaid" name="order_paid_yn">
+            <select class="edit-field description" id="addEditOrderPaid" name="order_paid_yn">
               <option value=0 selected>No</option>
               <option value=1>Yes</option>
             </select>
             <label for="addEditDatetimeOrderPlaced">Datetime Order Placed</label>
             <input class="edit-field" type="datetime-local" id="addEditDatetimeOrderPlaced" name="datetime_order_placed">
-            <label for="addEditDerOrderPrice">Total Order Price</label>
-            <input class="edit-field" type="number" id="addEditDerOrderPrice" name="der_total_order_price" min="0.01" step="0.01" max="5000">
             <label for="addEditOrderDetail">Order Details</label>
             <input class="edit-field" type="text" id="addEditOrderDetail" name="order_detail">
             <input class="addOrder" type="submit" value="Add" onclick="addRowAJAX(this)">

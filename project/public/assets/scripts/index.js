@@ -6,6 +6,12 @@
     Description: Crabshack homepage client-side JS
 */
 
+Array.prototype.forEach.call(document.querySelectorAll("input[onclick]"), input => {
+  input.addEventListener('click', e => {
+   event.preventDefault();
+ })
+});
+
 function openNav() {
   document.getElementById("sidenav-menu").style.width = "250px";
   // get all elements to push
@@ -109,7 +115,7 @@ function editRowAJAX(editButton) {
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.addEventListener("load", () => {
         if (xhr.response == "Successfully edited!") {
-            editRowClient(data);
+            location.reload();
         }
         else {
             console.error(xhr.statusText);
@@ -148,7 +154,7 @@ function addRowAJAX(addButton) {
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.addEventListener("load", () => {
         if (xhr.response == "Successfully added!") {
-            addRowClient(data);
+            location.reload();
         }
         else {
             console.error(xhr.statusText);
@@ -183,7 +189,7 @@ function setDefaults(editButton) {
     });
 }
 
-// Edits a row client-side
+/*
 function editRowClient(data) {
     let rows = document.getElementsByClassName("table-row");
     let selectedRow;
@@ -204,13 +210,14 @@ function editRowClient(data) {
     let cells = selectedRow.querySelectorAll("[headers]");
     Array.prototype.forEach.call(cells, cell => {
         let cellKey = cell.getAttribute("headers");
-        if (Array.prototype.includes(Object.keys(data.cols), cellKey)) {
+        if (Array.prototype.includes.call(Object.keys(data.cols), cellKey)) {
             cell.innerHTML = data.cols[cellKey];
         }
     });
 }
+*/
 
-// Add a row client-side
+/*
 function addRowClient(data) {
     let tr = create("tr");
         tr.className = "table-row";
@@ -256,3 +263,4 @@ function create(tag) {
 function append(child, parent) {
     parent.appendChild(child);
 }
+*/

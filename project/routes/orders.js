@@ -3,7 +3,7 @@ const mysql = require('../dbcon.js');
 const funcs = require('../index.js');
 let router = express.Router();
 
-// main page route
+// lookup orders
 router.route("/lookup").get((req, res) => {
 	let context = {};
 	let firstNames = {};
@@ -25,27 +25,27 @@ router.route("/lookup").get((req, res) => {
 	}).catch(err => console.error(err));
 });
 
-/*
-router.route("/create").get((req, res) => {
+// order details
+router.route("/details").get((req, res) => {
 	let context = {};
-	funcs.getData("Ref_Card_Types").then(rows => {
-		context.rows = rows;
-		 res.render('create_order', context);
-    }).catch(err => console.error(err));
+	let firstNames = {};
+	firstNames.cols = ["first_name"];
+	let lastNames = {};
+	lastNames.cols = ["last_name"];
+	let paymentMethods = {};
+	paymentMethods.cols = ["card_type_code", "card_type_description"];
+	// need to write two SQL queries for orders and orderProducts
+	getOrders(req.query.first_name, req.query.last_name, req.query.customer_phone_primary).then(rows => {
+		context.orders = rows;
+	}).then(() => funcs.getColumns(firstNames, "Customers", true)).then(rows => {
+		context.firstNames = rows;
+	}).then(() => funcs.getColumns(lastNames, "Customers", true)).then(rows => {
+		context.lastNames = rows;
+	}).then(() => funcs.getColumns(paymentMethods, "Ref_Card_Types", true)).then(rows => {
+		context.paymentMethods = rows;
+		res.render('order_details', context);
+	}).catch(err => console.error(err));
 });
-
-router.route("/add").get((req, res) => {
-	res.render("add_to_order");
-});
-
-router.route("/lookup").get((req, res) => {
-	let context = {};
-	funcs.getData("Customer_Orders").then(rows => {
-		context.rows = rows;
-		 res.render('lookup_order', context);
-    }).catch(err => console.error(err));
-});
-*/
 
 // lookup orders
 function getOrders(firstName, lastName, phoneNumber) {
@@ -72,13 +72,13 @@ function getOrders(firstName, lastName, phoneNumber) {
 		queryVals.push(lastName);
 	}
 	if (phoneNumber != "") {
-		criteriaQuery += "Customers.customer_phone_primary = ? AND";
+		criteriaQuery += "Customers.customer_phone_primary = ? AND ";
 		queryVals.push(phoneNumber);
 	}
 	// remove the trailing AND from query
 	criteriaQuery = criteriaQuery.substring(0, criteriaQuery.length - 4);
 	// add WHERE clause and semicolon
-	criteriaQuery = "WHERE " + criteriaQuery + ";";
+	criteriaQuery = "WHERE " + criteriaQuery;
 
 	// display all orders
 	if ((!firstName || firstName == "") && (!lastName || lastName == "") && (!phoneNumber || phoneNumber == "")) {
@@ -129,13 +129,13 @@ function getOrderProducts(orderId) {
 		queryVals.push(lastName);
 	}
 	if (phoneNumber != "") {
-		criteriaQuery += "Customers.customer_phone_primary = ? AND";
+		criteriaQuery += "Customers.customer_phone_primary = ? AND ";
 		queryVals.push(phoneNumber);
 	}
 	// remove the trailing AND from query
 	criteriaQuery = criteriaQuery.substring(0, criteriaQuery.length - 4);
-	// add WHERE clause and semicolon
-	criteriaQuery = "WHERE " + criteriaQuery + ";";
+	// add WHERE clause
+	criteriaQuery = "WHERE " + criteriaQuery;
 
 	// display all orders
 	if ((!firstName || firstName == "") && (!lastName || lastName == "") && (!phoneNumber || phoneNumber == "")) {

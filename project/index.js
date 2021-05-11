@@ -67,7 +67,7 @@ app.post('/', function(req, res, next) {
     }
     else if (req.body.action == "editOrder") {
         delete req.body["action"];
-        editRowServer(req.body, "Customer_Orders").then((msg) => res.send(msg)).catch((err) => console.error(err));
+        checkDataServer(req.body, "Customer_Orders").then((data) => editRowServer(data, "Customer_Orders")).then((msg) => res.send(msg)).catch((err) => console.error(err));
     }
     else if (req.body.action == "addOrder") {
         delete req.body["action"];
@@ -84,7 +84,7 @@ app.listen(app.get("port"), () => {
 // Deletes row from server
 // data: {ids: {idKey1: idVal1, ...}}
 // tableName: name of the table
-function deleteRowServer(data, tableName) {
+deleteRowServer = (data, tableName) => {
     let idKeys = Object.keys(data.ids);
     let idVals = Object.values(data.ids);
 
@@ -118,10 +118,45 @@ function deleteRowServer(data, tableName) {
     })
 }
 
+// Server-side check to ensure data is valid for SQL queries
+// data: {ids: {idKey1: idVal1, ...} cols: {colKey1: colVal1, ...}}
+// takes data and ensures idKeys and colKeys exist within tableName
+checkDataServer = (data, tableName) => {
+    let idKeys = Object.keys(data.ids);
+    let colKeys = Object.keys(data.cols);
+
+    let query = "SELECT ?? FROM ??.?? WHERE ?? = ?;";
+    let queryVals = ["COLUMN_NAME", "INFORMATION_SCHEMA", "COLUMNS", "TABLE_NAME", tableName];
+    return new Promise((resolve, reject) => {
+        mysql.pool.query(query, queryVals, (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            let colNames = [];
+            Array.prototype.forEach.call(results, result => {
+                colNames.push(result.COLUMN_NAME);
+            });
+            // remove idKeys that are not in results
+            Array.prototype.forEach.call(idKeys, key => {
+                if (!colNames.includes(key)) {
+                    delete data.ids[key];
+                }
+            });
+            // remove colKeys that are not in results
+            Array.prototype.forEach.call(colKeys, key => {
+                if (!colNames.includes(key)) {
+                    delete data.cols[key];
+                }
+            });
+            resolve(data);
+        });
+    })
+}
+
 // Edits row from server
 // data: {ids: {idKey1: idVal1, ...} cols: {colKey1: colVal1, ...}}
 // tableName: name of the table
-function editRowServer(data, tableName) {
+editRowServer = (data, tableName) => {
     let idKeys = Object.keys(data.ids);
     let idVals = Object.values(data.ids);
     let colKeys = Object.keys(data.cols);
@@ -170,7 +205,7 @@ function editRowServer(data, tableName) {
 // Adds row to server
 // data: {cols: {colKey1: colVal1, ...}}
 // tableName: name of the table
-function addRowServer(data, tableName) {
+addRowServer = (data, tableName) => {
     let colKeys = Object.keys(data.cols);
     let colVals = Object.values(data.cols);
 
