@@ -36,34 +36,34 @@ app.post('/', function(req, res, next) {
     // Products
     if (req.body.action == "deleteProduct") {
         delete req.body["action"];
-        deleteRowServer(req.body, "Products").then((msg) => res.send(msg)).catch((err) => console.error(err));
+        checkDataServer(req.body, "Products").then((data) => deleteRowServer(data, "Products")).then((msg) => res.send(msg)).catch((err) => console.error(err));
     }
     else if (req.body.action == "editProduct") {
         delete req.body["action"];
-        editRowServer(req.body, "Products").then((msg) => res.send(msg)).catch((err) => console.error(err));
+        checkDataServer(req.body, "Products").then((data) => editRowServer(data, "Products")).then((msg) => res.send(msg)).catch((err) => console.error(err));
     }
     else if (req.body.action == "addProduct") {
         delete req.body["action"];
-        addRowServer(req.body, "Products").then((msg) => res.send(msg)).catch((err) => console.error(err));
+        checkDataServer(req.body, "Products").then((data) => addRowServer(data, "Products")).then((msg) => res.send(msg)).catch((err) => console.error(err));
     }
     // Customers
     else if (req.body.action == "deleteCustomer") {
         delete req.body["action"];
         console.log(req.body);
-        deleteRowServer(req.body, "Customers").then((msg) => res.send(msg)).catch((err) => console.error(err));
+        checkDataServer(req.body, "Customers").then((data) => deleteRowServer(data, "Customers")).then((msg) => res.send(msg)).catch((err) => console.error(err));
     }
     else if (req.body.action == "editCustomer") {
         delete req.body["action"];
-        editRowServer(req.body, "Customers").then((msg) => res.send(msg)).catch((err) => console.error(err));
+        checkDataServer(req.body, "Customers").then((data) => editRowServer(data, "Customers")).then((msg) => res.send(msg)).catch((err) => console.error(err));
     }
     else if (req.body.action == "addCustomer") {
         delete req.body["action"];
-        addRowServer(req.body, "Customers").then((msg) => res.send(msg)).catch((err) => console.error(err));
+        checkDataServer(req.body, "Customers").then((data) => addRowServer(data, "Customers")).then((msg) => res.send(msg)).catch((err) => console.error(err));
     }
     // Orders
     else if (req.body.action == "deleteOrder") {
         delete req.body["action"];
-        deleteRowServer(req.body, "Customer_Orders").then((msg) => res.send(msg)).catch((err) => console.error(err));
+        checkDataServer(req.body, "Customer_Orders").then((data) => deleteRowServer(data, "Customer_Orders")).then((msg) => res.send(msg)).catch((err) => console.error(err));
     }
     else if (req.body.action == "editOrder") {
         delete req.body["action"];
@@ -71,8 +71,21 @@ app.post('/', function(req, res, next) {
     }
     else if (req.body.action == "addOrder") {
         delete req.body["action"];
-        addRowServer(req.body, "Customer_Orders").then((msg) => res.send(msg)).catch((err) => console.error(err));
+        checkDataServer(req.body, "Customer_Orders").then((data) => addRowServer(data, "Customer_Orders")).then((msg) => res.send(msg)).catch((err) => console.error(err));
     }
+    // Order Products
+    else if (req.body.action == "deleteOrderProduct") {
+        delete req.body["action"];
+        checkDataServer(req.body, "Customer_Orders_Products").then((data) => deleteRowServer(data, "Customer_Orders_Products")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+    }
+    else if (req.body.action == "editOrderProduct") {
+        delete req.body["action"];
+        checkDataServer(req.body, "Customer_Orders_Products").then((data) => editRowServer(data, "Customer_Orders_Products")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+    }
+    else if (req.body.action == "addOrderProduct") {
+        delete req.body["action"];
+        checkDataServer(req.body, "Customer_Orders_Products").then((data) => addRowServer(data, "Customer_Orders_Products")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+    }    
 });
 
 app.listen(app.get("port"), () => {
@@ -80,6 +93,41 @@ app.listen(app.get("port"), () => {
 });
 
 // SQL queries
+
+// Server-side check that removes any data that does not exist in tableName
+// data: {ids: {idKey1: idVal1, ...} cols: {colKey1: colVal1, ...}}
+// takes data and ensures idKeys and colKeys exist within tableName
+checkDataServer = (data, tableName) => {
+    let idKeys = Object.keys(data.ids);
+    let colKeys = Object.keys(data.cols);
+
+    let query = "SELECT ?? FROM ??.?? WHERE ?? = ?;";
+    let queryVals = ["COLUMN_NAME", "INFORMATION_SCHEMA", "COLUMNS", "TABLE_NAME", tableName];
+    return new Promise((resolve, reject) => {
+        mysql.pool.query(query, queryVals, (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            let colNames = [];
+            Array.prototype.forEach.call(results, result => {
+                colNames.push(result.COLUMN_NAME);
+            });
+            // remove idKeys that are not in results
+            Array.prototype.forEach.call(idKeys, key => {
+                if (!colNames.includes(key)) {
+                    delete data.ids[key];
+                }
+            });
+            // remove colKeys that are not in results
+            Array.prototype.forEach.call(colKeys, key => {
+                if (!colNames.includes(key)) {
+                    delete data.cols[key];
+                }
+            });
+            resolve(data);
+        });
+    })
+}
 
 // Deletes row from server
 // data: {ids: {idKey1: idVal1, ...}}
@@ -115,41 +163,6 @@ deleteRowServer = (data, tableName) => {
             }
             resolve("Successfully deleted!");
         })
-    })
-}
-
-// Server-side check to ensure data is valid for SQL queries
-// data: {ids: {idKey1: idVal1, ...} cols: {colKey1: colVal1, ...}}
-// takes data and ensures idKeys and colKeys exist within tableName
-checkDataServer = (data, tableName) => {
-    let idKeys = Object.keys(data.ids);
-    let colKeys = Object.keys(data.cols);
-
-    let query = "SELECT ?? FROM ??.?? WHERE ?? = ?;";
-    let queryVals = ["COLUMN_NAME", "INFORMATION_SCHEMA", "COLUMNS", "TABLE_NAME", tableName];
-    return new Promise((resolve, reject) => {
-        mysql.pool.query(query, queryVals, (err, results) => {
-            if (err) {
-                return reject(err);
-            }
-            let colNames = [];
-            Array.prototype.forEach.call(results, result => {
-                colNames.push(result.COLUMN_NAME);
-            });
-            // remove idKeys that are not in results
-            Array.prototype.forEach.call(idKeys, key => {
-                if (!colNames.includes(key)) {
-                    delete data.ids[key];
-                }
-            });
-            // remove colKeys that are not in results
-            Array.prototype.forEach.call(colKeys, key => {
-                if (!colNames.includes(key)) {
-                    delete data.cols[key];
-                }
-            });
-            resolve(data);
-        });
     })
 }
 

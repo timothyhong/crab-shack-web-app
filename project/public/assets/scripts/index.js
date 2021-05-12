@@ -60,11 +60,13 @@ function deleteRowAJAX(deleteButton) {
     let row = deleteButton.parentElement.parentElement;
     let cells = row.querySelectorAll(".key");
     let data = {};
+    let cols = {};
     let ids = {};
     Array.prototype.forEach.call(cells, cell => {
         ids[cell.getAttribute("headers")] = cell.innerHTML;
     });
     data.ids = ids;
+    data.cols = cols;
     data.action = deleteButton.className;
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/");
@@ -127,7 +129,8 @@ function editRowAJAX(editButton) {
 // AJAX add row call
 function addRowAJAX(addButton) {
     // client-side checks to ensure data has been filled out properly
-    const requiredFields = document.querySelectorAll("[required]");
+    const form = addButton.parentElement;
+    const requiredFields = form.querySelectorAll("[required]");
     let requiredFieldsMissing = false;
     Array.prototype.forEach.call(requiredFields, element => {
         if (!element.value || element.value == "") {
@@ -138,9 +141,11 @@ function addRowAJAX(addButton) {
     if (requiredFieldsMissing) {
       return;
     }
-    const editFields = document.getElementsByClassName("edit-field");
+    const editFields = form.querySelectorAll(".edit-field");
+    console.log(editFields);
     let data = {};
     let cols = {};
+    let ids = {};
     Array.prototype.forEach.call(editFields, element => {
         // get only non-keys
         if (!element.classList.contains("key")) {
@@ -148,7 +153,9 @@ function addRowAJAX(addButton) {
         }
     });
     data.cols = cols;
+    data.ids = ids;
     data.action = addButton.className;
+    console.log(data);
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/");
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -167,7 +174,6 @@ function addRowAJAX(addButton) {
 function setDefaults(editButton) {
     let data = {};
     const row = editButton.parentElement.parentElement;
-    const id = row.firstElementChild.innerHTML;
     // get and set values of current row to be default values for the edit form
     const cells = row.querySelectorAll("[headers]");
     Array.prototype.forEach.call(cells, cell => {
@@ -183,7 +189,7 @@ function setDefaults(editButton) {
                 }
             });
         }
-        else {
+        else if (Array.prototype.includes.call(Object.keys(data), input.getAttribute("name"))) {
             input.value = data[input.getAttribute("name")];
         }
     });

@@ -8,10 +8,6 @@ router.route("/").get((req, res) => {
 	let context = {};
 	let orderIds = {};
 	orderIds.cols = ["order_id"];
-	let firstNames = {};
-	firstNames.cols = ["first_name"];
-	let lastNames = {};
-	lastNames.cols = ["last_name"];
 	let primaryPhones = {};
 	primaryPhones.cols = ["customer_phone_primary"];
 	let paymentMethods = {};
@@ -19,50 +15,26 @@ router.route("/").get((req, res) => {
 	let productNames = {};
 	productNames.cols = ["product_id", "product_name"];
 
-	getOrders(req.query.order_id, req.query.first_name, req.query.last_name, req.query.customer_phone_primary).then(rows => {
+	getOrders(req.query.order_id, req.query.customer_id).then(rows => {
 		context.orders = rows;
-	}).then(() => getOrderProducts(req.query.order_id, req.query.first_name, req.query.last_name, req.query.customer_phone_primary)).then(rows => {
+	}).then(() => getOrderProducts(req.query.order_id, req.query.customer_id)).then(rows => {
 		context.orderProducts = rows;
 	}).then(() => funcs.getColumns(orderIds, "Customer_Orders", true)).then(rows => {
 		context.orderIds = rows;
-	}).then(() => funcs.getColumns(firstNames, "Customers", true)).then(rows => {
-		context.firstNames = rows;
-	}).then(() => funcs.getColumns(lastNames, "Customers", true)).then(rows => {
-		context.lastNames = rows;
 	}).then(() => funcs.getColumns(primaryPhones, "Customers", true)).then(rows => {
 		context.primaryPhones = rows;
 	}).then(() => funcs.getColumns(paymentMethods, "Ref_Card_Types", true)).then(rows => {
 		context.paymentMethods = rows;
+	}).then(() => getCustomerDescriptions()).then(rows => {
+		context.customers = rows;
 	}).then(() => funcs.getColumns(productNames, "Products", true)).then(rows => {
 		context.productNames = rows;
 		res.render('orders', context);
 	}).catch(err => console.error(err));
 });
 
-// order lookup
-router.route("/lookup").get((req, res) => {
-	let context = {};
-	let firstNames = {};
-	firstNames.cols = ["first_name"];
-	let lastNames = {};
-	lastNames.cols = ["last_name"];
-	let paymentMethods = {};
-	paymentMethods.cols = ["card_type_code", "card_type_description"];
-	// need to write two SQL queries for orders and orderProducts
-	getOrders(req.query.first_name, req.query.last_name, req.query.customer_phone_primary).then(rows => {
-		context.orders = rows;
-	}).then(() => funcs.getColumns(firstNames, "Customers", true)).then(rows => {
-		context.firstNames = rows;
-	}).then(() => funcs.getColumns(lastNames, "Customers", true)).then(rows => {
-		context.lastNames = rows;
-	}).then(() => funcs.getColumns(paymentMethods, "Ref_Card_Types", true)).then(rows => {
-		context.paymentMethods = rows;
-		res.render('order_details', context);
-	}).catch(err => console.error(err));
-});
-
 // lookup orders
-function getOrders(orderId, firstName, lastName, phoneNumber) {
+function getOrders(orderId, customerId) {
 	let baseQuery = "SELECT Customer_Orders.order_id, Customer_Orders.customer_id, Customers.first_name, " +
     "Customers.last_name, Customers.customer_phone_primary, Ref_Card_Types.card_type_description, " +
     "Customer_Orders.card_last_four, IF(Customer_Orders.order_picked_up_yn, 'Yes', 'No') AS order_picked_up_yn, " +
@@ -81,17 +53,9 @@ function getOrders(orderId, firstName, lastName, phoneNumber) {
 		criteriaQuery += "Customer_Orders.order_id = ? AND ";
 		queryVals.push(orderId);
 	}
-	if (firstName != "") {
-		criteriaQuery += "Customers.first_name = ? AND ";
-		queryVals.push(firstName);
-	}
-	if (lastName != "") {
-		criteriaQuery += "Customers.last_name = ? AND ";
-		queryVals.push(lastName);
-	}
-	if (phoneNumber != "") {
-		criteriaQuery += "Customers.customer_phone_primary = ? AND ";
-		queryVals.push(phoneNumber);
+	if (customerId != "") {
+		criteriaQuery += "Customers.customer_id = ? AND ";
+		queryVals.push(customerId);
 	}
 	// remove the trailing AND from query
 	criteriaQuery = criteriaQuery.substring(0, criteriaQuery.length - 4);
@@ -99,7 +63,7 @@ function getOrders(orderId, firstName, lastName, phoneNumber) {
 	criteriaQuery = "WHERE " + criteriaQuery;
 
 	// display all orders
-	if ((!orderId || orderId == "") && (!firstName || firstName == "") && (!lastName || lastName == "") && (!phoneNumber || phoneNumber == "")) {
+	if ((!orderId || orderId == "") && (!customerId || customerId == "")) {
 		return new Promise((resolve, reject) => {
             mysql.pool.query(baseQuery + endQuery, (err, results) => {
                 if (err) {
@@ -123,7 +87,7 @@ function getOrders(orderId, firstName, lastName, phoneNumber) {
 }
 
 // lookup order products
-function getOrderProducts(orderId, firstName, lastName, phoneNumber) {
+function getOrderProducts(orderId, customerId) {
 	let baseQuery = "SELECT Customer_Orders.order_id, Products.product_id, Products.product_name, " +
     "Products.product_unit_price, Customer_Orders_Products.quantity FROM Customer_Orders " +
     "JOIN Customer_Orders_Products USING (order_id) JOIN Products USING (product_id) JOIN Customers USING " +
@@ -137,17 +101,9 @@ function getOrderProducts(orderId, firstName, lastName, phoneNumber) {
 		criteriaQuery += "Customer_Orders.order_id = ? AND ";
 		queryVals.push(orderId);
 	}
-	if (firstName != "") {
-		criteriaQuery += "Customers.first_name = ? AND ";
-		queryVals.push(firstName);
-	}
-	if (lastName != "") {
-		criteriaQuery += "Customers.last_name = ? AND ";
-		queryVals.push(lastName);
-	}
-	if (phoneNumber != "") {
-		criteriaQuery += "Customers.customer_phone_primary = ? AND ";
-		queryVals.push(phoneNumber);
+	if (customerId != "") {
+		criteriaQuery += "Customers.customer_id = ? AND ";
+		queryVals.push(customerId);
 	}
 	// remove the trailing AND from query
 	criteriaQuery = criteriaQuery.substring(0, criteriaQuery.length - 4);
@@ -155,7 +111,7 @@ function getOrderProducts(orderId, firstName, lastName, phoneNumber) {
 	criteriaQuery = "WHERE " + criteriaQuery;
 
 	// display all orders
-	if ((!orderId || orderId == "") && (!firstName || firstName == "") && (!lastName || lastName == "") && (!phoneNumber || phoneNumber == "")) {
+	if ((!orderId || orderId == "") && (!customerId || customerId == "")) {
 		return new Promise((resolve, reject) => {
             mysql.pool.query(baseQuery + endQuery, (err, results) => {
                 if (err) {
@@ -176,6 +132,18 @@ function getOrderProducts(orderId, firstName, lastName, phoneNumber) {
             })
         })
     }
+}
+
+function getCustomerDescriptions() {
+	let query = "SELECT customer_id, CONCAT(first_name, ' ', last_name, ', ', customer_phone_primary) AS customer_desc FROM Customers;";
+    return new Promise((resolve, reject) => {
+        mysql.pool.query(query, (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(results);
+        })
+    })
 }
 
 module.exports = router;
