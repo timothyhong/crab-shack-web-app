@@ -1,16 +1,53 @@
 -- SQL Queries for Website
 
--- Products page
--- SELECT
+
+-- COMMON QUERIES (Javascript functions)
+
+-- getColumns = (data, tableName, distinct) => a promise with query results
+  -- data: {cols: [col1, ...], criteria:{criteriaKey1: criteriaVal1}}
+  -- tableName: name of the table
+  -- distinct: bool true/false
+SELECT :col1, :col2, ... FROM :tableName WHERE :criteriaKey1 = :criteriaVal1 AND criteriaKey2 = :criteriaVal2 ...;
+
+-- addRowServer = (data, tableName) => a promise with success message
+  -- data: {cols: {colKey1: colVal1, ...}}
+  -- tableName: name of the table
+INSERT INTO :tableName (:colKey1, :colKey2, ...) VALUES (:colVal1, :colval2, ...);
+
+-- editRowServer = (data, tableName) => a promise with success message
+  -- data: {ids: {idKey1: idVal1, ...} cols: {colKey1: colVal1, ...}}
+  -- tableName: name of the table
+UPDATE :tableName SET :colKey1 = :colVal1, :colKey2 = :colVal2, ... WHERE :idKey1 = :idVal1 AND :idKey2 = :idVal2 ...;
+
+-- deleteRowServer = (data, tableName) => a promise with success message
+  -- data: {ids: {idKey1: idVal1, ...}}
+  -- tableName: name of the table
+DELETE FROM :tableName WHERE :idKey1 = :idVal1 AND :idKey2 = :idVal2 ...;
+
+
+-- PRODUCTS PAGE
+
+-- Display Products
 SELECT `product_id`, `product_type_description`, `product_name`, `product_unit_price`, `product_unit_size`, `product_description`
      FROM `Products` LEFT JOIN `Ref_Product_Types` ON Products.product_type_code = Ref_Product_Types.product_type_code;
--- DELETE
-  -- DELETE FROM Customer_Orders WHERE 
+   
+-- Display all products that have parent_product_type_code as an ancestor
+WITH RECURSIVE cte_products 
+AS (
+      SELECT product_type_code, parent_product_type_code, product_type_description FROM Ref_Product_Types WHERE product_type_code = ?
+      UNION ALL
+      SELECT child.product_type_code,
+         child.parent_product_type_code,
+         child.product_type_description
+      FROM Ref_Product_Types AS child
+      JOIN cte_products AS parent ON parent.product_type_code = child.parent_product_type_code
+    )
+SELECT cte_products.product_type_description, Products.product_name, Products.product_unit_price, Products.product_unit_size, Products.product_description
+FROM cte_products LEFT JOIN Ref_Product_Types ON cte_products.product_type_description = Ref_Product_Types.product_type_description LEFT JOIN Products ON Ref_Product_Types.product_type_code = Products.product_type_code;
 
+-- ORDERS PAGE
 
-
--- Orders page
-
+-- Display Customer_Orders
 SELECT
     Customer_Orders.order_id,
     Customer_Orders.customer_id,
@@ -41,20 +78,31 @@ LEFT JOIN Ref_Card_Types ON Customer_Orders.card_type = Ref_Card_Types.card_type
 LEFT JOIN Customer_Orders_Products ON Customer_Orders.order_id = Customer_Orders_Products.order_id
 LEFT JOIN Products ON Customer_Orders_Products.product_id = Products.product_id
 GROUP BY Customer_Orders.order_id;
-   
--- Ref_Product_Types
 
--- recursive query displaying product_type_codes which descend from a specified parent_product_type_code
-WITH RECURSIVE cte_products 
-AS (
-      SELECT product_type_code, parent_product_type_code, product_type_description FROM Ref_Product_Types WHERE product_type_code = ?
-      UNION ALL
-      SELECT child.product_type_code,
-         child.parent_product_type_code,
-         child.product_type_description
-      FROM Ref_Product_Types AS child
-      JOIN cte_products AS parent ON parent.product_type_code = child.parent_product_type_code
-    )
-SELECT cte_products.product_type_description, Products.product_name, Products.product_unit_price, Products.product_unit_size, Products.product_description
-FROM cte_products LEFT JOIN Ref_Product_Types ON cte_products.product_type_description = Ref_Product_Types.product_type_description LEFT JOIN Products ON Ref_Product_Types.product_type_code = Products.product_type_code;
+-- Display Products on each Customer_Order
+SELECT
+    Customer_Orders.order_id,
+    Products.product_id,
+    Products.product_name,
+    Products.product_unit_price,
+    Customer_Orders_Products.quantity
+FROM
+    Customer_Orders
+JOIN Customer_Orders_Products USING(order_id)
+JOIN Products USING(product_id)
+JOIN Customers USING(customer_id)
+ORDER BY
+    Customer_Orders.order_id;
+   
+-- REFERENCES
+
+-- Display Ref_Product_Types
+SELECT
+    child.product_type_code,
+    child.product_type_description,
+    parent.product_type_description AS parent_product_type_description
+FROM
+    Ref_Product_Types child
+LEFT JOIN Ref_Product_Types parent ON
+    child.parent_product_type_code = parent.product_type_code;
 

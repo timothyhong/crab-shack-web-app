@@ -286,6 +286,7 @@ addRowServer = (data, tableName) => {
     })
 }
 
+/*
 // fetches entire table from MYSQL database
 module.exports.getData = (tableName) => {
     return new Promise((resolve, reject) => {
@@ -297,6 +298,7 @@ module.exports.getData = (tableName) => {
         })
     })
 }
+*/
 
 // fetches columns matching criteria
 // data: {cols: [col1, ...], criteria:{criteriaKey1: criteriaVal1}}
