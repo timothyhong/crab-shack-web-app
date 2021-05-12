@@ -8,9 +8,16 @@
 
 <div class="form-container">
     <h2>Order Search</h2>
-    <p>Search orders by customer first name, last name, or phone number.</p>
-    <form id="lookupOrderForm" method="get" action="/orders/search">
+    <p>Search orders by order ID, customer first name, last name, or phone number.</p>
+    <form id="lookupOrderForm" method="get" action="/orders">
         <fieldset>
+            <label for="lookupOrderId">Order ID</label>
+            <select id="lookupOrderId" name="order_id">
+                <option value=""></option>
+                {{#each orderIds}}
+                <option value={{this.order_id}}>{{this.order_id}}</option>
+                {{/each}}
+            </select>
             <label for="lookupFirstName">First Name</label>
             <select id="lookupFirstName" name="first_name">
                 <option value=""></option>
@@ -26,7 +33,12 @@
                 {{/each}}
             </select>
             <label for="lookupPrimaryPhone">Primary Phone</label>
-            <input type="tel" id="lookupPrimaryPhone" name="customer_phone_primary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="123-456-7890">
+            <select id="lookupPrimaryPhone" name="customer_phone_primary">
+                <option value=""></option>
+                {{#each primaryPhones}}
+                <option value={{this.customer_phone_primary}}>{{this.customer_phone_primary}}</option>
+                {{/each}}
+            </select>
             <input class="lookup-order" id="lookupOrderButton" type="submit" value="Search">
         </fieldset>
     </form>
@@ -76,6 +88,34 @@
         </tbody>
     </table>
 </div>
+<div class="table-container form-container">
+    <h2>Order Details</h2>
+    <br>
+    <table class="order-products">
+        <thead class="order-products">
+            <tr>
+                <th id="order_id" class="key">Order ID</th>
+                <th id="product_id" class="key hidden">Product ID</th>
+                <th id="product_name">Product Name</th>
+                <th id="product_unit_price">Unit Price</th>
+                <th id="quantity">Quantity</th>
+            </tr>
+        </thead>
+        <tbody class="order-products">
+            {{#each orderProducts}}
+            <tr class="table-row">
+                <td headers="order_id" class="key">{{this.order_id}}</td>
+                <td headers="product_id" class="key hidden">{{this.product_id}}</td>
+                <td headers="product_name">{{this.product_name}}</td>
+                <td headers="product_unit_price">{{this.product_unit_price}}</td>
+                <td headers="quantity">{{this.quantity}}</td>
+                <td><input class="deleteOrderProduct" type="submit" value="Delete" onclick="deleteRowAJAX(this)"></td>
+                <td><input class="editOrderProduct" type="submit" value="Edit" onclick="setDefaults(this)"></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
 <div class="form-container">
     <h2>Add/Edit Orders</h2>
     <p>Add a new order or edit an existing order.</p>
@@ -87,11 +127,23 @@
             <label for="addEditCustomerID" class="hidden">Customer ID</label>
             <input class="edit-field hidden" type="hidden" id="addEditCustomerID" name="customer_id">
             <label for="addEditFirstName">*First Name</label>
-            <input class="edit-field" type="text" id="addEditFirstName" name="first_name" required>
+            <select class="edit-field description" id="addEditFirstName" name="first_name">
+                {{#each firstNames}}
+                <option value={{this.first_name}}>{{this.first_name}}</option>
+                {{/each}}
+            </select>
             <label for="addEditLastName">*Last Name</label>
-            <input class="edit-field" type="text" id="addEditLastName" name="last_name" required>
+            <select class="edit-field description" id="addEditLastName" name="last_name">
+                {{#each lastNames}}
+                <option value={{this.last_name}}>{{this.last_name}}</option>
+                {{/each}}
+            </select>
             <label for="addEditPrimaryPhone">*Primary Phone</label>
-            <input class="edit-field" type="tel" id="addEditPrimaryPhone" name="customer_phone_primary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required title="123-456-7890">
+            <select class="edit-field description" id="addEditPrimaryPhone" name="customer_phone_primary">
+                {{#each primaryPhones}}
+                <option value={{this.customer_phone_primary}}>{{this.customer_phone_primary}}</option>
+                {{/each}}
+            </select>
             <label for="addEditCardType">*Payment Method</label>
             <select class="edit-field description" id="addEditCardType" name="card_type_code">
                 {{#each paymentMethods}}
@@ -120,3 +172,29 @@
         </fieldset>
     </form>
 </div>
+<div class="form-container">
+    <h2>Add to Existing Order</h2>
+    <p>Add products to an existing order.</p>
+    <form id="addToOrderForm">
+        <fieldset>
+            <legend>*Starred* Fields are Required</legend>
+            <label for="addEditOrderProductsOrderId" class="key">*Order ID</label>
+            <select class="edit-field description" id="addEditOrderProductsOrderId" name="order_id" required>
+                {{#each orderIds}}
+                <option value={{this.order_id}}>{{this.order_id}}</option>
+                {{/each}}
+            </select>
+            <label for="addEditOrderProductsProductName">*Product Name</label>
+            <select class="edit-field description" id="addEditOrderProductsProductName" name="product_name" required>
+                {{#each productNames}}
+                <option value={{this.product_id}}>{{this.product_name}}</option>
+                {{/each}}
+            </select>
+            <label for="addEditOrderProductsQuantity">*Quantity</label>
+            <input class="edit-field" type="number" id="addEditOrderProductsQuantity" name="quantity" required>
+            <input class="addOrderProducts" type="submit" value="Add" onclick="addRowAJAX(this)">
+            <input class="editOrderProducts" type="submit" value="Edit" onclick="editRowAJAX(this)">
+        </fieldset>
+    </form>
+</div>
+
