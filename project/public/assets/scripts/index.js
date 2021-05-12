@@ -30,6 +30,7 @@ function closeNav() {
   document.getElementById("sidenav-open").style.display = "block";
 }
 
+/*
 function toggleSubMenu(id) {
   let currentSubMenu = document.getElementById(id);
 	// close existing open submenus
@@ -54,6 +55,7 @@ function addNewProductType(event) {
     location.href = '/references/products';
   }
 }
+*/
 
 // AJAX delete row call
 function deleteRowAJAX(deleteButton) {
@@ -139,10 +141,9 @@ function addRowAJAX(addButton) {
         }
     });
     if (requiredFieldsMissing) {
-      return;
+        return;
     }
     const editFields = form.querySelectorAll(".edit-field");
-    console.log(editFields);
     let data = {};
     let cols = {};
     let ids = {};
@@ -155,7 +156,6 @@ function addRowAJAX(addButton) {
     data.cols = cols;
     data.ids = ids;
     data.action = addButton.className;
-    console.log(data);
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/");
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -184,7 +184,7 @@ function setDefaults(editButton) {
         // for dropdown menus that utilize descriptions, find the description that matches the value and select it
         if (input.classList.contains("description")) {
             Array.prototype.forEach.call(input.children, child => {
-                if (child.innerHTML == data[input.getAttribute("name")]) {
+                if (child.innerHTML == data[input.getAttribute("name")] || child.value == data[input.getAttribute("name")]) {
                     input.value = child.value;
                 }
             });

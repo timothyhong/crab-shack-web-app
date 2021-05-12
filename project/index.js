@@ -49,7 +49,6 @@ app.post('/', function(req, res, next) {
     // Customers
     else if (req.body.action == "deleteCustomer") {
         delete req.body["action"];
-        console.log(req.body);
         checkDataServer(req.body, "Customers").then((data) => deleteRowServer(data, "Customers")).then((msg) => res.send(msg)).catch((err) => console.error(err));
     }
     else if (req.body.action == "editCustomer") {
@@ -85,7 +84,33 @@ app.post('/', function(req, res, next) {
     else if (req.body.action == "addOrderProduct") {
         delete req.body["action"];
         checkDataServer(req.body, "Customer_Orders_Products").then((data) => addRowServer(data, "Customer_Orders_Products")).then((msg) => res.send(msg)).catch((err) => console.error(err));
-    }    
+    }
+    // Payment Type References
+    else if (req.body.action == "deletePaymentType") {
+        delete req.body["action"];
+        checkDataServer(req.body, "Ref_Card_Types").then((data) => deleteRowServer(data, "Ref_Card_Types")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+    }
+    else if (req.body.action == "editPaymentType") {
+        delete req.body["action"];
+        checkDataServer(req.body, "Ref_Card_Types").then((data) => editRowServer(data, "Ref_Card_Types")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+    }
+    else if (req.body.action == "addPaymentType") {
+        delete req.body["action"];
+        checkDataServer(req.body, "Ref_Card_Types").then((data) => addRowServer(data, "Ref_Card_Types")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+    }
+    // Product Type References
+    else if (req.body.action == "deleteProductType") {
+        delete req.body["action"];
+        checkDataServer(req.body, "Ref_Product_Types").then((data) => deleteRowServer(data, "Ref_Product_Types")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+    }
+    else if (req.body.action == "editProductType") {
+        delete req.body["action"];
+        checkDataServer(req.body, "Ref_Product_Types").then((data) => editRowServer(data, "Ref_Product_Types")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+    }
+    else if (req.body.action == "addProductType") {
+        delete req.body["action"];
+        checkDataServer(req.body, "Ref_Product_Types").then((data) => addRowServer(data, "Ref_Product_Types")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+    }        
 });
 
 app.listen(app.get("port"), () => {

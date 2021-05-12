@@ -150,14 +150,14 @@
     <form id="addToOrderForm">
         <fieldset>
             <legend>*Starred* Fields are Required</legend>
-            <label for="addEditOrderProductsOrderId" class="key">*Order ID</label>
+            <label for="addEditOrderProductsOrderId">*Order ID</label>
             <select class="edit-field description" id="addEditOrderProductsOrderId" name="order_id" required>
                 {{#each orderIds}}
                 <option value={{this.order_id}}>{{this.order_id}}</option>
                 {{/each}}
             </select>
             <label for="addEditOrderProductsProductName">*Product Name</label>
-            <select class="edit-field description" id="addEditOrderProductsProductName" name="product_name" required>
+            <select class="edit-field description" id="addEditOrderProductsProductName" name="product_id" required>
                 {{#each productNames}}
                 <option value={{this.product_id}}>{{this.product_name}}</option>
                 {{/each}}
