@@ -38,7 +38,7 @@ function getOrders(orderId, customerId) {
 	let baseQuery = "SELECT Customer_Orders.order_id, Customer_Orders.customer_id, Customers.first_name, " +
     "Customers.last_name, Customers.customer_phone_primary, Ref_Card_Types.card_type_description, " +
     "Customer_Orders.card_last_four, IF(Customer_Orders.order_picked_up_yn, 'Yes', 'No') AS order_picked_up_yn, " +
-    "IF(Customer_Orders.order_paid_yn, 'Yes', 'No') AS order_paid_yn, Customer_Orders.datetime_order_placed, " +
+    "IF(Customer_Orders.order_paid_yn, 'Yes', 'No') AS order_paid_yn, DATE_FORMAT(Customer_Orders.datetime_order_placed, '%Y-%m-%dT%H:%i') AS datetime_order_placed, " +
     "SUM(Customer_Orders_Products.quantity * Products.product_unit_price) AS der_total_order_price, " +
     "Customer_Orders.order_detail FROM Customer_Orders LEFT JOIN Customers ON Customer_Orders.customer_id = Customers.customer_id " +
 	"LEFT JOIN Ref_Card_Types ON Customer_Orders.card_type = Ref_Card_Types.card_type_code " +
@@ -69,6 +69,7 @@ function getOrders(orderId, customerId) {
                 if (err) {
                     return reject(err);
                 }
+                console.log(results);
                 resolve(results);
             })
         })

@@ -119,7 +119,7 @@ app.listen(app.get("port"), () => {
 
 // SQL queries
 
-// Server-side check that removes any data that does not exist in tableName
+// Removes any data that does not exist in tableName
 // data: {ids: {idKey1: idVal1, ...} cols: {colKey1: colVal1, ...}}
 // takes data and ensures idKeys and colKeys exist within tableName
 checkDataServer = (data, tableName) => {

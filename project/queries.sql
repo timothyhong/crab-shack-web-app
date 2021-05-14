@@ -66,7 +66,7 @@ SELECT
         'Yes',
         'No'
     ) AS order_paid_yn,
-    Customer_Orders.datetime_order_placed,
+    DATE_FORMAT(Customer_Orders.datetime_order_placed, '%Y-%m-%dT%H:%i') AS datetime_order_placed,
     SUM(
         Customer_Orders_Products.quantity * Products.product_unit_price
     ) AS der_total_order_price,
