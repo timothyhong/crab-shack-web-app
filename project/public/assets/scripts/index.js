@@ -30,32 +30,12 @@ function closeNav() {
   document.getElementById("sidenav-open").style.display = "block";
 }
 
-/*
-function toggleSubMenu(id) {
-  let currentSubMenu = document.getElementById(id);
-	// close existing open submenus
-	let submenus = document.getElementsByClassName("submenu");
-	Array.prototype.forEach.call(submenus, element => {
-    if (element != currentSubMenu) {
-      element.style.display = "none"
-    }
-  });
-	// toggle current submenu
-  if (!currentSubMenu.style.display || currentSubMenu.style.display == "none") {
-    currentSubMenu.style.display = "block";
-  }
-  else {
-    currentSubMenu.style.display = "none";
-  }
-}
-
 // redirects to add new product type code page
 function addNewProductType(event) {
   if (event.target.value === "Add New Product Type") {
-    location.href = '/references/products';
+    location.href = '/references';
   }
 }
-*/
 
 // AJAX delete row call
 function deleteRowAJAX(deleteButton) {
@@ -268,5 +248,25 @@ function create(tag) {
 // Helper function to append child to parent
 function append(child, parent) {
     parent.appendChild(child);
+}
+*/
+
+/*
+function toggleSubMenu(id) {
+  let currentSubMenu = document.getElementById(id);
+  // close existing open submenus
+  let submenus = document.getElementsByClassName("submenu");
+  Array.prototype.forEach.call(submenus, element => {
+    if (element != currentSubMenu) {
+      element.style.display = "none"
+    }
+  });
+  // toggle current submenu
+  if (!currentSubMenu.style.display || currentSubMenu.style.display == "none") {
+    currentSubMenu.style.display = "block";
+  }
+  else {
+    currentSubMenu.style.display = "none";
+  }
 }
 */

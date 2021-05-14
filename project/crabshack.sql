@@ -105,7 +105,7 @@ CREATE TABLE Customer_Orders_Products(
 -- Ref_Card_Types
 
   INSERT INTO `Ref_Card_Types` (`card_type_description`) VALUES
-  ('Cash'),('American Express'), ('Discover'), ('Mastercard'), ('Visa');
+  ('Cash'),('American Express'), ('Discover'), ('Mastercard'), ('Visa'), ('Dogecoin');
 
 -- Customers
 
@@ -118,7 +118,7 @@ CREATE TABLE Customer_Orders_Products(
 
   INSERT INTO `Customers` (`first_name`, `middle_name`, `last_name`, `customer_phone_primary`, `customer_phone_secondary`,
   `customer_email`, `address_line_1`, `address_line_2`, `city`, `zip_code`, `state`, `customer_info`) VALUES
-  ('Earl', 'Papa Bear', 'Banks', '410-111-2222', '410-222-1111', 'papabear@morganstate.edu', '17 Roland Avenue', 'Apt. 2B', 'Baltimore', '21211', 'MD', 'extra napkins, utensils'),
+  ('Earl', 'Papa Bear', 'Banks', '410-111-2222', '410-222-1111', 'papabear@morganstate.edu', '17 Roland Avenue', 'Apt. 2B', 'Baltimore', '21211', 'MD', 'great guy'),
   ('Thurgood', null, 'Marshall', '111-222-3333', null, 'thurgoodmarshall@supremecourt.gov', '120 Martin Luther King Blvd', null, 'Baltimore', '21201', 'MD', null),
   ('Earl', null, 'Grey', '410-999-8765', null, 'earlgrey@besttea.com', '122 Union Avenue', 'Apt 17', 'Baltimore', '21212', 'MD', null);
 
