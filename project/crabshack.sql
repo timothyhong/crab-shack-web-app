@@ -65,7 +65,7 @@ CREATE TABLE Customer_Orders(
   `customer_id` int(11) NOT NULL,
   `card_type` int(11),
   `card_last_four` char(4),
-  `datetime_order_placed` datetime,
+  `datetime_order_placed` varchar(255), -- datetime,
   `order_picked_up_yn` tinyint(1) NOT NULL DEFAULT 0,
   `order_paid_yn` tinyint(1) NOT NULL DEFAULT 0,
   `order_detail` varchar(255),
@@ -275,125 +275,125 @@ CREATE TABLE Customer_Orders_Products(
   INSERT INTO `Customer_Orders` (`customer_id`, `card_type`, `card_last_four`, `datetime_order_placed`,
   `order_picked_up_yn`, `order_paid_yn`)
      SELECT `customer_id`, (SELECT `card_type_code` FROM `Ref_Card_Types` WHERE `card_type_description` = 'Visa'),
-            '1234', '2021-05-01 12:34:33', 1, 1
+            '1234', '2021-05-01T12:34:33', 1, 1
      FROM `Customers`
      WHERE `first_name` = 'Boog' AND `last_name` = 'Powell';
 
   INSERT INTO `Customer_Orders` (`customer_id`, `card_type`, `card_last_four`, `datetime_order_placed`,
   `order_picked_up_yn`, `order_paid_yn`)
      SELECT `customer_id`, (SELECT `card_type_code` FROM `Ref_Card_Types` WHERE `card_type_description` = 'Visa'),
-            '2222', '2021-05-01 16:04:25', 1, 1
+            '2222', '2021-05-01T16:04:25', 1, 1
      FROM `Customers`
      WHERE `first_name` = 'Kevin' AND `last_name` = 'Plank';
 
   INSERT INTO `Customer_Orders` (`customer_id`, `card_type`, `card_last_four`, `datetime_order_placed`,
   `order_picked_up_yn`, `order_paid_yn`)
      SELECT `customer_id`, (SELECT `card_type_code` FROM `Ref_Card_Types` WHERE `card_type_description` = 'Cash'),
-            null, '2021-05-10 12:08:52', 0, 1
+            null, '2021-05-10T12:08:52', 0, 1
      FROM `Customers`
      WHERE `first_name` = 'Kevin' AND `last_name` = 'Plank';
 
   INSERT INTO `Customer_Orders` (`customer_id`, `card_type`, `card_last_four`, `datetime_order_placed`,
   `order_picked_up_yn`, `order_paid_yn`, `order_detail`)
      SELECT `customer_id`, (SELECT `card_type_code` FROM `Ref_Card_Types` WHERE `card_type_description` = 'Cash'),
-            null, '2021-05-17 02:14:33', 1, 0, 'not paid'
+            null, '2021-05-17T02:14:33', 1, 0, 'not paid'
      FROM `Customers`
      WHERE `first_name` = 'Kevin' AND `last_name` = 'Smith';
 
   INSERT INTO `Customer_Orders` (`customer_id`, `card_type`, `card_last_four`, `datetime_order_placed`,
   `order_picked_up_yn`, `order_paid_yn`, `order_detail`)
      SELECT `customer_id`, (SELECT `card_type_code` FROM `Ref_Card_Types` WHERE `card_type_description` = 'American Express'),
-            '9284', '2021-05-12 09:32:17', 0, 1, 'extra napkins'
+            '9284', '2021-05-12T09:32:17', 0, 1, 'extra napkins'
      FROM `Customers`
      WHERE `first_name` = 'Weston' AND `last_name` = 'Powell';
 
   INSERT INTO `Customer_Orders` (`customer_id`, `card_type`, `card_last_four`, `datetime_order_placed`,
   `order_picked_up_yn`, `order_paid_yn`, `order_detail`)
      SELECT `customer_id`, (SELECT `card_type_code` FROM `Ref_Card_Types` WHERE `card_type_description` = 'Mastercard'),
-            '7777', '1999-01-17 22:32:19', 1, 1, null
+            '7777', '1999-01-17T22:32:19', 1, 1, null
      FROM `Customers`
      WHERE `first_name` = 'Earl' AND `last_name` = 'Banks';
 
   INSERT INTO `Customer_Orders` (`customer_id`, `card_type`, `card_last_four`, `datetime_order_placed`,
   `order_picked_up_yn`, `order_paid_yn`, `order_detail`)
      SELECT `customer_id`, (SELECT `card_type_code` FROM `Ref_Card_Types` WHERE `card_type_description` = 'Discover'),
-            '9999', '1982-01-01 17:22:54', 1, 1, null
+            '9999', '1982-01-01T17:22:54', 1, 1, null
      FROM `Customers`
      WHERE `first_name` = 'Thurgood' AND `last_name` = 'Marshall';
 
   INSERT INTO `Customer_Orders` (`customer_id`, `card_type`, `card_last_four`, `datetime_order_placed`,
   `order_picked_up_yn`, `order_paid_yn`, `order_detail`)
      SELECT `customer_id`, (SELECT `card_type_code` FROM `Ref_Card_Types` WHERE `card_type_description` = 'Cash'),
-            null, '2021-10-31 22:22:22', 0, 1, null
+            null, '2021-10-31T22:22:22', 0, 1, null
      FROM `Customers`
      WHERE `first_name` = 'Earl' AND `last_name` = 'Grey';
 
 -- Customer_Orders_Products
 
   INSERT INTO `Customer_Orders_Products` (`order_id`, `product_id`, `quantity`) VALUES
-    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Boog' AND `last_name` = 'Powell') AND `datetime_order_placed` = '2021-05-01 12:34:33'),
+    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Boog' AND `last_name` = 'Powell') AND `datetime_order_placed` = '2021-05-01T12:34:33'),
     (SELECT `product_id` FROM `Products` WHERE `product_name` = 'Dozen Medium Crabs Live'), 3);
 
   INSERT INTO `Customer_Orders_Products` (`order_id`, `product_id`, `quantity`) VALUES
-    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Boog' AND `last_name` = 'Powell') AND `datetime_order_placed` = '2021-05-01 12:34:33'),
+    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Boog' AND `last_name` = 'Powell') AND `datetime_order_placed` = '2021-05-01T12:34:33'),
     (SELECT `product_id` FROM `Products` WHERE `product_name` = 'Dozen Extra Large Crabs Steamed'), 2);
 
   INSERT INTO `Customer_Orders_Products` (`order_id`, `product_id`, `quantity`) VALUES
-    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Boog' AND `last_name` = 'Powell') AND `datetime_order_placed` = '2021-05-01 12:34:33'),
+    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Boog' AND `last_name` = 'Powell') AND `datetime_order_placed` = '2021-05-01T12:34:33'),
     (SELECT `product_id` FROM `Products` WHERE `product_name` = 'Claw Cracker (XL)'), 7);
 
   INSERT INTO `Customer_Orders_Products` (`order_id`, `product_id`, `quantity`) VALUES
-    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Kevin' AND `last_name` = 'Plank') AND `datetime_order_placed` = '2021-05-01 16:04:25'),
+    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Kevin' AND `last_name` = 'Plank') AND `datetime_order_placed` = '2021-05-01T16:04:25'),
     (SELECT `product_id` FROM `Products` WHERE `product_name` = 'Bushel Extra Large Crabs Live'), 2);
 
   INSERT INTO `Customer_Orders_Products` (`order_id`, `product_id`, `quantity`) VALUES
-    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Kevin' AND `last_name` = 'Plank') AND `datetime_order_placed` = '2021-05-10 12:08:52'),
+    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Kevin' AND `last_name` = 'Plank') AND `datetime_order_placed` = '2021-05-10T12:08:52'),
     (SELECT `product_id` FROM `Products` WHERE `product_name` = 'Bushel Medium Crabs Steamed'), 4);
 
   INSERT INTO `Customer_Orders_Products` (`order_id`, `product_id`, `quantity`) VALUES
-    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Kevin' AND `last_name` = 'Plank') AND `datetime_order_placed` = '2021-05-10 12:08:52'),
+    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Kevin' AND `last_name` = 'Plank') AND `datetime_order_placed` = '2021-05-10T12:08:52'),
     (SELECT `product_id` FROM `Products` WHERE `product_name` = 'Old Bay (Large)'), 4);
 
   INSERT INTO `Customer_Orders_Products` (`order_id`, `product_id`, `quantity`) VALUES
-    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Kevin' AND `last_name` = 'Plank') AND `datetime_order_placed` = '2021-05-10 12:08:52'),
+    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Kevin' AND `last_name` = 'Plank') AND `datetime_order_placed` = '2021-05-10T12:08:52'),
     (SELECT `product_id` FROM `Products` WHERE `product_name` = 'Paper Table Cover (White)'), 2);
 
   INSERT INTO `Customer_Orders_Products` (`order_id`, `product_id`, `quantity`) VALUES
-    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Kevin' AND `last_name` = 'Smith') AND `datetime_order_placed` = '2021-05-17 02:14:33'),
+    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Kevin' AND `last_name` = 'Smith') AND `datetime_order_placed` = '2021-05-17T02:14:33'),
     (SELECT `product_id` FROM `Products` WHERE `product_name` = 'Claw Cracker (Regular)'), 2000);   
 
   INSERT INTO `Customer_Orders_Products` (`order_id`, `product_id`, `quantity`) VALUES
-    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Weston' AND `last_name` = 'Powell') AND `datetime_order_placed` = '2021-05-12 09:32:17'),
+    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Weston' AND `last_name` = 'Powell') AND `datetime_order_placed` = '2021-05-12T09:32:17'),
     (SELECT `product_id` FROM `Products` WHERE `product_name` = 'Paper Table Cover (Maryland Flag)'), 2);   
 
   INSERT INTO `Customer_Orders_Products` (`order_id`, `product_id`, `quantity`) VALUES
-    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Weston' AND `last_name` = 'Powell') AND `datetime_order_placed` = '2021-05-12 09:32:17'),
+    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Weston' AND `last_name` = 'Powell') AND `datetime_order_placed` = '2021-05-12T09:32:17'),
     (SELECT `product_id` FROM `Products` WHERE `product_name` = 'Old Bay (Medium)'), 12);  
 
   INSERT INTO `Customer_Orders_Products` (`order_id`, `product_id`, `quantity`) VALUES
-    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Weston' AND `last_name` = 'Powell') AND `datetime_order_placed` = '2021-05-12 09:32:17'),
+    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Weston' AND `last_name` = 'Powell') AND `datetime_order_placed` = '2021-05-12T09:32:17'),
     (SELECT `product_id` FROM `Products` WHERE `product_name` = 'Dozen Large Crabs Live'), 10);  
 
   INSERT INTO `Customer_Orders_Products` (`order_id`, `product_id`, `quantity`) VALUES
-    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Weston' AND `last_name` = 'Powell') AND `datetime_order_placed` = '2021-05-12 09:32:17'),
+    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Weston' AND `last_name` = 'Powell') AND `datetime_order_placed` = '2021-05-12T09:32:17'),
     (SELECT `product_id` FROM `Products` WHERE `product_name` = 'Bushel Medium Crabs Live'), 10);
 
   INSERT INTO `Customer_Orders_Products` (`order_id`, `product_id`, `quantity`) VALUES
-    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Earl' AND `last_name` = 'Banks') AND `datetime_order_placed` = '1999-01-17 22:32:19'),
+    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Earl' AND `last_name` = 'Banks') AND `datetime_order_placed` = '1999-01-17T22:32:19'),
     (SELECT `product_id` FROM `Products` WHERE `product_name` = 'Bushel Large Crabs Live'), 5);    
 
   INSERT INTO `Customer_Orders_Products` (`order_id`, `product_id`, `quantity`) VALUES
-    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Earl' AND `last_name` = 'Banks') AND `datetime_order_placed` = '1999-01-17 22:32:19'),
+    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Earl' AND `last_name` = 'Banks') AND `datetime_order_placed` = '1999-01-17T22:32:19'),
     (SELECT `product_id` FROM `Products` WHERE `product_name` = 'Paper Table Cover (Maryland Flag)'), 1);    
 
   INSERT INTO `Customer_Orders_Products` (`order_id`, `product_id`, `quantity`) VALUES
-    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Thurgood' AND `last_name` = 'Marshall') AND `datetime_order_placed` = '1982-01-01 17:22:54'),
+    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Thurgood' AND `last_name` = 'Marshall') AND `datetime_order_placed` = '1982-01-01T17:22:54'),
     (SELECT `product_id` FROM `Products` WHERE `product_name` = 'Crab Mallet (XL)'), 99); 
 
   INSERT INTO `Customer_Orders_Products` (`order_id`, `product_id`, `quantity`) VALUES
-    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Thurgood' AND `last_name` = 'Marshall') AND `datetime_order_placed` = '1982-01-01 17:22:54'),
+    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Thurgood' AND `last_name` = 'Marshall') AND `datetime_order_placed` = '1982-01-01T17:22:54'),
     (SELECT `product_id` FROM `Products` WHERE `product_name` = 'Bushel Extra Large Crabs Steamed'), 50); 
 
   INSERT INTO `Customer_Orders_Products` (`order_id`, `product_id`, `quantity`) VALUES
-    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Earl' AND `last_name` = 'Grey') AND `datetime_order_placed` = '2021-10-31 22:22:22'),
+    ((SELECT `order_id` FROM `Customer_Orders` WHERE `customer_id` = (SELECT `customer_id` FROM `Customers` WHERE `first_name` = 'Earl' AND `last_name` = 'Grey') AND `datetime_order_placed` = '2021-10-31T22:22:22'),
     (SELECT `product_id` FROM `Products` WHERE `product_name` = 'Dozen Medium Crabs Steamed'), 1); 
