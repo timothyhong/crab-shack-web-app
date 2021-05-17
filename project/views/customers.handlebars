@@ -9,7 +9,7 @@
 <div class="form-container">
     <h2>Search Customers</h2>
     <p>Search customers by first name, last name, or phone number.</p>
-    <form id="lookupCustomerForm" method="get" action="/customers/search">
+    <form method="get" action="/customers/search">
         <fieldset>
             <label for="lookupFirstName">First Name</label>
             <select id="lookupFirstName" name="first_name">
@@ -33,12 +33,10 @@
 </div>
 <div class="table-container form-container">
     <h2>Browse Customers</h2>
-    <form action="/customers/search">
-        <input type="submit" value="Show All">
-    </form>
+    <input class="modal-open" data-modal="add-customer-modal" type="submit" value="Add New Customer">
     <br>
-    <table class="customers">
-        <thead class="customers">
+    <table>
+        <thead>
             <tr>
                 <th id="customer_id" class="hidden key">Customer ID</th>
                 <th id="first_name">First Name</th>
@@ -55,9 +53,9 @@
                 <th id="customer_info">Info</th>
             </tr>
         </thead>
-        <tbody class="customers">
+        <tbody>
             {{#each rows}}
-            <tr class="table-row">
+            <tr>
                 <td headers="customer_id" class="hidden key">{{this.customer_id}}</td>
                 <td headers="first_name">{{this.first_name}}</td>
                 <td headers="middle_name">{{this.middle_name}}</td>
@@ -72,47 +70,89 @@
                 <td headers="state">{{this.state}}</td>
                 <td headers="customer_info">{{this.customer_info}}</td>
                 <td><input class="deleteCustomer" type="submit" value="Delete" onclick="deleteRowAJAX(this)"></td>
-                <td><input class="editCustomer" type="submit" value="Edit" onclick="setDefaults(this)"></td>
+                <td><input class="modal-open" data-modal="edit-customer-modal" type="submit" value="Edit" onclick="setDefaults(this)"></td>
             </tr>
             {{/each}}
         </tbody>
     </table>
 </div>
-<div class="form-container">
-    <h2>Add/Edit Customers</h2>
-    <p>Add a new customer or edit an existing customer.</p>
-    <form id="addEditCustomerForm">
-        <fieldset>
-            <legend>*Starred* Fields are Required</legend>
-            <label for="addEditCustomerId" class="hidden key">Customer ID</label>
-            <input class="edit-field hidden key" type="hidden" id="addEditCustomerId" name="customer_id">
-            <label for="addEditFirstName">*First Name</label>
-            <input class="edit-field" type="text" id="addEditFirstName" name="first_name" required>
+<div id="add-customer-modal" class="modal">
+    <div class="modal-content form-container">
+        <span class="modal-close">&times;</span>
+        <h2>Add Customer</h2>
+        <p>Add a new customer.</p>
+        <form>
+            <fieldset>
+                <legend>*Starred* Fields are Required</legend>
+                <label for="addCustomerId" class="hidden key">Customer ID</label>
+                <input class="user-input hidden key" type="hidden" id="addCustomerId" name="customer_id">
+                <label for="addFirstName">*First Name</label>
+                <input class="user-input" type="text" id="addFirstName" name="first_name" required>
 
-            <label for="addEditMiddleName">Middle Name</label>
-            <input class="edit-field" type="text" id="addEditMiddleName" name="middle_name">
-            <label for="addEditLastName">*Last Name</label>
-            <input class="edit-field" type="text" id="addEditLastName" name="last_name" required>
-            <label for="addEditPrimaryPhone">*Primary Phone</label>
-            <input class="edit-field" type="tel" id="addEditPrimaryPhone" name="customer_phone_primary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required title="123-456-7890">
-            <label for="addEditSecondaryPhone">Secondary Phone</label>
-            <input class="edit-field" type="tel" id="addEditSecondaryPhone" name="customer_phone_secondary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="123-456-7890">
-            <label for="addEditEmail">Email</label>
-            <input class="edit-field" type="email" id="addEditEmail" name="customer_email">
-            <label for="addEditAddress1">Address Line 1</label>
-            <input class="edit-field" type="text" id="addEditAddress1" name="address_line_1">
-            <label for="addEditAddress2">Address Line 2</label>
-            <input class="edit-field" type="text" id="addEditAddress2" name="address_line_2">
-            <label for="addEditCity">City</label>
-            <input class="edit-field" type="text" id="addEditCity" name="city">
-            <label for="addEditZipCode">Zip Code</label>
-            <input class="edit-field" type="text" pattern="[0-9]{5}" id="addEditZipCode" name="zip_code" title="5 digit numeric zip code">
-            <label for="addEditState">State</label>
-            <input class="edit-field" type="text" pattern="[a-zA-Z]{2}" id="addEditState" name="state" title="2 letter state code">
-            <label for="addEditInfo">Additional Info</label>
-            <input class="edit-field" type="text" id="addEditInfo" name="customer_info">
-            <input class="addCustomer" type="submit" value="Add" onclick="addRowAJAX(this)">
-            <input class="editCustomer" type="submit" value="Edit" onclick="editRowAJAX(this)">
-        </fieldset>
-    </form>
+                <label for="addMiddleName">Middle Name</label>
+                <input class="user-input" type="text" id="addMiddleName" name="middle_name">
+                <label for="addLastName">*Last Name</label>
+                <input class="user-input" type="text" id="addLastName" name="last_name" required>
+                <label for="addPrimaryPhone">*Primary Phone</label>
+                <input class="user-input" type="tel" id="addPrimaryPhone" name="customer_phone_primary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required title="123-456-7890">
+                <label for="addSecondaryPhone">Secondary Phone</label>
+                <input class="user-input" type="tel" id="addSecondaryPhone" name="customer_phone_secondary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="123-456-7890">
+                <label for="addEmail">Email</label>
+                <input class="user-input" type="email" id="addEmail" name="customer_email">
+                <label for="addAddress1">Address Line 1</label>
+                <input class="user-input" type="text" id="addAddress1" name="address_line_1">
+                <label for="addAddress2">Address Line 2</label>
+                <input class="user-input" type="text" id="addAddress2" name="address_line_2">
+                <label for="addCity">City</label>
+                <input class="user-input" type="text" id="addCity" name="city">
+                <label for="addZipCode">Zip Code</label>
+                <input class="user-input" type="text" pattern="[0-9]{5}" id="addZipCode" name="zip_code" title="5 digit numeric zip code">
+                <label for="addState">State</label>
+                <input class="user-input" type="text" pattern="[a-zA-Z]{2}" id="addState" name="state" title="2 letter state code">
+                <label for="addInfo">Additional Info</label>
+                <input class="user-input" type="text" id="addInfo" name="customer_info">
+                <input class="addCustomer" type="submit" value="Add" onclick="addEditRowAJAX(this)">
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div id="edit-customer-modal" class="modal">
+    <div class="modal-content form-container">
+        <span class="modal-close">&times;</span>
+        <h2>Edit Customer</h2>
+        <p>Edit an existing customer.</p>
+        <form>
+            <fieldset>
+                <legend>*Starred* Fields are Required</legend>
+                <label for="editCustomerId" class="hidden key">Customer ID</label>
+                <input class="user-input hidden key" type="hidden" id="editCustomerId" name="customer_id">
+                <label for="editFirstName">*First Name</label>
+                <input class="user-input" type="text" id="editFirstName" name="first_name" required>
+
+                <label for="editMiddleName">Middle Name</label>
+                <input class="user-input" type="text" id="editMiddleName" name="middle_name">
+                <label for="editLastName">*Last Name</label>
+                <input class="user-input" type="text" id="editLastName" name="last_name" required>
+                <label for="editPrimaryPhone">*Primary Phone</label>
+                <input class="user-input" type="tel" id="editPrimaryPhone" name="customer_phone_primary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required title="123-456-7890">
+                <label for="editSecondaryPhone">Secondary Phone</label>
+                <input class="user-input" type="tel" id="editSecondaryPhone" name="customer_phone_secondary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="123-456-7890">
+                <label for="editEmail">Email</label>
+                <input class="user-input" type="email" id="editEmail" name="customer_email">
+                <label for="editAddress1">Address Line 1</label>
+                <input class="user-input" type="text" id="editAddress1" name="address_line_1">
+                <label for="editAddress2">Address Line 2</label>
+                <input class="user-input" type="text" id="editAddress2" name="address_line_2">
+                <label for="editCity">City</label>
+                <input class="user-input" type="text" id="editCity" name="city">
+                <label for="editZipCode">Zip Code</label>
+                <input class="user-input" type="text" pattern="[0-9]{5}" id="editZipCode" name="zip_code" title="5 digit numeric zip code">
+                <label for="editState">State</label>
+                <input class="user-input" type="text" pattern="[a-zA-Z]{2}" id="editState" name="state" title="2 letter state code">
+                <label for="editInfo">Additional Info</label>
+                <input class="user-input" type="text" id="editInfo" name="customer_info">
+                <input class="editCustomer" type="submit" value="Edit" onclick="addEditRowAJAX(this)">
+            </fieldset>
+        </form>
+    </div>
 </div>

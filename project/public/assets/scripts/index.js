@@ -12,6 +12,33 @@ Array.prototype.forEach.call(document.querySelectorAll("input[onclick]"), input 
  })
 });
 
+// modals
+let modals = document.getElementsByClassName("modal");
+let modalCloseBtns = document.getElementsByClassName("modal-close");
+
+// hide modals on click
+Array.prototype.forEach.call(modalCloseBtns, btn => {
+  btn.onclick = () => {
+    btn.parentElement.parentElement.style.display = "none";
+  }
+});
+
+// hide modals if clicked outside of window
+window.onclick = event => {
+  if (Array.prototype.includes.call(modals, event.target)) {
+    event.target.style.display = "none";
+  }
+}
+
+// show modals
+Array.prototype.forEach.call(document.querySelectorAll(".modal-open"), button => {
+  button.addEventListener('click', e => {
+    event.preventDefault();
+    let modal = document.getElementById(button.dataset.modal);
+    modal.style.display = "block";
+  })
+});
+
 function openNav() {
   document.getElementById("sidenav-menu").style.width = "250px";
   // get all elements to push
@@ -31,8 +58,8 @@ function closeNav() {
 }
 
 // redirects to add new product type code page
-function addNewProductType(event) {
-  if (event.target.value === "Add New Product Type") {
+function addNewReferenceType(event) {
+  if (event.target.value === "Add New Product Type" || event.target.value === "Add New Payment Type") {
     location.href = '/references';
   }
 }
@@ -64,10 +91,11 @@ function deleteRowAJAX(deleteButton) {
     xhr.send(JSON.stringify(data));
 }
 
-// AJAX edit existing row call
-function editRowAJAX(editButton) {
+// AJAX add or edit existing row call
+function addEditRowAJAX(editButton) {
     // client-side checks to ensure data has been filled out properly
-    const requiredFields = document.querySelectorAll("[required]");
+    const form = editButton.parentElement;
+    const requiredFields = form.querySelectorAll("[required]");
     let requiredFieldsMissing = false;
     Array.prototype.forEach.call(requiredFields, element => {
         if (!element.value || element.value == "") {
@@ -78,11 +106,11 @@ function editRowAJAX(editButton) {
     if (requiredFieldsMissing) {
       return;
     }
-    const editFields = document.getElementsByClassName("edit-field");
+    const userInput = form.getElementsByClassName("user-input");
     let data = {};
     let ids = {};
     let cols = {};
-    Array.prototype.forEach.call(editFields, element => {
+    Array.prototype.forEach.call(userInput, element => {
         // get ids (hidden)
         if (element.classList.contains("key")) {
             ids[element.getAttribute("name")] = element.value;
@@ -98,49 +126,7 @@ function editRowAJAX(editButton) {
     xhr.open("POST", "/");
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.addEventListener("load", () => {
-        if (xhr.response == "Successfully edited!") {
-            location.reload();
-        }
-        else {
-            console.error(xhr.statusText);
-        }
-    });
-    xhr.send(JSON.stringify(data));
-}
-
-// AJAX add row call
-function addRowAJAX(addButton) {
-    // client-side checks to ensure data has been filled out properly
-    const form = addButton.parentElement;
-    const requiredFields = form.querySelectorAll("[required]");
-    let requiredFieldsMissing = false;
-    Array.prototype.forEach.call(requiredFields, element => {
-        if (!element.value || element.value == "") {
-            requiredFieldsMissing = true;
-            return;
-        }
-    });
-    if (requiredFieldsMissing) {
-        return;
-    }
-    const editFields = form.querySelectorAll(".edit-field");
-    let data = {};
-    let cols = {};
-    let ids = {};
-    Array.prototype.forEach.call(editFields, element => {
-        // get only non-keys
-        if (!element.classList.contains("key")) {
-            cols[element.getAttribute("name")] = element.value;
-        }
-    });
-    data.cols = cols;
-    data.ids = ids;
-    data.action = addButton.className;
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/");
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.addEventListener("load", () => {
-        if (xhr.response == "Successfully added!") {
+        if (xhr.response == "Success!") {
             location.reload();
         }
         else {
@@ -159,7 +145,8 @@ function setDefaults(editButton) {
     Array.prototype.forEach.call(cells, cell => {
         data[cell.getAttribute("headers")] = cell.innerHTML;
     });
-    const inputs = document.getElementsByClassName("edit-field");
+    let modal = document.getElementById(editButton.dataset.modal);
+    let inputs = modal.getElementsByClassName("user-input");
     Array.prototype.forEach.call(inputs, input => {
         // for dropdown menus that utilize descriptions, find the description that matches the value and select it
         if (input.classList.contains("description")) {
@@ -174,99 +161,3 @@ function setDefaults(editButton) {
         }
     });
 }
-
-/*
-function editRowClient(data) {
-    let rows = document.getElementsByClassName("table-row");
-    let selectedRow;
-    // get the row that has hidden cells matching idKeys
-    Array.prototype.forEach.call(rows, row => {
-        let count = 0;
-        let cells = row.querySelectorAll(".key");
-        for (let i = 0; i < cells.length; i++) {
-            if (data.ids[cells[i].getAttribute("headers")] == cells[i].innerHTML) {
-                count += 1;
-            }
-        if (count == cells.length) {
-            selectedRow = row;
-        }
-        }
-    });
-    // get the cells to be modified in that row
-    let cells = selectedRow.querySelectorAll("[headers]");
-    Array.prototype.forEach.call(cells, cell => {
-        let cellKey = cell.getAttribute("headers");
-        if (Array.prototype.includes.call(Object.keys(data.cols), cellKey)) {
-            cell.innerHTML = data.cols[cellKey];
-        }
-    });
-}
-*/
-
-/*
-function addRowClient(data) {
-    let tr = create("tr");
-        tr.className = "table-row";
-        for (key of Object.keys(data)) {
-            let td = create("td");
-            td.setAttribute("headers", key);
-            td.innerHTML = data[key];
-            td.className = "cell-data";
-            append(td, tr);
-        }
-        // set first id cell to hidden
-        tr.firstElementChild.className += " key";
-
-        // delete button
-        let deleteTd = create("td");
-        let deleteButton = create("input");
-        deleteButton.className = "delete-button";
-        deleteButton.setAttribute("type", "submit");
-        deleteButton.value = "Delete";
-        deleteButton.setAttribute("onclick", "deleteRow(this)");
-        append(deleteButton, deleteTd);
-        append(deleteTd, tr);
-        // edit button
-        let editTd = create("td");
-        let editButton = create("input");
-        editButton.className = "edit-button";
-        editButton.setAttribute("type", "submit");
-        editButton.value = "Edit";
-        editButton.setAttribute("onclick", "setDefaults(this)");
-        append(editButton, editTd);
-        append(editTd, tr);
-
-        let tableBody = document.querySelector("tbody");
-        append(tr, tableBody);
-}
-
-// Helper function to create element
-function create(tag) {
-    return document.createElement(tag);
-}
-
-// Helper function to append child to parent
-function append(child, parent) {
-    parent.appendChild(child);
-}
-*/
-
-/*
-function toggleSubMenu(id) {
-  let currentSubMenu = document.getElementById(id);
-  // close existing open submenus
-  let submenus = document.getElementsByClassName("submenu");
-  Array.prototype.forEach.call(submenus, element => {
-    if (element != currentSubMenu) {
-      element.style.display = "none"
-    }
-  });
-  // toggle current submenu
-  if (!currentSubMenu.style.display || currentSubMenu.style.display == "none") {
-    currentSubMenu.style.display = "block";
-  }
-  else {
-    currentSubMenu.style.display = "none";
-  }
-}
-*/

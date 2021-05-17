@@ -9,10 +9,10 @@
 <div class="form-container">
     <h2>Search Products</h2>
     <p>Search products by product type.</p>
-    <form id="lookupProductForm" method="get" action="/products/search">
+    <form method="get" action="/products/search">
         <fieldset>
             <label for="lookupProductTypeCode">Product Type</label>
-            <select id="lookupProductTypeCode" name="product_type_code" onchange="addNewProductType(event)">
+            <select id="lookupProductTypeCode" name="product_type_code" onchange="addNewReferenceType(event)">
                 <option value=""></option>
                 {{#each productTypes}}
                 <option value={{this.product_type_code}}>{{this.product_type_description}}</option>
@@ -25,12 +25,10 @@
 </div>
 <div class="table-container form-container">
     <h2>Browse Products</h2>
-    <form action="/products/search">
-        <input type="submit" value="Show All">
-    </form>
+    <input class="modal-open" data-modal="add-product-modal" type="submit" value="Add New Product">
     <br>
-    <table class="products">
-        <thead class="products">
+    <table>
+        <thead>
             <tr>
                 <th id="product_id" class="hidden key">Product ID</th>
                 <th id="product_type_code">Product Type</th>
@@ -40,9 +38,9 @@
                 <th id="product_description">Product Description</th>
             </tr>
         </thead>
-        <tbody class="products">
+        <tbody>
             {{#each rows}}
-            <tr class="table-row">
+            <tr>
                 <td headers="product_id" class="hidden key">{{this.product_id}}</td>
                 <td headers="product_type_code">{{this.product_type_description}}</td>
                 <td headers="product_name">{{this.product_name}}</td>
@@ -50,37 +48,69 @@
                 <td headers="product_unit_size">{{this.product_unit_size}}</td>
                 <td headers="product_description">{{this.product_description}}</td>
                 <td><input class="deleteProduct" type="submit" value="Delete" onclick="deleteRowAJAX(this)"></td>
-                <td><input class="editProduct" type="submit" value="Edit" onclick="setDefaults(this)"></td>
+                <td><input class="modal-open" data-modal="edit-product-modal" type="submit" value="Edit" onclick="setDefaults(this)"></td>
             </tr>
             {{/each}}
         </tbody>
     </table>
 </div>
-<div class="form-container">
-	<h2>Add/Edit Products</h2>
-	<p>Add a new product or edit an existing product.</p>
-	<form id="addEditProductForm">
-        <fieldset>
-            <legend>*Starred* Fields are Required</legend>
-            <label for="addEditProductId" class="hidden key">Product ID</label>
-            <input class="edit-field hidden key" type="hidden" id="addEditProductId" name="product_id">
-            <label for="addEditProductName">*Product Name</label>
-            <input class="edit-field" type="text" id="addEditProductName" name="product_name" required>
-            <label for="addEditProductTypeCode">*Product Type</label>
-            <select class="edit-field description" id="addEditProductTypeCode" name="product_type_code" onchange="addNewProductType(event)">
-				{{#each productTypes}}
-			  	<option value={{this.product_type_code}}>{{this.product_type_description}}</option>
-			  	{{/each}}
-			  	<option class="linked-option" value="Add New Product Type">Add New Product Type</option>
-			</select>
-            <label for="addEditProductUnitPrice">Product Unit Price</label>
-            <input class="edit-field" type="number" id="addEditProductUnitPrice" name="product_unit_price" min="0.01" step="0.01" max="5000">
-            <label for="addEditProductUnitSize">Product Unit Size</label>
-            <input class="edit-field" type="text" id="addEditProductUnitSize" name="product_unit_size">
-            <label for="addEditProductDescription">Product Description</label>
-            <input class="edit-field" type="text" id="addEditProductDescription" name="product_description">
-            <input class="addProduct" type="submit" value="Add" onclick="addRowAJAX(this)">
-            <input class="editProduct" type="submit" value="Edit" onclick="editRowAJAX(this)">
-        </fieldset>
-    </form>
+<div id="add-product-modal" class="modal">
+    <div class="modal-content form-container">
+        <span class="modal-close">&times;</span>
+        <h2>Add Product</h2>
+        <p>Add a new product.</p>
+        <form>
+            <fieldset>
+                <legend>*Starred* Fields are Required</legend>
+                <label for="addProductId" class="hidden key">Product ID</label>
+                <input class="user-input hidden key" type="hidden" id="addProductId" name="product_id">
+                <label for="addProductName">*Product Name</label>
+                <input class="user-input" type="text" id="addProductName" name="product_name" required>
+                <label for="addProductTypeCode">*Product Type</label>
+                <select class="user-input description" id="addProductTypeCode" name="product_type_code" onchange="addNewReferenceType(event)">
+                    {{#each productTypes}}
+                    <option value={{this.product_type_code}}>{{this.product_type_description}}</option>
+                    {{/each}}
+                    <option class="linked-option" value="Add New Product Type">Add New Product Type</option>
+                </select>
+                <label for="addProductUnitPrice">Product Unit Price</label>
+                <input class="user-input" type="number" id="addProductUnitPrice" name="product_unit_price" min="0.01" step="0.01" max="5000">
+                <label for="addProductUnitSize">Product Unit Size</label>
+                <input class="user-input" type="text" id="addProductUnitSize" name="product_unit_size">
+                <label for="addProductDescription">Product Description</label>
+                <input class="user-input" type="text" id="addProductDescription" name="product_description">
+                <input class="addProduct" type="submit" value="Add" onclick="addEditRowAJAX(this)">
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div id="edit-product-modal" class="modal">
+    <div class="modal-content form-container">
+        <span class="modal-close">&times;</span>
+        <h2>Edit Product</h2>
+        <p>Edit an existing product.</p>
+        <form>
+            <fieldset>
+                <legend>*Starred* Fields are Required</legend>
+                <label for="editProductId" class="hidden key">Product ID</label>
+                <input class="user-input hidden key" type="hidden" id="editProductId" name="product_id">
+                <label for="editProductName">*Product Name</label>
+                <input class="user-input" type="text" id="editProductName" name="product_name" required>
+                <label for="editProductTypeCode">*Product Type</label>
+                <select class="user-input description" id="editProductTypeCode" name="product_type_code" onchange="addNewReferenceType(event)">
+                    {{#each productTypes}}
+                    <option value={{this.product_type_code}}>{{this.product_type_description}}</option>
+                    {{/each}}
+                    <option class="linked-option" value="Add New Product Type">Add New Product Type</option>
+                </select>
+                <label for="editProductUnitPrice">Product Unit Price</label>
+                <input class="user-input" type="number" id="editProductUnitPrice" name="product_unit_price" min="0.01" step="0.01" max="5000">
+                <label for="editProductUnitSize">Product Unit Size</label>
+                <input class="user-input" type="text" id="editProductUnitSize" name="product_unit_size">
+                <label for="editProductDescription">Product Description</label>
+                <input class="user-input" type="text" id="editProductDescription" name="product_description">
+                <input class="editProduct" type="submit" value="Edit" onclick="addEditRowAJAX(this)">
+            </fieldset>
+        </form>
+    </div>
 </div>

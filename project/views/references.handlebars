@@ -8,82 +8,131 @@
 
 <div class="table-container form-container">
     <h2>Payment Type Codes</h2>
-    <table class="paymentTypes">
-        <thead class="paymentTypes">
+    <input class="modal-open" data-modal="add-payment-type-modal" type="submit" value="Add Payment Type">
+    <br>
+    <table>
+        <thead>
             <tr>
                 <th id="card_type_code" class="key">Payment Type Code</th>
                 <th id="card_type_description">Description</th>
             </tr>
         </thead>
-        <tbody class="paymentTypes">
+        <tbody>
             {{#each cardTypes}}
-            <tr class="table-row">
+            <tr>
                 <td headers="card_type_code" class="key">{{this.card_type_code}}</td>
                 <td headers="card_type_description">{{this.card_type_description}}</td>
                 <td><input class="deletePaymentType" type="submit" value="Delete" onclick="deleteRowAJAX(this)"></td>
-                <td><input class="editPaymentType" type="submit" value="Edit" onclick="setDefaults(this)"></td>
+                <td><input class="modal-open" data-modal="edit-payment-type-modal" type="submit" value="Edit" onclick="setDefaults(this)"></td>
             </tr>
             {{/each}}
         </tbody>
     </table>
 </div>
-<div class="form-container">
-    <h2>Add/Edit Payment Type Codes</h2>
-    <p>Add a new payment type or edit an existing payment type.</p>
-    <form id="addPaymentTypeForm">
-        <fieldset>
-            <legend>*Starred* Fields are Required</legend>
-            <label for="addEditPaymentTypeCode" class="hidden key">Payment Type Code</label>
-            <input class="edit-field hidden key" type="hidden" id="addEditPaymentTypeCode" name="card_type_code">
-            <label for="addEditPaymentTypeDescription">*Payment Type Description</label>
-            <input class="edit-field" type="text" id="addEditPaymentTypeDescription" name="card_type_description">
-            <input class="addPaymentType" type="submit" value="Add" onclick="addRowAJAX(this)">
-            <input class="editPaymentType" type="submit" value="Edit" onclick="editRowAJAX(this)">
-        </fieldset>
-    </form>
-</div>
 <div class="table-container form-container">
     <h2>Product Type Codes</h2>
-    <table class="productTypes">
-        <thead class="productTypes">
+    <input class="modal-open" data-modal="add-product-type-modal" type="submit" value="Add Product Type">
+    <br>
+    <table>
+        <thead>
             <tr>
                 <th id="product_type_code" class="key">Product Type Code</th>
                 <th id="product_type_description">Description</th>
                 <th id="parent_product_type_code">Parent Product Type Description</th>
             </tr>
         </thead>
-        <tbody class="productTypes">
+        <tbody>
             {{#each productTypes}}
-            <tr class="table-row">
+            <tr>
                 <td headers="product_type_code" class="key">{{this.product_type_code}}</td>
                 <td headers="product_type_description">{{this.product_type_description}}</td>
                 <td headers="parent_product_type_code">{{this.parent_product_type_description}}</td>
                 <td><input class="deleteProductType" type="submit" value="Delete" onclick="deleteRowAJAX(this)"></td>
-                <td><input class="editProductType" type="submit" value="Edit" onclick="setDefaults(this)"></td>
+                <td><input class="modal-open" data-modal="edit-product-type-modal" type="submit" value="Edit" onclick="setDefaults(this)"></td>
             </tr>
             {{/each}}
         </tbody>
     </table>
 </div>
-<div class="form-container">
-    <h2>Add/Edit Product Type Codes</h2>
-    <p>Add a new product type or edit an existing product type.</p>
-    <form id="addProductTypeForm">
+<div id="add-payment-type-modal" class="modal">
+<div class="modal-content form-container">
+    <span class="modal-close">&times;</span>
+    <h2>Add Payment Type Code</h2>
+    <p>Add a new payment type.</p>
+    <form>
         <fieldset>
             <legend>*Starred* Fields are Required</legend>
-            <label for="addEditProductTypeCode" class="hidden key">Product Type Code</label>
-            <input class="edit-field hidden key" type="hidden" id="addEditProductTypeCode" name="product_type_code">
-            <label for="addEditProductTypeDescription">*Product Type Description</label>
-            <input class="edit-field" type="text" id="addEditProductTypeDescription" name="product_type_description">
-            <label for="addEditProductTypeParentType">Parent Product Type Description</label>
-            <select class="edit-field description" id="addEditProductTypeParentType" name="parent_product_type_code">
+            <label for="addPaymentTypeCode" class="hidden key">Payment Type Code</label>
+            <input class="user-input hidden key" type="hidden" id="addPaymentTypeCode" name="card_type_code">
+            <label for="addPaymentTypeDescription">*Payment Type Description</label>
+            <input class="user-input" type="text" id="addPaymentTypeDescription" name="card_type_description">
+            <input class="addPaymentType" type="submit" value="Add" onclick="addEditRowAJAX(this)">
+        </fieldset>
+    </form>
+</div>
+</div>
+<div id="edit-payment-type-modal" class="modal">
+<div class="modal-content form-container">
+    <span class="modal-close">&times;</span>
+    <h2>Edit Payment Type Code</h2>
+    <p>Edit a new payment type.</p>
+    <form>
+        <fieldset>
+            <legend>*Starred* Fields are Required</legend>
+            <label for="editPaymentTypeCode" class="hidden key">Payment Type Code</label>
+            <input class="user-input hidden key" type="hidden" id="editPaymentTypeCode" name="card_type_code">
+            <label for="editPaymentTypeDescription">*Payment Type Description</label>
+            <input class="user-input" type="text" id="editPaymentTypeDescription" name="card_type_description">
+            <input class="editPaymentType" type="submit" value="Edit" onclick="addEditRowAJAX(this)">
+        </fieldset>
+    </form>
+</div>
+</div>
+<div id="add-product-type-modal" class="modal">
+<div class="modal-content form-container">
+    <span class="modal-close">&times;</span>
+    <h2>Add Product Type</h2>
+    <p>Add a new product type.</p>
+    <form>
+        <fieldset>
+            <legend>*Starred* Fields are Required</legend>
+            <label for="addProductTypeCode" class="hidden key">Product Type Code</label>
+            <input class="user-input hidden key" type="hidden" id="addProductTypeCode" name="product_type_code">
+            <label for="addProductTypeDescription">*Product Type Description</label>
+            <input class="user-input" type="text" id="addProductTypeDescription" name="product_type_description">
+            <label for="addProductTypeParentType">Parent Product Type Description</label>
+            <select class="user-input description" id="addProductTypeParentType" name="parent_product_type_code">
                 <option value=""></option>
                 {{#each productTypes}}
                 <option value={{this.product_type_code}}>{{this.product_type_description}}</option>
                 {{/each}}
             </select>
-            <input class="addProductType" type="submit" value="Add" onclick="addRowAJAX(this)">
-            <input class="editProductType" type="submit" value="Edit" onclick="editRowAJAX(this)">
+            <input class="addProductType" type="submit" value="Add" onclick="addEditRowAJAX(this)">
         </fieldset>
     </form>
+</div>
+</div>
+<div id="edit-product-type-modal" class="modal">
+<div class="modal-content form-container">
+    <span class="modal-close">&times;</span>
+    <h2>Edit Product Type</h2>
+    <p>Edit an existing product type.</p>
+    <form>
+        <fieldset>
+            <legend>*Starred* Fields are Required</legend>
+            <label for="editProductTypeCode" class="hidden key">Product Type Code</label>
+            <input class="user-input hidden key" type="hidden" id="editProductTypeCode" name="product_type_code">
+            <label for="editProductTypeDescription">*Product Type Description</label>
+            <input class="user-input" type="text" id="editProductTypeDescription" name="product_type_description">
+            <label for="editProductTypeParentType">Parent Product Type Description</label>
+            <select class="user-input description" id="editProductTypeParentType" name="parent_product_type_code">
+                <option value=""></option>
+                {{#each productTypes}}
+                <option value={{this.product_type_code}}>{{this.product_type_description}}</option>
+                {{/each}}
+            </select>
+            <input class="editProductType" type="submit" value="Edit" onclick="addEditRowAJAX(this)">
+        </fieldset>
+    </form>
+</div>
 </div>

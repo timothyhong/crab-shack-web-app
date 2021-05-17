@@ -9,7 +9,7 @@
 <div class="form-container">
     <h2>Order Search</h2>
     <p>Search orders by order ID or customer.</p>
-    <form id="lookupOrderForm" method="get" action="/orders">
+    <form method="get" action="/orders">
         <fieldset>
             <label for="lookupOrderId">Order ID</label>
             <select id="lookupOrderId" name="order_id">
@@ -31,12 +31,10 @@
 </div>
 <div class="table-container form-container">
     <h2>Browse Orders</h2>
-    <form action="/orders">
-        <input type="submit" value="Show All">
-    </form>
+    <input class="modal-open" data-modal="add-order-modal" type="submit" value="Create New Order">
     <br>
-    <table class="orders">
-        <thead class="orders">
+    <table>
+        <thead>
             <tr>
                 <th id="order_id" class="key">Order ID</th>
                 <th id="customer_id" class="hidden">Customer ID</th>
@@ -52,9 +50,9 @@
                 <th id="order_detail">Order Details</th>
             </tr>
         </thead>
-        <tbody class="orders">
+        <tbody>
             {{#each orders}}
-            <tr class="table-row">
+            <tr>
                 <td headers="order_id" class="key">{{this.order_id}}</td>
                 <td headers="customer_id" class="hidden">{{this.customer_id}}</td>
                 <td headers="first_name">{{this.first_name}}</td>
@@ -68,7 +66,7 @@
                 <td headers="der_total_order_price">{{this.der_total_order_price}}</td>
                 <td headers="order_detail">{{this.order_detail}}</td>
                 <td><input class="deleteOrder" type="submit" value="Delete" onclick="deleteRowAJAX(this)"></td>
-                <td><input class="editOrder" type="submit" value="Edit" onclick="setDefaults(this)"></td>
+                <td><input class="modal-open" data-modal="edit-order-modal" type="submit" value="Edit" onclick="setDefaults(this)"></td>
             </tr>
             {{/each}}
         </tbody>
@@ -76,9 +74,10 @@
 </div>
 <div class="table-container form-container">
     <h2>Order Details</h2>
+    <input class="modal-open" data-modal="add-order-product-modal" type="submit" value="Add to Order">
     <br>
-    <table class="order-products">
-        <thead class="order-products">
+    <table>
+        <thead>
             <tr>
                 <th id="order_id" class="key">Order ID</th>
                 <th id="product_id" class="key hidden">Product ID</th>
@@ -87,86 +86,162 @@
                 <th id="quantity">Quantity</th>
             </tr>
         </thead>
-        <tbody class="order-products">
+        <tbody>
             {{#each orderProducts}}
-            <tr class="table-row">
+            <tr>
                 <td headers="order_id" class="key">{{this.order_id}}</td>
                 <td headers="product_id" class="key hidden">{{this.product_id}}</td>
                 <td headers="product_name">{{this.product_name}}</td>
                 <td headers="product_unit_price">{{this.product_unit_price}}</td>
                 <td headers="quantity">{{this.quantity}}</td>
                 <td><input class="deleteOrderProduct" type="submit" value="Delete" onclick="deleteRowAJAX(this)"></td>
-                <td><input class="editOrderProduct" type="submit" value="Edit" onclick="setDefaults(this)"></td>
+                <td><input class="modal-open" data-modal="edit-order-product-modal" type="submit" value="Edit" onclick="setDefaults(this)"></td>
             </tr>
             {{/each}}
         </tbody>
     </table>
 </div>
-<div class="form-container">
-    <h2>Add/Edit Orders</h2>
-    <p>Add a new order or edit an existing order.</p>
-    <form id="addEditOrderForm">
-        <fieldset>
-            <legend>*Starred* Fields are Required</legend>
-            <label for="addEditOrderId" class="hidden key">Order ID</label>
-            <input class="edit-field hidden key" type="hidden" id="addEditOrderId" name="order_id">
-            <label for="addEditCustomer">*Customer</label>
-            <select class="edit-field description" id="addEditCustomer" name="customer_id">
-                {{#each customers}}
-                <option value={{this.customer_id}}>{{this.customer_desc}}</option>
-                {{/each}}
-            </select>
-            <label for="addEditCardType">*Payment Method</label>
-            <select class="edit-field description" id="addEditCardType" name="card_type_code">
-                {{#each paymentMethods}}
-                <option value={{this.card_type_code}}>{{this.card_type_description}}</option>
-                {{/each}}
-                <option class="linked-option" value="Add New Payment Type">Add New Payment Type</option>
-            </select>
-            <label for="addEditCardLastFour">Card Last Four Digits</label>
-            <input class="edit-field" type="number" pattern="[0-9]{4}" title="e.g. 0123" id="addEditCardLastFour" name="card_last_four">
-            <label for="addEditOrderPaid">*Order Picked Up?</label>
-            <select class="edit-field description" id="addEditOrderPickedUp" name="order_picked_up_yn">
-              <option value=0 selected>No</option>
-              <option value=1>Yes</option>
-            </select>
-            <label for="addEditOrderPaid">*Order Paid?</label>
-            <select class="edit-field description" id="addEditOrderPaid" name="order_paid_yn">
-              <option value=0 selected>No</option>
-              <option value=1>Yes</option>
-            </select>
-            <label for="addEditDatetimeOrderPlaced">Datetime Order Placed</label>
-            <input class="edit-field" type="datetime-local" id="addEditDatetimeOrderPlaced" name="datetime_order_placed">
-            <label for="addEditOrderDetail">Order Details</label>
-            <input class="edit-field" type="text" id="addEditOrderDetail" name="order_detail">
-            <input class="addOrder" type="submit" value="Add" onclick="addRowAJAX(this)">
-            <input class="editOrder" type="submit" value="Edit" onclick="editRowAJAX(this)">
-        </fieldset>
-    </form>
+<div id="add-order-modal" class="modal">
+    <div class="modal-content form-container">
+        <span class="modal-close">&times;</span>
+        <h2>Create Order</h2>
+        <p>Create a new order.</p>
+        <form>
+            <fieldset>
+                <legend>*Starred* Fields are Required</legend>
+                <label for="addOrderId" class="hidden key">Order ID</label>
+                <input class="user-input hidden key" type="hidden" id="addOrderId" name="order_id">
+                <label for="addCustomer">*Customer</label>
+                <select class="user-input description" id="addCustomer" name="customer_id">
+                    {{#each customers}}
+                    <option value={{this.customer_id}}>{{this.customer_desc}}</option>
+                    {{/each}}
+                </select>
+                <label for="addCardType">*Payment Method</label>
+                <select class="user-input description" id="addCardType" name="card_type_code" onchange="addNewReferenceType(event)">
+                    {{#each paymentMethods}}
+                    <option value={{this.card_type_code}}>{{this.card_type_description}}</option>
+                    {{/each}}
+                    <option class="linked-option" value="Add New Payment Type">Add New Payment Type</option>
+                </select>
+                <label for="addCardLastFour">Card Last Four Digits</label>
+                <input class="user-input" type="number" pattern="[0-9]{4}" title="e.g. 0123" id="addCardLastFour" name="card_last_four">
+                <label for="addOrderPickedUp">*Order Picked Up?</label>
+                <select class="user-input description" id="addOrderPickedUp" name="order_picked_up_yn">
+                  <option value=0 selected>No</option>
+                  <option value=1>Yes</option>
+              </select>
+              <label for="addOrderPaid">*Order Paid?</label>
+              <select class="user-input description" id="addOrderPaid" name="order_paid_yn">
+                  <option value=0 selected>No</option>
+                  <option value=1>Yes</option>
+              </select>
+              <label for="addDatetimeOrderPlaced">Datetime Order Placed</label>
+              <input class="user-input" type="datetime-local" id="addDatetimeOrderPlaced" name="datetime_order_placed">
+              <label for="addOrderDetail">Order Details</label>
+              <input class="user-input" type="text" id="addOrderDetail" name="order_detail">
+              <input class="addOrder" type="submit" value="Add" onclick="addEditRowAJAX(this)">
+          </fieldset>
+      </form>
+  </div>
 </div>
-<div class="form-container">
-    <h2>Add to Existing Order</h2>
-    <p>Add products to an existing order.</p>
-    <form id="addToOrderForm">
-        <fieldset>
-            <legend>*Starred* Fields are Required</legend>
-            <label for="addEditOrderProductsOrderId">*Order ID</label>
-            <select class="edit-field description" id="addEditOrderProductsOrderId" name="order_id" required>
-                {{#each orderIds}}
-                <option value={{this.order_id}}>{{this.order_id}}</option>
-                {{/each}}
-            </select>
-            <label for="addEditOrderProductsProductName">*Product Name</label>
-            <select class="edit-field description" id="addEditOrderProductsProductName" name="product_id" required>
-                {{#each productNames}}
-                <option value={{this.product_id}}>{{this.product_name}}</option>
-                {{/each}}
-            </select>
-            <label for="addEditOrderProductsQuantity">*Quantity</label>
-            <input class="edit-field" type="number" id="addEditOrderProductsQuantity" name="quantity" required>
-            <input class="addOrderProduct" type="submit" value="Add" onclick="addRowAJAX(this)">
-            <input class="editOrderProduct" type="submit" value="Edit" onclick="editRowAJAX(this)">
-        </fieldset>
-    </form>
+<div id="edit-order-modal" class="modal">
+    <div class="modal-content form-container">
+        <span class="modal-close">&times;</span>
+        <h2>Edit Order</h2>
+        <p>Edit an existing order.</p>
+        <form>
+            <fieldset>
+                <legend>*Starred* Fields are Required</legend>
+                <label for="editOrderId" class="hidden key">Order ID</label>
+                <input class="user-input hidden key" type="hidden" id="editOrderId" name="order_id">
+                <label for="editCustomer">*Customer</label>
+                <select class="user-input description" id="editCustomer" name="customer_id">
+                    {{#each customers}}
+                    <option value={{this.customer_id}}>{{this.customer_desc}}</option>
+                    {{/each}}
+                </select>
+                <label for="editCardType">*Payment Method</label>
+                <select class="user-input description" id="editCardType" name="card_type_code" onchange="addNewReferenceType(event)">
+                    {{#each paymentMethods}}
+                    <option value={{this.card_type_code}}>{{this.card_type_description}}</option>
+                    {{/each}}
+                    <option class="linked-option" value="Add New Payment Type">Add New Payment Type</option>
+                </select>
+                <label for="editCardLastFour">Card Last Four Digits</label>
+                <input class="user-input" type="number" pattern="[0-9]{4}" title="e.g. 0123" id="editCardLastFour" name="card_last_four">
+                <label for="editOrderPickedUp">*Order Picked Up?</label>
+                <select class="user-input description" id="editOrderPickedUp" name="order_picked_up_yn">
+                  <option value=0 selected>No</option>
+                  <option value=1>Yes</option>
+              </select>
+              <label for="editOrderPaid">*Order Paid?</label>
+              <select class="user-input description" id="editOrderPaid" name="order_paid_yn">
+                  <option value=0 selected>No</option>
+                  <option value=1>Yes</option>
+              </select>
+              <label for="editDatetimeOrderPlaced">Datetime Order Placed</label>
+              <input class="user-input" type="datetime-local" id="editDatetimeOrderPlaced" name="datetime_order_placed">
+              <label for="editOrderDetail">Order Details</label>
+              <input class="user-input" type="text" id="editOrderDetail" name="order_detail">
+              <input class="editOrder" type="submit" value="Edit" onclick="addEditRowAJAX(this)">
+          </fieldset>
+      </form>
+  </div>
 </div>
-
+<div id="add-order-product-modal" class="modal">
+    <div class="modal-content form-container">
+        <span class="modal-close">&times;</span>
+        <h2>Add to Order</h2>
+        <p>Add a product to an existing order.</p>
+        <form>
+            <fieldset>
+                <legend>*Starred* Fields are Required</legend>
+                <label for="addOrderProductsOrderId">*Order ID</label>
+                <select class="user-input description" id="addOrderProductsOrderId" name="order_id" required>
+                    {{#each orderIds}}
+                    <option value={{this.order_id}}>{{this.order_id}}</option>
+                    {{/each}}
+                </select>
+                <label for="addOrderProductsProductName">*Product Name</label>
+                <select class="user-input description" id="addOrderProductsProductName" name="product_id" required onchange="addNewReferenceType(event)">
+                    {{#each productNames}}
+                    <option value={{this.product_id}}>{{this.product_name}}</option>
+                    {{/each}}
+                    <option class="linked-option" value="Add New Product Type">Add New Product Type</option>
+                </select>
+                <label for="addOrderProductsQuantity">*Quantity</label>
+                <input class="user-input" type="number" id="addOrderProductsQuantity" name="quantity" required>
+                <input class="addOrderProduct" type="submit" value="Add" onclick="addEditRowAJAX(this)">
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div id="edit-order-product-modal" class="modal">
+    <div class="modal-content form-container">
+        <span class="modal-close">&times;</span>
+        <h2>Edit Quantity</h2>
+        <p>Edit quantity of existing order & product.</p>
+        <form>
+            <fieldset>
+                <legend>*Starred* Fields are Required</legend>
+                <label for="editOrderProductsOrderId" class="key">*Order ID</label>
+                <select class="user-input description key" id="editOrderProductsOrderId" name="order_id" required disabled>
+                    {{#each orderIds}}
+                    <option value={{this.order_id}}>{{this.order_id}}</option>
+                    {{/each}}
+                </select>
+                <label for="editOrderProductsProductName" class="key">*Product Name</label>
+                <select class="user-input description key" id="editOrderProductsProductName" name="product_id" required disabled onchange="addNewReferenceType(event)">
+                    {{#each productNames}}
+                    <option value={{this.product_id}}>{{this.product_name}}</option>
+                    {{/each}}
+                    <option class="linked-option" value="Add New Product Type">Add New Product Type</option>
+                </select>
+                <label for="editOrderProductsQuantity">*Quantity</label>
+                <input class="user-input" type="number" id="editOrderProductsQuantity" name="quantity" required>
+                <input class="editOrderProduct" type="submit" value="Edit" onclick="addEditRowAJAX(this)">
+            </fieldset>
+        </form>
+    </div>
+</div>
