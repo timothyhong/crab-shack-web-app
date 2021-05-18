@@ -19,11 +19,12 @@
                 {{/each}}
             </select>
             <label for="lookupCustomer">Customer</label>
-            <select id="lookupCustomer" name="customer_id">
+            <select id="lookupCustomer" name="customer_id" onchange="addNewCustomer(event)">
                 <option value=""></option>
                 {{#each customers}}
                 <option value={{this.customer_id}}>{{this.customer_desc}}</option>
                 {{/each}}
+                <option class="linked-option" value="Add New Customer">Add New Customer</option>
             </select>
             <input class="lookup-order" id="lookupOrderButton" type="submit" value="Search">
         </fieldset>
@@ -32,6 +33,7 @@
 <div class="table-container form-container">
     <h2>Browse Orders</h2>
     <input class="modal-open" data-modal="add-order-modal" type="submit" value="Create New Order">
+    <br>
     <br>
     <table>
         <thead>
@@ -76,6 +78,7 @@
     <h2>Order Details</h2>
     <input class="modal-open" data-modal="add-order-product-modal" type="submit" value="Add to Order">
     <br>
+    <br>
     <table>
         <thead>
             <tr>
@@ -112,10 +115,11 @@
                 <label for="addOrderId" class="hidden key">Order ID</label>
                 <input class="user-input hidden key" type="hidden" id="addOrderId" name="order_id">
                 <label for="addCustomer">*Customer</label>
-                <select class="user-input description" id="addCustomer" name="customer_id">
+                <select class="user-input description" id="addCustomer" name="customer_id" onchange="addNewCustomer(event)">
                     {{#each customers}}
                     <option value={{this.customer_id}}>{{this.customer_desc}}</option>
                     {{/each}}
+                    <option class="linked-option" value="Add New Customer">Add New Customer</option>
                 </select>
                 <label for="addCardType">*Payment Method</label>
                 <select class="user-input description" id="addCardType" name="card_type_code" onchange="addNewReferenceType(event)">
@@ -156,10 +160,11 @@
                 <label for="editOrderId" class="hidden key">Order ID</label>
                 <input class="user-input hidden key" type="hidden" id="editOrderId" name="order_id">
                 <label for="editCustomer">*Customer</label>
-                <select class="user-input description" id="editCustomer" name="customer_id">
+                <select class="user-input description" id="editCustomer" name="customer_id" onchange="addNewCustomer(event)">
                     {{#each customers}}
                     <option value={{this.customer_id}}>{{this.customer_desc}}</option>
                     {{/each}}
+                    <option class="linked-option" value="Add New Customer">Add New Customer</option>
                 </select>
                 <label for="editCardType">*Payment Method</label>
                 <select class="user-input description" id="editCardType" name="card_type_code" onchange="addNewReferenceType(event)">

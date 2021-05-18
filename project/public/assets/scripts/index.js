@@ -64,6 +64,13 @@ function addNewReferenceType(event) {
   }
 }
 
+// redirects to customers page and brings up appropriate modal
+function addNewCustomer(event) {
+  if (event.target.value === "Add New Customer") {
+    location.href = '/customers';
+  }
+}
+
 // AJAX delete row call
 function deleteRowAJAX(deleteButton) {
     let row = deleteButton.parentElement.parentElement;
