@@ -6,12 +6,10 @@ let router = express.Router();
 // main page route
 router.route("/").get((req, res) => {
     let context = {};
-    let cardTypes = {};
-    cardTypes.cols = ["card_type_code", "card_type_description"];
 
     getProductTypes().then(rows => {
         context.productTypes = rows;
-    }).then(() => funcs.getColumns(cardTypes, "Ref_Card_Types", true)).then(rows => {
+    }).then(() => funcs.getColumns({tableName: "Ref_Card_Types", colNames: ["card_type_code", "card_type_description"]})).then(rows => {
         context.cardTypes = rows;
         res.render('references', context);
     }).catch(err => console.error(err));

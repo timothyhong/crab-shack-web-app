@@ -6,6 +6,7 @@
     Description: Crabshack homepage client-side JS
 */
 
+// prevent default for inputs with onclick events
 Array.prototype.forEach.call(document.querySelectorAll("input[onclick]"), input => {
   input.addEventListener('click', e => {
    event.preventDefault();
@@ -39,6 +40,7 @@ Array.prototype.forEach.call(document.querySelectorAll(".modal-open"), button =>
   })
 });
 
+// navbar open
 function openNav() {
   document.getElementById("sidenav-menu").style.width = "250px";
   // get all elements to push
@@ -48,6 +50,7 @@ function openNav() {
   document.getElementById("sidenav-open").style.display = "none";
 }
 
+// navbar close
 function closeNav() {
   document.getElementById("sidenav-menu").style.width = "0";
   // get all elements to push

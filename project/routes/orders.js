@@ -6,28 +6,20 @@ let router = express.Router();
 // main page route
 router.route("/").get((req, res) => {
 	let context = {};
-	let orderIds = {};
-	orderIds.cols = ["order_id"];
-	let primaryPhones = {};
-	primaryPhones.cols = ["customer_phone_primary"];
-	let paymentMethods = {};
-	paymentMethods.cols = ["card_type_code", "card_type_description"];
-	let productNames = {};
-	productNames.cols = ["product_id", "product_name"];
 
 	getOrders(req.query.order_id, req.query.customer_id).then(rows => {
 		context.orders = rows;
 	}).then(() => getOrderProducts(req.query.order_id, req.query.customer_id)).then(rows => {
 		context.orderProducts = rows;
-	}).then(() => funcs.getColumns(orderIds, "Customer_Orders", true)).then(rows => {
+	}).then(() => funcs.getColumns({tableName: "Customer_Orders", colNames: ["order_id"], distinct: true})).then(rows => {
 		context.orderIds = rows;
-	}).then(() => funcs.getColumns(primaryPhones, "Customers", true)).then(rows => {
+	}).then(() => funcs.getColumns({tableName: "Customers", colNames: ["customer_phone_primary"], distinct: true})).then(rows => {
 		context.primaryPhones = rows;
-	}).then(() => funcs.getColumns(paymentMethods, "Ref_Card_Types", true)).then(rows => {
+	}).then(() => funcs.getColumns({tableName: "Ref_Card_Types", colNames: ["card_type_code", "card_type_description"], distinct: true})).then(rows => {
 		context.paymentMethods = rows;
 	}).then(() => getCustomerDescriptions()).then(rows => {
 		context.customers = rows;
-	}).then(() => funcs.getColumns(productNames, "Products", true)).then(rows => {
+	}).then(() => funcs.getColumns({tableName: "Products", colNames: ["product_id", "product_name"], distinct: true})).then(rows => {
 		context.productNames = rows;
 		res.render('orders', context);
 	}).catch(err => console.error(err));
@@ -44,11 +36,11 @@ function getOrders(orderId, customerId) {
 	"LEFT JOIN Ref_Card_Types ON Customer_Orders.card_type_code = Ref_Card_Types.card_type_code " +
 	"LEFT JOIN Customer_Orders_Products ON Customer_Orders.order_id = Customer_Orders_Products.order_id " +
 	"LEFT JOIN Products ON Customer_Orders_Products.product_id = Products.product_id ";
-
 	let endQuery = "GROUP BY Customer_Orders.order_id;";
-
 	let criteriaQuery = "";
+	let query;
 	let queryVals = [];
+
 	if (orderId != "") {
 		criteriaQuery += "Customer_Orders.order_id = ? AND ";
 		queryVals.push(orderId);
@@ -64,26 +56,21 @@ function getOrders(orderId, customerId) {
 
 	// display all orders
 	if ((!orderId || orderId == "") && (!customerId || customerId == "")) {
-		return new Promise((resolve, reject) => {
-            mysql.pool.query(baseQuery + endQuery, (err, results) => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve(results);
-            })
-        })
+		query = baseQuery + endQuery;
     }
     // search by filters
     else {
-        return new Promise((resolve, reject) => {
-            mysql.pool.query(baseQuery + criteriaQuery + endQuery, queryVals, (err, results) => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve(results);
-            })
-        })
+    	query = baseQuery + criteriaQuery + endQuery;
     }
+
+    return new Promise((resolve, reject) => {
+        mysql.pool.query(query, queryVals, (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(results);
+        })
+    })
 }
 
 // lookup order products
@@ -92,11 +79,11 @@ function getOrderProducts(orderId, customerId) {
     "Products.product_unit_price, Customer_Orders_Products.quantity FROM Customer_Orders " +
     "JOIN Customer_Orders_Products USING (order_id) JOIN Products USING (product_id) JOIN Customers USING " +
     "(customer_id) ";
-
 	let endQuery = "ORDER BY Customer_Orders.order_id;";	
-
 	let criteriaQuery = "";
+	let query;
 	let queryVals = [];
+
 	if (orderId != "") {
 		criteriaQuery += "Customer_Orders.order_id = ? AND ";
 		queryVals.push(orderId);
@@ -112,26 +99,21 @@ function getOrderProducts(orderId, customerId) {
 
 	// display all orders
 	if ((!orderId || orderId == "") && (!customerId || customerId == "")) {
-		return new Promise((resolve, reject) => {
-            mysql.pool.query(baseQuery + endQuery, (err, results) => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve(results);
-            })
-        })
+		query = baseQuery + endQuery;
     }
-    // search by filters
+    // filter with criteria
     else {
-        return new Promise((resolve, reject) => {
-            mysql.pool.query(baseQuery + criteriaQuery + endQuery, queryVals, (err, results) => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve(results);
-            })
-        })
+    	query = baseQuery + criteriaQuery + endQuery;
     }
+
+    return new Promise((resolve, reject) => {
+        mysql.pool.query(query, queryVals, (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(results);
+        })
+    })
 }
 
 function getCustomerDescriptions() {

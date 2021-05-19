@@ -158,37 +158,35 @@ deleteRowServer = (clientSideData, serverSideIdKeys, tableName) => {
     let queryVals = [];
     queryVals.push(tableName);
 
-    // generate rest of query
-    for (let i = 0; i < serverSideIdKeys.length; i++) {
-        if (i == serverSideIdKeys.length - 1) {
-            query += "??=?;";
-        }
-        else {
-            query += "??=? AND ";
-        }
-    }
-
     return new Promise((resolve, reject) => {
         if (clientSideIdKeys.length != serverSideIdKeys.length) {
             reject("Expected data size mismatch.");
         }
+        // push each serverSideIdKey and clientSideIdVal to queryVals if it exists
         else {
-            // push each serverSideIdKey and clientSideIdVal to queryVals if it exists
-            Array.prototype.forEach.call(serverSideIdKeys, key => {
-                // replace empty string with null
-                if (clientSideData.ids[key] == "") {
-                    queryVals.push(key);
-                    queryVals.push(null);
-                }
-                else if (clientSideData.ids[key] != undefined) {
-                    queryVals.push(key);
-                    queryVals.push(clientSideData.ids[key]);
+            for (let i = 0; i < serverSideIdKeys.length; i++) {
+                if (clientSideData.ids[serverSideIdKeys[i]] != undefined) {
+                    // update query
+                    if (i == serverSideIdKeys.length - 1) {
+                        query += "??=?;";
+                    }
+                    else {
+                        query += "??=? AND ";
+                    }
+                    // push values, replacing "" with null
+                    queryVals.push(serverSideIdKeys[i]);
+                    if (clientSideData.ids[serverSideIdKeys[i]] == "") {
+                        queryVals.push(null);
+                    }
+                    else {
+                        queryVals.push(clientSideData.ids[serverSideIdKeys[i]]);                       
+                    }
                 }
                 // if an expected serverSideKey does not exist in the clientSideData, reject
                 else {
                     reject("Missing expected data.");
                 }
-            });
+            }
             // send query
             mysql.pool.query(query, queryVals, (err, results) => {
                 if (err) {
@@ -204,6 +202,21 @@ deleteRowServer = (clientSideData, serverSideIdKeys, tableName) => {
 // serverSideIdKeys: [idKey1, idKey2, ...] <- this is server-side
 // serverSideColKeys: [colKey1, colKey2, ...] <- this is server-side
 // tableName: the name of the table to delete <- this is server-side
+
+/*
+    UPDATE query that updates valid clientSideData from tableName.
+
+    :param clientSideData: object containing a dictionary cols with key/value pairs representing column names and column values to be added
+        and a dictionary ids with key/value pairs representing column names and values for the criteria to check against.
+        example: {action: ?, {ids: {idKey1: idVal1, ...}, cols: {colKey1: colVal1, ...}}
+    :param serverSideIdKeys: array of valid criteria column names to query on
+    :param serverSideColKeys: array of valid column names to query on
+    :param tableName: the name of the table to query
+    :returns: MYSQL query results or error
+ 
+    Notes:
+    -The only client-side data used are the column values. Everything else is server-side input.
+*/
 editRowServer = (clientSideData, serverSideIdKeys, serverSideColKeys, tableName) => {
 
     let clientSideIdKeys = Object.keys(clientSideData.ids);
@@ -216,61 +229,57 @@ editRowServer = (clientSideData, serverSideIdKeys, serverSideColKeys, tableName)
     let queryVals = [];
     queryVals.push(tableName);
 
-    // generate rest of query
-    for (let i = 0; i < serverSideColKeys.length; i++) {
-        if (i == serverSideColKeys.length - 1) {
-            query += "??=? WHERE ";
-        }
-        else {
-            query += "??=?, ";
-        }
-    }
-    for (let i = 0; i < serverSideIdKeys.length; i++) {
-        if (i == serverSideIdKeys.length - 1) {
-            query += "??=?;";
-        }
-        else {
-            query += "??=? AND ";
-        }
-    }
-
     return new Promise((resolve, reject) => {
         if (clientSideIdKeys.length != serverSideIdKeys.length || clientSideColKeys.length != serverSideColKeys.length) {
             reject("Expected data size mismatch.");
         }
         else {
-            // push each serverSideColKey and clientSideColVal to queryVals if it exists
-            Array.prototype.forEach.call(serverSideColKeys, key => {
-                // replace empty string with null
-                if (clientSideData.cols[key] == "") {
-                    queryVals.push(key);
-                    queryVals.push(null);
-                }
-                else if (clientSideData.cols[key] != undefined) {
-                    queryVals.push(key);
-                    queryVals.push(clientSideData.cols[key]);
+            for (let i = 0; i < serverSideColKeys.length; i++) {
+                if (clientSideData.cols[serverSideColKeys[i]] != undefined) {
+                    // update query
+                    if (i == serverSideColKeys.length - 1) {
+                        query += "??=? WHERE ";
+                    }
+                    else {
+                        query += "??=?, ";
+                    }
+                    // push values, replacing "" with null
+                    queryVals.push(serverSideColKeys[i]);
+                    if (clientSideData.cols[serverSideColKeys[i]] == "") {
+                        queryVals.push(null);
+                    }
+                    else {
+                        queryVals.push(clientSideData.cols[serverSideColKeys[i]]);                       
+                    }
                 }
                 // if an expected serverSideColKey does not exist in the clientSideData, reject
                 else {
                     reject("Missing expected data.");
                 }
-            });
-            // push each serverSideIdKey and clientSideIdVal to queryVals if it exists
-            Array.prototype.forEach.call(serverSideIdKeys, key => {
-                // replace empty string with null
-                if (clientSideData.ids[key] == "") {
-                    queryVals.push(key);
-                    queryVals.push(null);
-                }
-                else if (clientSideData.ids[key] != undefined) {
-                    queryVals.push(key);
-                    queryVals.push(clientSideData.ids[key]);
+            }
+            for (let i = 0; i < serverSideIdKeys.length; i++) {
+                if (clientSideData.ids[serverSideIdKeys[i]] != undefined) {
+                    // update query
+                    if (i == serverSideIdKeys.length - 1) {
+                        query += "??=?;";
+                    }
+                    else {
+                        query += "??=? AND ";
+                    }
+                    // push values, replacing "" with null
+                    queryVals.push(serverSideIdKeys[i]);
+                    if (clientSideData.ids[serverSideIdKeys[i]] == "") {
+                        queryVals.push(null);
+                    }
+                    else {
+                        queryVals.push(clientSideData.ids[serverSideIdKeys[i]]);                       
+                    }
                 }
                 // if an expected serverSideIdKey does not exist in the clientSideData, reject
                 else {
                     reject("Missing expected data.");
                 }
-            });            
+            }      
             // send query
             mysql.pool.query(query, queryVals, (err, results) => {
                 if (err) {
@@ -282,9 +291,18 @@ editRowServer = (clientSideData, serverSideIdKeys, serverSideColKeys, tableName)
     })
 }
 
-// clientSideData: {action: ?, {ids: {idKey1: idVal1, ...}, cols: {colKey1: colVal1, ...}} <- this is the only client-side info
-// serverSideColKeys: [colKey1, colKey2, ...] <- this is server-side
-// tableName: the name of the table to delete <- this is server-side
+/*
+    INSERT query that adds valid clientSideData into tableName.
+
+    :param clientSideData: object containing a dictionary cols with key/value pairs representing column names and column values to be added
+        example: {action: ?, {ids: {idKey1: idVal1, ...}, cols: {colKey1: colVal1, ...}}
+    :param serverSideColKeys: array of valid column names to query on
+    :param tableName: the name of the table to query
+    :returns: MYSQL query results or error
+ 
+    Notes:
+    -The only client-side data used are the column values. Everything else is server-side input.
+*/
 addRowServer = (clientSideData, serverSideColKeys, tableName) => {
 
     let clientSideColKeys = Object.keys(clientSideData.cols);
@@ -295,47 +313,44 @@ addRowServer = (clientSideData, serverSideColKeys, tableName) => {
     let queryVals = [];
     queryVals.push(tableName);
 
-    // generate rest of query
-    for (let i = 0; i < serverSideColKeys.length; i++) {
-        if (i == serverSideColKeys.length - 1) {
-            query += "??) VALUES ("
-        }
-        else {
-            query += "??, ";
-        }
-    }
-    for (let i = 0; i < serverSideColKeys.length; i++) {
-        if (i == serverSideColKeys.length - 1) {
-            query += "?);";
-        }
-        else {
-            query += "?, ";
-        }
-    }
-
     return new Promise((resolve, reject) => {
         if (clientSideColKeys.length != serverSideColKeys.length) {
             reject("Expected data size mismatch.");
         }
         else {
-            // push each serverSideColKey to queryVals
-            Array.prototype.forEach.call(serverSideColKeys, key => {
-                queryVals.push(key);
-            });
-            // push each clientSideColVal to queryVals if it exists
-            Array.prototype.forEach.call(serverSideColKeys, key => {
-                // replace empty string with null
-                if (clientSideData.cols[key] == "") {
-                    queryVals.push(null);
+            // continue query and push each serverSideColKey to queryVals
+            for (let i = 0; i < serverSideColKeys.length; i++) {
+                if (i == serverSideColKeys.length - 1) {
+                    query += "??) VALUES ("
                 }
-                else if (clientSideData.cols[key] != undefined) {
-                    queryVals.push(clientSideData.cols[key]);
+                else {
+                    query += "??, ";
+                }
+                queryVals.push(serverSideColKeys[i]);
+            }
+            // continue query and push each value to queryVals
+            for (let i = 0; i < serverSideColKeys.length; i++) {
+                if (clientSideData.cols[serverSideColKeys[i]] != undefined) {
+                    // update query
+                    if (i == serverSideColKeys.length - 1) {
+                        query += "?);";
+                    }
+                    else {
+                        query += "?, ";
+                    }
+                    // push values, replacing "" with null
+                    if (clientSideData.cols[serverSideColKeys[i]] == "") {
+                        queryVals.push(null);
+                    }
+                    else {
+                        queryVals.push(clientSideData.cols[serverSideColKeys[i]]);
+                    }
                 }
                 // if an expected serverSideColKey does not exist in the clientSideData, reject
                 else {
                     reject("Missing expected data.");
                 }
-            });          
+            }      
             // send query
             mysql.pool.query(query, queryVals, (err, results) => {
                 if (err) {
@@ -347,124 +362,77 @@ addRowServer = (clientSideData, serverSideColKeys, tableName) => {
     })
 }
 
-// fetches columns matching criteria
-// data: {cols: [col1, ...], criteria:{criteriaKey1: criteriaVal1}}
-// tableName: name of the table
-// distinct: bool true (distinct), false (all)
-// if data = {} : SELECT * FROM tableName;
-// if data = {cols} (no criteria) : SELECT col1, ... FROM tableName;
-// if data = {criteria} (no cols) : SELECT * FROM tableName WHERE ?? = ?, ...
+/*
+    SELECT query that returns (distinct) rows from colNames matching criteria from tableName
 
-// refactor this later it's repetitive
-module.exports.getColumns = (data, tableName, distinct) => {
-    // data = {}
-    let query;
+    :param tableName: the name of the table to query
+    :param colNames: an array containing the names of columns to retrieve
+    :param criteria: a dictionary object containing the criteria columns as keys and criteria values as values
+    :param distinct: bool, true (return only unique rows), false (all)
+    :returns: MYSQL query results or error
+ 
+    Notes:
+    -The only client-side data used are the criteria values. Everything else is server-side input.
+    -if colNames === undefined, SELECT * FROM ...
+    -if criteria === undefined, SELECT colName1, colName2, ... FROM tableName;
+*/
+module.exports.getColumns = ({tableName, colNames, criteria, distinct = false}) => {
+
+    if (!tableName) {
+        throw "tableName is required!";
+    }
+    
+    // start of query
+    let query = "SELECT ";
     let queryVals = [];
-    // data is empty, get everything
-    if (Object.keys(data).length === 0 || 
-        (data.hasOwnProperty("cols") && data.cols.length === 0) || 
-        (data.hasOwnProperty("criteria") && Object.keys(data.criteria).length === 0)) {
-        if (distinct) {
-            query = "SELECT * FROM ??;";
-        }
-        else {
-            query = "SELECT DISTINCT * FROM ??;";
-        }
-        queryVals.push(tableName);
-    }
-    // data: {cols: [], criteria: {}}
-    // SELECT * FROM ?? WHERE ?? = ?;
-    else if (data.hasOwnProperty("cols") && data.cols.length > 0 && 
-        data.hasOwnProperty("criteria") && Object.keys(data.criteria).length > 0) {
-        let criteriaKeys = Object.keys(data.criteria);
-        let criteriaVals = Object.values(data.criteria);
 
-        let numCriteria = criteriaKeys.length;
-        // form query
-        if (distinct) {
-            query = "SELECT DISTINCT ";
-        }
-        else {
-            query = "SELECT ";
-        }
-        for (let i = 0; i < data.cols.length; i++) {
-            if (i == data.cols.length - 1) {
-                query += "?? FROM ?? WHERE ";
+    // if distinct
+    if (distinct) {
+        query += "DISTINCT "
+    }
+
+    // if colNames
+    if (colNames && colNames.length > 0) {
+        for (let i = 0; i < colNames.length; i++) {
+            if (i == colNames.length - 1) {
+                query += "?? FROM ?? ";
             }
             else {
                 query += "??, ";
             }
+            queryVals.push(colNames[i]);
         }
-        for (let i = 0; i < numCriteria; i++) {
-            if (i == numCriteria - 1) {
+    }
+    else {
+        query += "* FROM ?? ";
+    }
+
+    // push tableName
+    queryVals.push(tableName);
+
+    // if criteria
+    if (criteria && Object.keys(criteria).length > 0) {
+
+        query += "WHERE "
+
+        let criteriaKeys = Object.keys(criteria);
+        let criteriaVals = Object.values(criteria);
+
+        for (let i = 0; i < criteriaKeys.length; i++) {
+            if (i == criteriaKeys.length - 1) {
                 query += "?? = ?;";
             }
             else {
                 query += "?? = ? AND ";
             }
-        }
-        // form query values list
-        for (let i = 0; i < data.cols.length; i++) {
-            queryVals.push(data.cols[i]);
-        }
-        queryVals.push(tableName);
-        for (let i = 0; i < numCriteria; i++) {
             queryVals.push(criteriaKeys[i]);
             queryVals.push(criteriaVals[i]);
         }
-            }
-    // data = {cols: []}
-    // SELECT ?? FROM ??;
-    else if (data.hasOwnProperty("cols") && data.cols.length > 0) {
-        // form query
-        if (distinct) {
-            query = "SELECT DISTINCT ";
-        }
-        else {
-            query = "SELECT ";
-        }
-        for (let i = 0; i < data.cols.length; i++) {
-            if (i == data.cols.length - 1) {
-                query += "?? FROM ??;";
-            }
-            else {
-                query += "??, ";
-            }
-        }
-        // form query values list
-        for (let i = 0; i < data.cols.length; i++) {
-            queryVals.push(data.cols[i]);
-        }
-        queryVals.push(tableName);
     }
-    // data = {criteria: {}}
-    // SELECT * FROM ?? WHERE ?? = ?;
-    else if (data.hasOwnProperty("criteria") && Object.keys(data.criteria).length > 0) {
-        let criteriaKeys = Object.keys(data.criteria);
-        let criteriaVals = Object.values(data.criteria);
+    else {
+        query += ";";
+    }
 
-        let numCriteria = criteriaKeys.length;
-        if (distinct) {
-            query = "SELECT DISTINCT * FROM ?? WHERE ";
-        }
-        else {
-            query = "SELECT * FROM ?? WHERE ";
-        }
-        for (let i = 0; i < numCriteria; i++) {
-            if (i == numCriteria - 1) {
-                query += "?? = ?;";
-            }
-            else {
-                query += "?? = ? AND ";
-            }
-        }
-        // form query values list
-        queryVals.push(tableName);
-        for (let i = 0; i < numCriteria; i++) {
-            queryVals.push(criteriaKeys[i]);
-            queryVals.push(criteriaVals[i]);
-        }
-    }
     return new Promise((resolve, reject) => {
         mysql.pool.query(query, queryVals, (err, results) => {
             if (err) {
