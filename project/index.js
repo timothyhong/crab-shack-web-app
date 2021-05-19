@@ -35,81 +35,107 @@ app.get('/', function(req, res, next) {
 app.post('/', function(req, res, next) {
     // Products
     if (req.body.action == "deleteProduct") {
-        delete req.body["action"];
-        checkDataServer(req.body, "Products").then((data) => deleteRowServer(data, "Products")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+        deleteRowServer(req.body, ["product_id"], "Products")
+        .then((msg) => res.send(msg))
+        .catch((err) => console.error(err));
     }
     else if (req.body.action == "editProduct") {
-        delete req.body["action"];
-        checkDataServer(req.body, "Products").then((data) => editRowServer(data, "Products")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+        editRowServer(req.body, ["product_id"], ["product_type_code", "product_name", "product_unit_price", 
+            "product_unit_size", "product_description"], "Products")
+        .then((msg) => res.send(msg))
+        .catch((err) => console.error(err));
     }
     else if (req.body.action == "addProduct") {
-        delete req.body["action"];
-        checkDataServer(req.body, "Products").then((data) => addRowServer(data, "Products")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+        addRowServer(req.body, ["product_type_code", "product_name", "product_unit_price", 
+            "product_unit_size", "product_description"], "Products")
+        .then((msg) => res.send(msg))
+        .catch((err) => console.error(err));
     }
     // Customers
     else if (req.body.action == "deleteCustomer") {
-        delete req.body["action"];
-        checkDataServer(req.body, "Customers").then((data) => deleteRowServer(data, "Customers")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+        deleteRowServer(req.body, ["customer_id"], "Customers")
+        .then((msg) => res.send(msg))
+        .catch((err) => console.error(err));
     }
     else if (req.body.action == "editCustomer") {
-        delete req.body["action"];
-        checkDataServer(req.body, "Customers").then((data) => editRowServer(data, "Customers")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+        editRowServer(req.body, ["customer_id"], ["first_name", "middle_name", "last_name", 
+            "customer_phone_primary", "customer_phone_secondary", "customer_email", 
+            "address_line_1", "address_line_2", "city", "zip_code", "state", "customer_info"], "Customers")
+        .then((msg) => res.send(msg))
+        .catch((err) => console.error(err));
     }
     else if (req.body.action == "addCustomer") {
-        delete req.body["action"];
-        checkDataServer(req.body, "Customers").then((data) => addRowServer(data, "Customers")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+        addRowServer(req.body, ["first_name", "middle_name", "last_name", 
+            "customer_phone_primary", "customer_phone_secondary", "customer_email", 
+            "address_line_1", "address_line_2", "city", "zip_code", "state", "customer_info"], "Customers")
+        .then((msg) => res.send(msg))
+        .catch((err) => console.error(err));
     }
     // Orders
     else if (req.body.action == "deleteOrder") {
-        delete req.body["action"];
-        checkDataServer(req.body, "Customer_Orders").then((data) => deleteRowServer(data, "Customer_Orders")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+        deleteRowServer(req.body, ["order_id"], "Customer_Orders")
+        .then((msg) => res.send(msg))
+        .catch((err) => console.error(err));
     }
     else if (req.body.action == "editOrder") {
-        delete req.body["action"];
-        checkDataServer(req.body, "Customer_Orders").then((data) => editRowServer(data, "Customer_Orders")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+        editRowServer(req.body, ["order_id"], ["customer_id", "card_type_code", "card_last_four", 
+            "order_picked_up_yn", "order_paid_yn", "datetime_order_placed", "order_detail"], "Customer_Orders")
+        .then((msg) => res.send(msg))
+        .catch((err) => console.error(err));
     }
     else if (req.body.action == "addOrder") {
-        delete req.body["action"];
-        checkDataServer(req.body, "Customer_Orders").then((data) => addRowServer(data, "Customer_Orders")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+        addRowServer(req.body, ["customer_id", "card_type_code", "card_last_four", 
+            "order_picked_up_yn", "order_paid_yn", "datetime_order_placed", "order_detail"], "Customer_Orders")
+        .then((msg) => res.send(msg))
+        .catch((err) => console.error(err));
     }
     // Order Products
     else if (req.body.action == "deleteOrderProduct") {
-        delete req.body["action"];
-        checkDataServer(req.body, "Customer_Orders_Products").then((data) => deleteRowServer(data, "Customer_Orders_Products")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+        deleteRowServer(req.body, ["order_id", "product_id"], "Customer_Orders_Products")
+        .then((msg) => res.send(msg))
+        .catch((err) => console.error(err));
     }
     else if (req.body.action == "editOrderProduct") {
-        delete req.body["action"];
-        checkDataServer(req.body, "Customer_Orders_Products").then((data) => editRowServer(data, "Customer_Orders_Products")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+        editRowServer(req.body, ["order_id", "product_id"], ["quantity"], "Customer_Orders_Products")
+        .then((msg) => res.send(msg))
+        .catch((err) => console.error(err));
     }
     else if (req.body.action == "addOrderProduct") {
-        delete req.body["action"];
-        checkDataServer(req.body, "Customer_Orders_Products").then((data) => addRowServer(data, "Customer_Orders_Products")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+        addRowServer(req.body, ["order_id", "product_id", "quantity"], "Customer_Orders_Products")
+        .then((msg) => res.send(msg))
+        .catch((err) => console.error(err));
     }
     // Payment Type References
     else if (req.body.action == "deletePaymentType") {
-        delete req.body["action"];
-        checkDataServer(req.body, "Ref_Card_Types").then((data) => deleteRowServer(data, "Ref_Card_Types")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+        deleteRowServer(req.body, ["card_type_code"], "Ref_Card_Types")
+        .then((msg) => res.send(msg))
+        .catch((err) => console.error(err));
     }
     else if (req.body.action == "editPaymentType") {
-        delete req.body["action"];
-        checkDataServer(req.body, "Ref_Card_Types").then((data) => editRowServer(data, "Ref_Card_Types")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+        editRowServer(req.body, ["card_type_code"], ["card_type_description"], "Ref_Card_Types")
+        .then((msg) => res.send(msg))
+        .catch((err) => console.error(err));
     }
     else if (req.body.action == "addPaymentType") {
-        delete req.body["action"];
-        checkDataServer(req.body, "Ref_Card_Types").then((data) => addRowServer(data, "Ref_Card_Types")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+        addRowServer(req.body, ["card_type_description"], "Ref_Card_Types")
+        .then((msg) => res.send(msg))
+        .catch((err) => console.error(err));
     }
     // Product Type References
     else if (req.body.action == "deleteProductType") {
-        delete req.body["action"];
-        checkDataServer(req.body, "Ref_Product_Types").then((data) => deleteRowServer(data, "Ref_Product_Types")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+        deleteRowServer(req.body, ["product_type_code"], "Ref_Product_Types")
+        .then((msg) => res.send(msg))
+        .catch((err) => console.error(err));
     }
     else if (req.body.action == "editProductType") {
-        delete req.body["action"];
-        checkDataServer(req.body, "Ref_Product_Types").then((data) => editRowServer(data, "Ref_Product_Types")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+        editRowServer(req.body, ["product_type_code"], ["parent_product_type_code", "product_type_description"], "Ref_Product_Types")
+        .then((msg) => res.send(msg))
+        .catch((err) => console.error(err));
     }
     else if (req.body.action == "addProductType") {
-        delete req.body["action"];
-        checkDataServer(req.body, "Ref_Product_Types").then((data) => addRowServer(data, "Ref_Product_Types")).then((msg) => res.send(msg)).catch((err) => console.error(err));
+        addRowServer(req.body, ["parent_product_type_code", "product_type_description"], "Ref_Product_Types")
+        .then((msg) => res.send(msg))
+        .catch((err) => console.error(err));
     }        
 });
 
@@ -119,54 +145,22 @@ app.listen(app.get("port"), () => {
 
 // SQL queries
 
-// Drops any user-inputted data with columns that do not exist in the given table
-// data: {ids: {idKey1: idVal1, ...} cols: {colKey1: colVal1, ...}}
-// takes data and ensures idKeys and colKeys exist within tableName
-checkDataServer = (data, tableName) => {
-    let idKeys = Object.keys(data.ids);
-    let colKeys = Object.keys(data.cols);
+// clientSideData: {action: ?, {ids: {idKey1: idVal1, ...}} <- this is the only client-side info
+// serverSideIdKeys: [idKey1, idKey2, ...] <- this is server side
+// tableName: the name of the table to delete <- this is server-side
+deleteRowServer = (clientSideData, serverSideIdKeys, tableName) => {
 
-    let query = "SELECT ?? FROM ??.?? WHERE ?? = ?;";
-    let queryVals = ["COLUMN_NAME", "INFORMATION_SCHEMA", "COLUMNS", "TABLE_NAME", tableName];
-    return new Promise((resolve, reject) => {
-        mysql.pool.query(query, queryVals, (err, results) => {
-            if (err) {
-                return reject(err);
-            }
-            let colNames = [];
-            Array.prototype.forEach.call(results, result => {
-                colNames.push(result.COLUMN_NAME);
-            });
-            // remove idKeys that are not in results
-            Array.prototype.forEach.call(idKeys, key => {
-                if (!colNames.includes(key)) {
-                    delete data.ids[key];
-                }
-            });
-            // remove colKeys that are not in results
-            Array.prototype.forEach.call(colKeys, key => {
-                if (!colNames.includes(key)) {
-                    delete data.cols[key];
-                }
-            });
-            resolve(data);
-        });
-    })
-}
+    let clientSideIdKeys = Object.keys(clientSideData.ids);
+    let clientSideIdVals = Object.values(clientSideData.ids);
 
-// Deletes row from server
-// data: {ids: {idKey1: idVal1, ...}}
-// tableName: name of the table
-deleteRowServer = (data, tableName) => {
-    let idKeys = Object.keys(data.ids);
-    let idVals = Object.values(data.ids);
-
-    let numIds = idKeys.length;
-
+    // start of query
     let query = "DELETE FROM ?? WHERE ";
+    let queryVals = [];
+    queryVals.push(tableName);
 
-    for (let i = 0; i < numIds; i++) {
-        if (i == numIds - 1) {
+    // generate rest of query
+    for (let i = 0; i < serverSideIdKeys.length; i++) {
+        if (i == serverSideIdKeys.length - 1) {
             query += "??=?;";
         }
         else {
@@ -174,92 +168,144 @@ deleteRowServer = (data, tableName) => {
         }
     }
 
-    let queryVals = [];
-    queryVals.push(tableName);
-    for (let i = 0; i < numIds; i++) {
-        queryVals.push(idKeys[i]);
-        queryVals.push(idVals[i]);
-    }
-
     return new Promise((resolve, reject) => {
-        mysql.pool.query(query, queryVals, (err, results) => {
-            if (err) {
-                return reject(err);
-            }
-            resolve("Successfully deleted!");
-        })
+        if (clientSideIdKeys.length != serverSideIdKeys.length) {
+            reject("Expected data size mismatch.");
+        }
+        else {
+            // push each serverSideIdKey and clientSideIdVal to queryVals if it exists
+            Array.prototype.forEach.call(serverSideIdKeys, key => {
+                // replace empty string with null
+                if (clientSideData.ids[key] == "") {
+                    queryVals.push(key);
+                    queryVals.push(null);
+                }
+                else if (clientSideData.ids[key] != undefined) {
+                    queryVals.push(key);
+                    queryVals.push(clientSideData.ids[key]);
+                }
+                // if an expected serverSideKey does not exist in the clientSideData, reject
+                else {
+                    reject("Missing expected data.");
+                }
+            });
+            // send query
+            mysql.pool.query(query, queryVals, (err, results) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve("Successfully deleted!");
+            })            
+        }
     })
 }
 
-// Edits row from server
-// data: {ids: {idKey1: idVal1, ...} cols: {colKey1: colVal1, ...}}
-// tableName: name of the table
-editRowServer = (data, tableName) => {
-    let idKeys = Object.keys(data.ids);
-    let idVals = Object.values(data.ids);
-    let colKeys = Object.keys(data.cols);
-    let colVals = Object.values(data.cols);
+// clientSideData: {action: ?, {ids: {idKey1: idVal1, ...}, cols: {colKey1: colVal1, ...}} <- this is the only client-side info
+// serverSideIdKeys: [idKey1, idKey2, ...] <- this is server-side
+// serverSideColKeys: [colKey1, colKey2, ...] <- this is server-side
+// tableName: the name of the table to delete <- this is server-side
+editRowServer = (clientSideData, serverSideIdKeys, serverSideColKeys, tableName) => {
 
-    let numIds = idKeys.length;
-    let numCols = colKeys.length;
-    // form query
+    let clientSideIdKeys = Object.keys(clientSideData.ids);
+    let clientSideIdVals = Object.values(clientSideData.ids);
+    let clientSideColKeys = Object.keys(clientSideData.cols);
+    let clientSideColVals = Object.values(clientSideData.cols);
+
+    // start of query
     let query = "UPDATE ?? SET ";
-    for (let i = 0; i < numCols; i++) {
-        if (i == numCols - 1) {
+    let queryVals = [];
+    queryVals.push(tableName);
+
+    // generate rest of query
+    for (let i = 0; i < serverSideColKeys.length; i++) {
+        if (i == serverSideColKeys.length - 1) {
             query += "??=? WHERE ";
         }
         else {
             query += "??=?, ";
         }
     }
-    for (let i = 0; i < numIds; i++) {
-        if (i == numIds - 1) {
+    for (let i = 0; i < serverSideIdKeys.length; i++) {
+        if (i == serverSideIdKeys.length - 1) {
             query += "??=?;";
         }
         else {
             query += "??=? AND ";
         }
     }
-    let queryVals = [];
-    queryVals.push(tableName);
-    for (let i = 0; i < numCols; i++) {
-        queryVals.push(colKeys[i]);
-        queryVals.push(colVals[i]);
-    }
-    for (let i = 0; i < numIds; i++) {
-        queryVals.push(idKeys[i]);
-        queryVals.push(idVals[i]);
-    }
+
     return new Promise((resolve, reject) => {
-        mysql.pool.query(query, queryVals, (err, results) => {
-            if (err) {
-                return reject(err);
-            }
-            resolve("Success!");
-        })
+        if (clientSideIdKeys.length != serverSideIdKeys.length || clientSideColKeys.length != serverSideColKeys.length) {
+            reject("Expected data size mismatch.");
+        }
+        else {
+            // push each serverSideColKey and clientSideColVal to queryVals if it exists
+            Array.prototype.forEach.call(serverSideColKeys, key => {
+                // replace empty string with null
+                if (clientSideData.cols[key] == "") {
+                    queryVals.push(key);
+                    queryVals.push(null);
+                }
+                else if (clientSideData.cols[key] != undefined) {
+                    queryVals.push(key);
+                    queryVals.push(clientSideData.cols[key]);
+                }
+                // if an expected serverSideColKey does not exist in the clientSideData, reject
+                else {
+                    reject("Missing expected data.");
+                }
+            });
+            // push each serverSideIdKey and clientSideIdVal to queryVals if it exists
+            Array.prototype.forEach.call(serverSideIdKeys, key => {
+                // replace empty string with null
+                if (clientSideData.ids[key] == "") {
+                    queryVals.push(key);
+                    queryVals.push(null);
+                }
+                else if (clientSideData.ids[key] != undefined) {
+                    queryVals.push(key);
+                    queryVals.push(clientSideData.ids[key]);
+                }
+                // if an expected serverSideIdKey does not exist in the clientSideData, reject
+                else {
+                    reject("Missing expected data.");
+                }
+            });            
+            // send query
+            mysql.pool.query(query, queryVals, (err, results) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve("Successfully edited!");
+            })            
+        }
     })
 }
 
-// Adds row to server
-// data: {cols: {colKey1: colVal1, ...}}
-// tableName: name of the table
-addRowServer = (data, tableName) => {
-    let colKeys = Object.keys(data.cols);
-    let colVals = Object.values(data.cols);
+// clientSideData: {action: ?, {ids: {idKey1: idVal1, ...}, cols: {colKey1: colVal1, ...}} <- this is the only client-side info
+// serverSideColKeys: [colKey1, colKey2, ...] <- this is server-side
+// tableName: the name of the table to delete <- this is server-side
+addRowServer = (clientSideData, serverSideColKeys, tableName) => {
 
-    let numCols = colKeys.length;
-    // form query
+    let clientSideColKeys = Object.keys(clientSideData.cols);
+    let clientSideColVals = Object.values(clientSideData.cols);
+
+    // start of query
     let query = "INSERT INTO ?? (";
-    for (let i = 0; i < numCols; i++) {
-        if (i == numCols - 1) {
+    let queryVals = [];
+    queryVals.push(tableName);
+
+    // generate rest of query
+    for (let i = 0; i < serverSideColKeys.length; i++) {
+        if (i == serverSideColKeys.length - 1) {
             query += "??) VALUES ("
         }
         else {
             query += "??, ";
         }
     }
-    for (let i = 0; i < numCols; i++) {
-        if (i == numCols - 1) {
+    for (let i = 0; i < serverSideColKeys.length; i++) {
+        if (i == serverSideColKeys.length - 1) {
             query += "?);";
         }
         else {
@@ -267,22 +313,37 @@ addRowServer = (data, tableName) => {
         }
     }
 
-    let queryVals = [];
-    queryVals.push(tableName);
-    for (let i = 0; i < numCols; i++) {
-        queryVals.push(colKeys[i]);
-    }
-    for (let i = 0; i < numCols; i++) {
-        queryVals.push(colVals[i]);
-    }
-
     return new Promise((resolve, reject) => {
-        mysql.pool.query(query, queryVals, (err, results) => {
-            if (err) {
-                return reject(err);
-            }
-            resolve("Success!");
-        })
+        if (clientSideColKeys.length != serverSideColKeys.length) {
+            reject("Expected data size mismatch.");
+        }
+        else {
+            // push each serverSideColKey to queryVals
+            Array.prototype.forEach.call(serverSideColKeys, key => {
+                queryVals.push(key);
+            });
+            // push each clientSideColVal to queryVals if it exists
+            Array.prototype.forEach.call(serverSideColKeys, key => {
+                // replace empty string with null
+                if (clientSideData.cols[key] == "") {
+                    queryVals.push(null);
+                }
+                else if (clientSideData.cols[key] != undefined) {
+                    queryVals.push(clientSideData.cols[key]);
+                }
+                // if an expected serverSideColKey does not exist in the clientSideData, reject
+                else {
+                    reject("Missing expected data.");
+                }
+            });          
+            // send query
+            mysql.pool.query(query, queryVals, (err, results) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve("Successfully added!");
+            })            
+        }
     })
 }
 

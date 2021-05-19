@@ -72,24 +72,23 @@ function addNewCustomer(event) {
 }
 
 // AJAX delete row call
-function deleteRowAJAX(deleteButton) {
-    let row = deleteButton.parentElement.parentElement;
+function deleteRowAJAX(button) {
+    let row = button.parentElement.parentElement;
     let cells = row.querySelectorAll(".key");
     let data = {};
-    let cols = {};
     let ids = {};
     Array.prototype.forEach.call(cells, cell => {
         ids[cell.getAttribute("headers")] = cell.innerHTML;
     });
     data.ids = ids;
-    data.cols = cols;
-    data.action = deleteButton.className;
+    data.action = button.className;
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/");
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.addEventListener("load", () => {
-        if (xhr.response == "Successfully deleted!") {
+        if (xhr.status >= 200 && xhr.status < 400) {
             row.remove();
+            alert(xhr.response);
         }
         else {
             console.error(xhr.statusText);
@@ -99,9 +98,9 @@ function deleteRowAJAX(deleteButton) {
 }
 
 // AJAX add or edit existing row call
-function addEditRowAJAX(editButton) {
+function addEditRowAJAX(button) {
     // client-side checks to ensure data has been filled out properly
-    const form = editButton.parentElement;
+    const form = button.parentElement;
     const requiredFields = form.querySelectorAll("[required]");
     let requiredFieldsMissing = false;
     Array.prototype.forEach.call(requiredFields, element => {
@@ -128,12 +127,13 @@ function addEditRowAJAX(editButton) {
     });
     data.ids = ids;
     data.cols = cols;
-    data.action = editButton.className;
+    data.action = button.className;
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/");
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.addEventListener("load", () => {
-        if (xhr.response == "Success!") {
+        if (xhr.status >= 200 && xhr.status < 400) {
+            alert(xhr.response);
             location.reload();
         }
         else {
