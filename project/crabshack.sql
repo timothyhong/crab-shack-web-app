@@ -44,7 +44,7 @@ CREATE TABLE `Ref_Product_Types` (
 CREATE TABLE `Products` (
   `product_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `product_type_code` int(11),
-  `product_unit_price` decimal(10, 2),
+  `product_unit_price` unsigned decimal(10, 2),
   `product_name` varchar(255) NOT NULL UNIQUE,
   `product_description` varchar(255),
   `product_unit_size` varchar(255),

@@ -267,3 +267,9 @@ table {
   text-decoration: none;
   cursor: pointer;
 }
+
+/* client-side input validation */
+
+input:invalid {
+  border: 2px dashed red;
+}

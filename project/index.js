@@ -369,6 +369,7 @@ addRowServer = (clientSideData, serverSideColKeys, tableName) => {
     :param colNames: an array containing the names of columns to retrieve
     :param criteria: a dictionary object containing the criteria columns as keys and criteria values as values
     :param distinct: bool, true (return only unique rows), false (all)
+    :param ascending: bool, true (sort by ascending), false (sort by descending)
     :returns: MYSQL query results or error
  
     Notes:
@@ -376,7 +377,7 @@ addRowServer = (clientSideData, serverSideColKeys, tableName) => {
     -if colNames === undefined, SELECT * FROM ...
     -if criteria === undefined, SELECT colName1, colName2, ... FROM tableName;
 */
-module.exports.getColumns = ({tableName, colNames, criteria, distinct = false}) => {
+module.exports.getColumns = ({tableName, colNames, criteria, distinct = false, ascending = true}) => {
 
     if (!tableName) {
         throw "tableName is required!";
@@ -410,11 +411,11 @@ module.exports.getColumns = ({tableName, colNames, criteria, distinct = false}) 
     // push tableName
     queryVals.push(tableName);
 
+    let criteriaKeys = [];
+    let criteriaVals = [];
+
     // if criteria
     if (criteria && Object.keys(criteria).length > 0) {
-
-        let criteriaKeys = [];
-        let criteriaVals = [];
 
         // check if criteria values are nonempty
         Array.prototype.forEach.call(Object.keys(criteria), key => {
@@ -423,28 +424,46 @@ module.exports.getColumns = ({tableName, colNames, criteria, distinct = false}) 
                 criteriaVals.push(criteria[key]);
             }
         })
+    }
 
-        // construct query for valid criteria
-        if (criteriaKeys.length > 0) {
-            query += "WHERE "
-            for (let i = 0; i < criteriaKeys.length; i++) {
-                if (i == criteriaKeys.length - 1) {
-                    query += "?? = ?;";
-                }
-                else {
-                    query += "?? = ? AND ";
-                }
-                queryVals.push(criteriaKeys[i]);
-                queryVals.push(criteriaVals[i]);
+    // construct query for valid criteria
+    if (criteriaKeys.length > 0) {
+        query += "WHERE "
+        for (let i = 0; i < criteriaKeys.length; i++) {
+            if (i == criteriaKeys.length - 1) {
+                query += "?? = ? ";
             }
+            else {
+                query += "?? = ? AND ";
+            }
+            queryVals.push(criteriaKeys[i]);
+            queryVals.push(criteriaVals[i]);
+        }
+    }
+
+    // if colNames, order by them
+    if (colNames && colNames.length > 0) {
+        query += "ORDER BY ";
+        for (let i = 0; i < colNames.length; i++) {
+            if (i == colNames.length - 1) {
+                query += "??";
+            }
+            else {
+                query += "??, ";
+            }
+            queryVals.push(colNames[i]);
+        }
+        if (ascending) {
+            query += "ASC;";
         }
         else {
-            query += ";";
+            query += "DESC;";
         }
     }
     else {
         query += ";";
     }
+
     return new Promise((resolve, reject) => {
         mysql.pool.query(query, queryVals, (err, results) => {
             if (err) {
