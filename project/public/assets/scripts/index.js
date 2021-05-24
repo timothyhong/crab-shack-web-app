@@ -74,6 +74,103 @@ function addNewCustomer(event) {
   }
 }
 
+// Customers Page
+// reloads current page with restricted options
+function refreshNames(event) {
+    // a first_name is selected while last_name is empty => refresh last_names
+    if (document.getElementById("lookupFirstName").value != "" && document.getElementById("lookupLastName").value == "") {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "/customers/?first_name=" + document.getElementById("lookupFirstName").value);
+        xhr.addEventListener("load", () => {
+            if (xhr.status >= 200 && xhr.status < 400) {
+                // remove all options
+                let dropdown = document.getElementById("lookupLastName");
+                dropdown.options.length = 0;
+                // add empty option back
+                let empty = document.createElement("option");
+                empty.value = "";
+                dropdown.appendChild(empty);
+                // add relevant options back
+                Array.prototype.forEach.call(JSON.parse(xhr.response), row => {
+                  let option = document.createElement("option");
+                  option.value = row["last_name"];
+                  option.innerHTML = row["last_name"];
+                  dropdown.appendChild(option);
+                })
+            }
+            else {
+                console.error(xhr.statusText);
+            }
+        });
+        xhr.send();
+    }
+    // a last name is selected while first_name is empty => refresh first names
+    else if (document.getElementById("lookupLastName").value != "" && document.getElementById("lookupFirstName").value == "") {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "/customers/?last_name=" + document.getElementById("lookupLastName").value);
+        xhr.addEventListener("load", () => {
+            if (xhr.status >= 200 && xhr.status < 400) {
+                // remove all options
+                let dropdown = document.getElementById("lookupFirstName");
+                dropdown.options.length = 0;
+                // add empty option back
+                let empty = document.createElement("option");
+                empty.value = "";
+                dropdown.appendChild(empty);
+                // add relevant options back
+                Array.prototype.forEach.call(JSON.parse(xhr.response), row => {
+                  let option = document.createElement("option");
+                  option.value = row["first_name"];
+                  option.innerHTML = row["first_name"];
+                  dropdown.appendChild(option);
+                })
+            }
+            else {
+                console.error(xhr.statusText);
+            }
+        });
+        xhr.send();
+    }
+    // both are empty => refresh both
+    else if (document.getElementById("lookupLastName").value == "" && document.getElementById("lookupFirstName").value == "") {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "/customers/?first_name=&last_name=");
+        xhr.addEventListener("load", () => {
+            if (xhr.status >= 200 && xhr.status < 400) {
+                // remove all options
+                let firstNameDropdown = document.getElementById("lookupFirstName");
+                firstNameDropdown.options.length = 0;
+                let lastNameDropdown = document.getElementById("lookupLastName");
+                lastNameDropdown.options.length = 0;
+                // add empty option back
+                let empty = document.createElement("option");
+                empty.value = "";
+                firstNameDropdown.appendChild(empty);
+                let empty2 = document.createElement("option");
+                empty2.value = "";
+                lastNameDropdown.appendChild(empty2);
+                // add relevant options back
+                Array.prototype.forEach.call(JSON.parse(xhr.response).firstNames, row => {
+                  let option = document.createElement("option");
+                  option.value = row["first_name"];
+                  option.innerHTML = row["first_name"];
+                  firstNameDropdown.appendChild(option);
+                });
+                Array.prototype.forEach.call(JSON.parse(xhr.response).lastNames, row => {
+                  let option = document.createElement("option");
+                  option.value = row["last_name"];
+                  option.innerHTML = row["last_name"];
+                  lastNameDropdown.appendChild(option);
+                });                
+            }
+            else {
+                console.error(xhr.statusText);
+            }
+        });
+        xhr.send();
+    }
+}
+
 // AJAX delete row call
 function deleteRowAJAX(button) {
     let row = button.parentElement.parentElement;
@@ -91,6 +188,7 @@ function deleteRowAJAX(button) {
     xhr.addEventListener("load", () => {
         if (xhr.status >= 200 && xhr.status < 400) {
             row.remove();
+            location.reload();
             alert(xhr.response);
         }
         else {
@@ -136,8 +234,8 @@ function addEditRowAJAX(button) {
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.addEventListener("load", () => {
         if (xhr.status >= 200 && xhr.status < 400) {
-            alert(xhr.response);
             location.reload();
+            alert(xhr.response);
         }
         else {
             console.error(xhr.statusText);

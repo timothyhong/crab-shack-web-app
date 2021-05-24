@@ -12,14 +12,14 @@
     <form method="get" action="/customers/search">
         <fieldset>
             <label for="lookupFirstName">First Name</label>
-            <select id="lookupFirstName" name="first_name">
+            <select id="lookupFirstName" name="first_name" onchange="refreshNames(event)">
                 <option value=""></option>
                 {{#each firstNames}}
                 <option value={{this.first_name}}>{{this.first_name}}</option>
                 {{/each}}
             </select>
             <label for="lookupLastName">Last Name</label>
-            <select id="lookupLastName" name="last_name">
+            <select id="lookupLastName" name="last_name" onchange="refreshNames(event)">
                 <option value=""></option>
                 {{#each lastNames}}
                 <option value={{this.last_name}}>{{this.last_name}}</option>

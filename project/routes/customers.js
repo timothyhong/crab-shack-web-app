@@ -6,15 +6,39 @@ let router = express.Router();
 // main page route
 router.route("/").get((req, res) => {
 	let context = {};
+	let criteria = {}
+	if (req.query.first_name != undefined && req.query.last_name != undefined) {
+		funcs.getColumns({tableName: "Customers", colNames: ["first_name"], distinct: true}).then(rows => {
+			context.firstNames = rows;
+	    }).then(() => funcs.getColumns({tableName: "Customers", colNames: ["last_name"], distinct: true})).then(rows => {
+	    	context.lastNames = rows;
+	    	res.send(context);
+	    }).catch(err => console.error(err));
+	}
+	else if (req.query.first_name != undefined) {
+		criteria["first_name"] = req.query.first_name;
 
-	funcs.getColumns({tableName: "Customers"}).then(rows => {
-    	context.rows = rows;
-    }).then(() => funcs.getColumns({tableName: "Customers", colNames: ["first_name"], distinct: true})).then(rows => {
-    	context.firstNames = rows;
-    }).then(() => funcs.getColumns({tableName: "Customers", colNames: ["last_name"], distinct: true})).then(rows => {
-    	context.lastNames = rows;
-    	res.render('customers', context);
-    }).catch(err => console.error(err));
+		funcs.getColumns({tableName: "Customers", colNames: ["last_name"], criteria, distinct: true}).then(rows => {
+	    	res.send(rows);
+	    }).catch(err => console.error(err));
+	}
+	else if (req.query.last_name != undefined) {
+		criteria["last_name"] = req.query.last_name;
+
+		funcs.getColumns({tableName: "Customers", colNames: ["first_name"], criteria, distinct: true}).then(rows => {
+	    	res.send(rows);
+	    }).catch(err => console.error(err));
+	}
+	else {
+		funcs.getColumns({tableName: "Customers"}).then(rows => {
+	    	context.rows = rows;
+	    }).then(() => funcs.getColumns({tableName: "Customers", colNames: ["first_name"], distinct: true})).then(rows => {
+	    	context.firstNames = rows;
+	    }).then(() => funcs.getColumns({tableName: "Customers", colNames: ["last_name"], distinct: true})).then(rows => {
+	    	context.lastNames = rows;
+	    	res.render('customers', context);
+	    }).catch(err => console.error(err));
+	}
 })
 
 // route for search

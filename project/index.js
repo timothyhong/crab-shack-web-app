@@ -413,26 +413,38 @@ module.exports.getColumns = ({tableName, colNames, criteria, distinct = false}) 
     // if criteria
     if (criteria && Object.keys(criteria).length > 0) {
 
-        query += "WHERE "
+        let criteriaKeys = [];
+        let criteriaVals = [];
 
-        let criteriaKeys = Object.keys(criteria);
-        let criteriaVals = Object.values(criteria);
+        // check if criteria values are nonempty
+        Array.prototype.forEach.call(Object.keys(criteria), key => {
+            if (criteria[key] != "") {
+                criteriaKeys.push(key);
+                criteriaVals.push(criteria[key]);
+            }
+        })
 
-        for (let i = 0; i < criteriaKeys.length; i++) {
-            if (i == criteriaKeys.length - 1) {
-                query += "?? = ?;";
+        // construct query for valid criteria
+        if (criteriaKeys.length > 0) {
+            query += "WHERE "
+            for (let i = 0; i < criteriaKeys.length; i++) {
+                if (i == criteriaKeys.length - 1) {
+                    query += "?? = ?;";
+                }
+                else {
+                    query += "?? = ? AND ";
+                }
+                queryVals.push(criteriaKeys[i]);
+                queryVals.push(criteriaVals[i]);
             }
-            else {
-                query += "?? = ? AND ";
-            }
-            queryVals.push(criteriaKeys[i]);
-            queryVals.push(criteriaVals[i]);
+        }
+        else {
+            query += ";";
         }
     }
     else {
         query += ";";
     }
-
     return new Promise((resolve, reject) => {
         mysql.pool.query(query, queryVals, (err, results) => {
             if (err) {
