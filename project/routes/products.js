@@ -9,6 +9,12 @@ router.route("/").get((req, res) => {
 
 	getProducts().then(rows => {
 		context.rows = rows;
+    	if (rows.length == 0) {
+    		context.message = "No products to display.";
+    	}
+    	else {
+    		context.message = "Displaying all " + rows.length + " products.";
+    	}
 	}).then(() => funcs.getColumns({tableName: "Ref_Product_Types", colNames: ["product_type_description", "product_type_code"]})).then(rows => {
 		context.productTypes = rows;
 		res.render('products', context);
@@ -21,6 +27,15 @@ router.route("/search").get((req, res) => {
 
 	getProducts(req.query.product_type_code).then(rows => {
 		context.rows = rows;
+    	if (rows.length == 0) {
+    		context.message = "No matches found.";
+    	}
+    	else if (rows.length == 1) {
+    		context.message = "Displaying 1 match.";
+    	}
+    	else {
+    		context.message = "Displaying " + rows.length + " matches.";
+    	}
 	}).then(() => funcs.getColumns({tableName: "Ref_Product_Types", colNames: ["product_type_description", "product_type_code"]})).then(rows => {
 		context.productTypes = rows;
 		res.render('products', context);

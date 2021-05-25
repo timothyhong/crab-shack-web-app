@@ -37,6 +37,12 @@ router.route("/").get((req, res) => {
 	else {
 		funcs.getColumns({tableName: "Customers"}).then(rows => {
 	    	context.rows = rows;
+	    	if (rows.length == 0) {
+	    		context.message = "No customers to display.";
+	    	}
+	    	else {
+	    		context.message = "Displaying all " + rows.length + " customers.";
+	    	}
 	    }).then(() => funcs.getColumns({tableName: "Customers", colNames: ["first_name"], distinct: true})).then(rows => {
 	    	context.firstNames = rows;
 	    }).then(() => funcs.getColumns({tableName: "Customers", colNames: ["last_name"], distinct: true})).then(rows => {
@@ -63,6 +69,15 @@ router.route("/search").get((req, res) => {
 
 	funcs.getColumns({tableName: "Customers", criteria: criteria}).then(rows => {
     	context.rows = rows;
+    	if (rows.length == 0) {
+    		context.message = "No matches found.";
+    	}
+    	else if (rows.length == 1) {
+    		context.message = "Displaying 1 match.";
+    	}
+    	else {
+    		context.message = "Displaying " + rows.length + " matches.";
+    	}
     }).then(() => funcs.getColumns({tableName: "Customers", colNames: ["first_name"], distinct: true})).then(rows => {
     	context.firstNames = rows;
     }).then(() => funcs.getColumns({tableName: "Customers", colNames: ["last_name"], distinct: true})).then(rows => {

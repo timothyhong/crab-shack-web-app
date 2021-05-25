@@ -13,6 +13,7 @@ router.route("/").get((req, res) => {
 		context.orderProducts = rows;
 	}).then(() => funcs.getColumns({tableName: "Customer_Orders", colNames: ["order_id"], distinct: true})).then(rows => {
 		context.orderIds = rows;
+    	context.message = "Displaying " + context.orders.length + " of " + context.orderIds.length + " orders.";
 	}).then(() => funcs.getColumns({tableName: "Customers", colNames: ["customer_phone_primary"], distinct: true})).then(rows => {
 		context.primaryPhones = rows;
 	}).then(() => funcs.getColumns({tableName: "Ref_Card_Types", colNames: ["card_type_code", "card_type_description"], distinct: true})).then(rows => {

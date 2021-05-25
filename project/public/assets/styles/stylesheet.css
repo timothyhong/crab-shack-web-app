@@ -57,6 +57,14 @@ body {
   margin-left: 50px;
 }
 
+#sidenav-open {
+  height: 100%;
+}
+
+.navbar {
+  height: 25px;
+}
+
 #sidenav-open span {
   font-size:25px;
   cursor:pointer;
@@ -64,19 +72,6 @@ body {
 
 .navbar img {
   height: 72px;
-}
-
-.header {
-  text-align:center;
-}
-
-.header h1 {
-  display:inline;
-}
-
-.header img {
-  width:50px;
-  height:50px;
 }
 
 .push {
@@ -159,9 +154,25 @@ th, td {
   margin: -30px -30px 30px -30px;
 }
 
-.header h1 {
-  font-size: 34px;
+header {
+  text-align:center;
+}
+
+header img {
+  width:50px;
+}
+
+header h1 {
+  font-size: 40px;
+  display:inline;
   text-transform: uppercase;
+  color: black;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+header > a {
+  text-decoration: none;
 }
 
 input[type="text"],
@@ -276,23 +287,6 @@ input:invalid, select:invalid {
 
 form:invalid {
   border: 5px solid #ffdddd;
-}
-
-input:valid {
-  background-color: #ddffdd;
-}
-
-form:valid {
-  border: 5px solid #ddffdd;
-}
-
-input:required, select:required {
-  border-color: black;
-  border-width: 3px;
-}
-
-input:required:valid, select:required:valid {
-  border-color: #ddffdd;
 }
 
 input:required:invalid, select:required:invalid {

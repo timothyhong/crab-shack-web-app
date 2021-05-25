@@ -190,7 +190,7 @@ deleteRowServer = (clientSideData, serverSideIdKeys, tableName) => {
             // send query
             mysql.pool.query(query, queryVals, (err, results) => {
                 if (err) {
-                    reject(err);
+                    reject("There was an error deleting this row.");
                 }
                 resolve("Successfully deleted!");
             })            
@@ -331,7 +331,7 @@ editRowServer = (clientSideData, serverSideIdKeys, serverSideColKeys, tableName)
             // send query
             mysql.pool.query(query, queryVals, (err, results) => {
                 if (err) {
-                    return reject(err);
+                    return reject("There was an error editing this row.");
                 }
                 return resolve("Successfully edited!");
             })            
@@ -450,7 +450,7 @@ addRowServer = (clientSideData, serverSideColKeys, tableName) => {
             // send query
             mysql.pool.query(query, queryVals, (err, results) => {
                 if (err) {
-                    return reject(err);
+                    return reject("There was an error adding this row. Check that it doesn't already exist.");
                 }
                 return resolve("Successfully added!");
             })            

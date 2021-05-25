@@ -9,8 +9,20 @@ router.route("/").get((req, res) => {
 
     getProductTypes().then(rows => {
         context.productTypes = rows;
+        if (rows.length == 0) {
+            context.message = "No product types to display.";
+        }
+        else {
+            context.message = "Displaying all " + rows.length + " product types.";
+        }
     }).then(() => funcs.getColumns({tableName: "Ref_Card_Types", colNames: ["card_type_code", "card_type_description"]})).then(rows => {
         context.cardTypes = rows;
+        if (rows.length == 0) {
+            context.message2 = "No card types to display.";
+        }
+        else {
+            context.message2 = "Displaying all " + rows.length + " payment types.";
+        }
         res.render('references', context);
     }).catch(err => console.error(err));
 });
