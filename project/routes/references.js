@@ -15,9 +15,6 @@ router.route("/").get((req, res) => {
     }).catch(err => console.error(err));
 });
 
-/* 
-    returns rows in format [product_type_code: ?, product_type_description: ?, parent_product_type_description: ?]
-*/
 function getProductTypes() {
 
     const query = "SELECT child.product_type_code, child.product_type_description, parent.product_type_description " +
@@ -28,10 +25,10 @@ function getProductTypes() {
         mysql.pool.query(query, (err, results) => {
             if (err) {
                 return reject(err);
-            }
-            resolve(results);
+            }            resolve(results);
         })
     })
+
 }
 
 module.exports = router;

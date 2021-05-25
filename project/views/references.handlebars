@@ -67,7 +67,7 @@
             <label for="addPaymentTypeCode" class="hidden key">Payment Type Code</label>
             <input class="user-input hidden key" type="hidden" id="addPaymentTypeCode" name="card_type_code">
             <label for="addPaymentTypeDescription">*Payment Type Description</label>
-            <input class="user-input" type="text" id="addPaymentTypeDescription" name="card_type_description">
+            <input class="user-input" type="text" id="addPaymentTypeDescription" name="card_type_description" required>
             <input class="addPaymentType" type="submit" value="Add" onclick="addEditRowAJAX(this)">
         </fieldset>
     </form>
@@ -84,7 +84,7 @@
             <label for="editPaymentTypeCode" class="hidden key">Payment Type Code</label>
             <input class="user-input hidden key" type="hidden" id="editPaymentTypeCode" name="card_type_code">
             <label for="editPaymentTypeDescription">*Payment Type Description</label>
-            <input class="user-input" type="text" id="editPaymentTypeDescription" name="card_type_description">
+            <input class="user-input" type="text" id="editPaymentTypeDescription" name="card_type_description" required>
             <input class="editPaymentType" type="submit" value="Edit" onclick="addEditRowAJAX(this)">
         </fieldset>
     </form>
@@ -101,7 +101,7 @@
             <label for="addProductTypeCode" class="hidden key">Product Type Code</label>
             <input class="user-input hidden key" type="hidden" id="addProductTypeCode" name="product_type_code">
             <label for="addProductTypeDescription">*Product Type Description</label>
-            <input class="user-input" type="text" id="addProductTypeDescription" name="product_type_description">
+            <input class="user-input" type="text" id="addProductTypeDescription" name="product_type_description" required>
             <label for="addProductTypeParentType">Parent Product Type Description</label>
             <select class="user-input description" id="addProductTypeParentType" name="parent_product_type_code">
                 <option value=""></option>

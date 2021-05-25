@@ -7,6 +7,7 @@ let router = express.Router();
 router.route("/").get((req, res) => {
 	let context = {};
 	let criteria = {}
+	// filtering for first and last name search
 	if (req.query.first_name != undefined && req.query.last_name != undefined) {
 		criteria["first_name"] = req.query.first_name;
 		criteria["last_name"] = req.query.last_name;
@@ -32,6 +33,7 @@ router.route("/").get((req, res) => {
 	    	res.send(rows);
 	    }).catch(err => console.error(err));
 	}
+	// main page display
 	else {
 		funcs.getColumns({tableName: "Customers"}).then(rows => {
 	    	context.rows = rows;

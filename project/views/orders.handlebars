@@ -115,28 +115,28 @@
                 <label for="addOrderId" class="hidden key">Order ID</label>
                 <input class="user-input hidden key" type="hidden" id="addOrderId" name="order_id">
                 <label for="addCustomer">*Customer</label>
-                <select class="user-input description" id="addCustomer" name="customer_id" onchange="addNewCustomer(event)">
+                <select class="user-input description" id="addCustomer" name="customer_id" onchange="addNewCustomer(event)" required>
                     {{#each customers}}
                     <option value={{this.customer_id}}>{{this.customer_desc}}</option>
                     {{/each}}
                     <option class="linked-option" value="Add New Customer">Add New Customer</option>
                 </select>
                 <label for="addCardType">*Payment Method</label>
-                <select class="user-input description" id="addCardType" name="card_type_code" onchange="addNewReferenceType(event)">
+                <select class="user-input description" id="addCardType" name="card_type_code" onchange="addNewReferenceType(event)" required>
                     {{#each paymentMethods}}
                     <option value={{this.card_type_code}}>{{this.card_type_description}}</option>
                     {{/each}}
                     <option class="linked-option" value="Add New Payment Type">Add New Payment Type</option>
                 </select>
                 <label for="addCardLastFour">Card Last Four Digits</label>
-                <input class="user-input" type="number" pattern="[0-9]{4}" title="e.g. 0123" id="addCardLastFour" name="card_last_four">
+                <input class="user-input" type="text" pattern="[0-9]{4}" title="e.g. 0123" id="addCardLastFour" name="card_last_four">
                 <label for="addOrderPickedUp">*Order Picked Up?</label>
-                <select class="user-input description" id="addOrderPickedUp" name="order_picked_up_yn">
+                <select class="user-input description" id="addOrderPickedUp" name="order_picked_up_yn" required>
                   <option value=0 selected>No</option>
                   <option value=1>Yes</option>
               </select>
               <label for="addOrderPaid">*Order Paid?</label>
-              <select class="user-input description" id="addOrderPaid" name="order_paid_yn">
+              <select class="user-input description" id="addOrderPaid" name="order_paid_yn" required>
                   <option value=0 selected>No</option>
                   <option value=1>Yes</option>
               </select>
@@ -160,28 +160,28 @@
                 <label for="editOrderId" class="hidden key">Order ID</label>
                 <input class="user-input hidden key" type="hidden" id="editOrderId" name="order_id">
                 <label for="editCustomer">*Customer</label>
-                <select class="user-input description" id="editCustomer" name="customer_id" onchange="addNewCustomer(event)">
+                <select class="user-input description" id="editCustomer" name="customer_id" onchange="addNewCustomer(event)" required>
                     {{#each customers}}
                     <option value={{this.customer_id}}>{{this.customer_desc}}</option>
                     {{/each}}
                     <option class="linked-option" value="Add New Customer">Add New Customer</option>
                 </select>
                 <label for="editCardType">*Payment Method</label>
-                <select class="user-input description" id="editCardType" name="card_type_code" onchange="addNewReferenceType(event)">
+                <select class="user-input description" id="editCardType" name="card_type_code" onchange="addNewReferenceType(event)" required>
                     {{#each paymentMethods}}
                     <option value={{this.card_type_code}}>{{this.card_type_description}}</option>
                     {{/each}}
                     <option class="linked-option" value="Add New Payment Type">Add New Payment Type</option>
                 </select>
                 <label for="editCardLastFour">Card Last Four Digits</label>
-                <input class="user-input" type="number" pattern="[0-9]{4}" title="e.g. 0123" id="editCardLastFour" name="card_last_four">
+                <input class="user-input" type="text" pattern="[0-9]{4}" title="e.g. 0123" id="editCardLastFour" name="card_last_four">
                 <label for="editOrderPickedUp">*Order Picked Up?</label>
-                <select class="user-input description" id="editOrderPickedUp" name="order_picked_up_yn">
+                <select class="user-input description" id="editOrderPickedUp" name="order_picked_up_yn" required>
                   <option value=0 selected>No</option>
                   <option value=1>Yes</option>
               </select>
               <label for="editOrderPaid">*Order Paid?</label>
-              <select class="user-input description" id="editOrderPaid" name="order_paid_yn">
+              <select class="user-input description" id="editOrderPaid" name="order_paid_yn" required>
                   <option value=0 selected>No</option>
                   <option value=1>Yes</option>
               </select>

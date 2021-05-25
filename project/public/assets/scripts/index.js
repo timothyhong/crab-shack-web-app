@@ -234,8 +234,13 @@ function addEditRowAJAX(button) {
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.addEventListener("load", () => {
         if (xhr.status >= 200 && xhr.status < 400) {
-            location.reload();
-            alert(xhr.response);
+            if (xhr.response.startsWith("ERROR")) {
+                alert(xhr.response);
+            }
+            else {
+                location.reload();
+                alert(xhr.response);
+            }
         }
         else {
             console.error(xhr.statusText);
