@@ -44,7 +44,7 @@ CREATE TABLE `Ref_Product_Types` (
 CREATE TABLE `Products` (
   `product_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `product_type_code` int(11),
-  `product_unit_price` unsigned decimal(10, 2),
+  `product_unit_price` decimal(10, 2) unsigned,
   `product_name` varchar(255) NOT NULL UNIQUE,
   `product_description` varchar(255),
   `product_unit_size` varchar(255),
@@ -271,6 +271,11 @@ CREATE TABLE Customer_Orders_Products(
      SELECT `product_type_code`, '24.99', 'Paper Table Cover (Maryland Flag)', 'Paper Table Cover (Maryland Flag) - 40 inches x 100 feet', '1'
      FROM `Ref_Product_Types`
      WHERE `product_type_description` = 'Paper Table Cover';
+
+  INSERT INTO `Products` (`product_type_code`, `product_unit_price`, `product_name`, `product_description`, `product_unit_size`)
+     SELECT `product_type_code`, '16.99', 'Maryland Specialty Roll', 'Deep fried Maryland Blue Crab, tuna, and jalapeno topped w/ caviar, scallions and a combination of our spicy mayo and eel sauce', '1 roll'
+     FROM `Ref_Product_Types`
+     WHERE `product_type_description` = 'Extras';
 
 -- Customer_Orders
   INSERT INTO `Customer_Orders` (`customer_id`, `card_type_code`, `card_last_four`, `datetime_order_placed`,

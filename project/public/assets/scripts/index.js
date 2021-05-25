@@ -188,7 +188,7 @@ function deleteRowAJAX(button) {
     xhr.addEventListener("load", () => {
         if (xhr.status >= 200 && xhr.status < 400) {
             row.remove();
-            location.reload();
+            window.location.assign(window.location.pathname);
             alert(xhr.response);
         }
         else {
@@ -238,8 +238,8 @@ function addEditRowAJAX(button) {
                 alert(xhr.response);
             }
             else {
-                location.reload();
                 alert(xhr.response);
+                window.location.assign(window.location.pathname);
             }
         }
         else {
