@@ -34,7 +34,7 @@ UNIQUE KEY (`first_name`, `last_name`, `customer_phone_primary`)
 
 CREATE TABLE `Ref_Product_Types` (
   `product_type_code` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `product_type_description` varchar(255),
+  `product_type_description` varchar(255) NOT NULL UNIQUE,
   `parent_product_type_code` int(11),
    FOREIGN KEY (parent_product_type_code) REFERENCES Ref_Product_Types(product_type_code) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -55,7 +55,7 @@ CREATE TABLE `Products` (
 
 CREATE TABLE `Ref_Card_Types` (
   `card_type_code` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `card_type_description` varchar(255)
+  `card_type_description` varchar(255) NOT NULL UNIQUE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Customer_Orders Table Setup:
@@ -128,6 +128,16 @@ CREATE TABLE Customer_Orders_Products(
   INSERT INTO `Ref_Product_Types` (`product_type_description`) VALUES ('Maryland Blue Crabs'), ('Extras');
 
   INSERT INTO `Ref_Product_Types` (`product_type_description`, `parent_product_type_code`)
+     SELECT 'Utensils', `product_type_code`
+     FROM `Ref_Product_Types`
+     WHERE `product_type_description` = 'Extras';
+
+  INSERT INTO `Ref_Product_Types` (`product_type_description`, `parent_product_type_code`)
+     SELECT 'Maryland Crab Cakes', `product_type_code`
+     FROM `Ref_Product_Types`
+     WHERE `product_type_description` = 'Maryland Blue Crabs';
+
+  INSERT INTO `Ref_Product_Types` (`product_type_description`, `parent_product_type_code`)
      SELECT 'Maryland Blue Crabs - Medium', `product_type_code`
      FROM `Ref_Product_Types`
      WHERE `product_type_description` = 'Maryland Blue Crabs';
@@ -150,12 +160,12 @@ CREATE TABLE Customer_Orders_Products(
   INSERT INTO `Ref_Product_Types` (`product_type_description`, `parent_product_type_code`)
      SELECT 'Crab Mallet', `product_type_code`
      FROM `Ref_Product_Types`
-     WHERE `product_type_description` = 'Extras';
+     WHERE `product_type_description` = 'Utensils';
 
   INSERT INTO `Ref_Product_Types` (`product_type_description`, `parent_product_type_code`)
      SELECT 'Claw Cracker', `product_type_code`
      FROM `Ref_Product_Types`
-     WHERE `product_type_description` = 'Extras';
+     WHERE `product_type_description` = 'Utensils';
 
   INSERT INTO `Ref_Product_Types` (`product_type_description`, `parent_product_type_code`)
      SELECT 'Paper Table Cover', `product_type_code`
@@ -275,7 +285,12 @@ CREATE TABLE Customer_Orders_Products(
   INSERT INTO `Products` (`product_type_code`, `product_unit_price`, `product_name`, `product_description`, `product_unit_size`)
      SELECT `product_type_code`, '16.99', 'Maryland Specialty Roll', 'Deep fried Maryland Blue Crab, tuna, and jalapeno topped w/ caviar, scallions and a combination of our spicy mayo and eel sauce', '1 roll'
      FROM `Ref_Product_Types`
-     WHERE `product_type_description` = 'Extras';
+     WHERE `product_type_description` = 'Maryland Blue Crabs';
+
+  INSERT INTO `Products` (`product_type_code`, `product_unit_price`, `product_name`, `product_description`, `product_unit_size`)
+     SELECT `product_type_code`, '18.99', 'Maryland Jumbo Lump Crab Cake (7 oz)', 'Our famous hand made, succulent crab cake mixed with a blend of secret ingredients and Old Bay', '7 oz'
+     FROM `Ref_Product_Types`
+     WHERE `product_type_description` = 'Maryland Crab Cakes';
 
 -- Customer_Orders
   INSERT INTO `Customer_Orders` (`customer_id`, `card_type_code`, `card_last_four`, `datetime_order_placed`,

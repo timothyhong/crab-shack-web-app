@@ -26,7 +26,7 @@
                 {{/each}}
             </select>
             <label for="lookupPrimaryPhone">Phone</label>
-            <input type="tel" id="lookupPrimaryPhone" name="customer_phone_primary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="Please enter in the format 123-456-7890">
+            <input type="tel" id="lookupPrimaryPhone" name="customer_phone_primary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="e.g. 123-456-7890">
             <input class="lookup-customer" id="lookupCustomerButton" type="submit" value="Search">
         </fieldset>
     </form>
@@ -96,9 +96,9 @@
                 <label for="addLastName">*Last Name</label>
                 <input class="user-input" type="text" id="addLastName" name="last_name" required>
                 <label for="addPrimaryPhone">*Primary Phone</label>
-                <input class="user-input" type="tel" id="addPrimaryPhone" name="customer_phone_primary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required title="123-456-7890">
+                <input class="user-input" type="tel" id="addPrimaryPhone" name="customer_phone_primary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required title="e.g. 123-456-7890">
                 <label for="addSecondaryPhone">Secondary Phone</label>
-                <input class="user-input" type="tel" id="addSecondaryPhone" name="customer_phone_secondary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="123-456-7890">
+                <input class="user-input" type="tel" id="addSecondaryPhone" name="customer_phone_secondary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="e.g. 123-456-7890">
                 <label for="addEmail">Email</label>
                 <input class="user-input" type="email" id="addEmail" name="customer_email">
                 <label for="addAddress1">Address Line 1</label>
@@ -108,9 +108,9 @@
                 <label for="addCity">City</label>
                 <input class="user-input" type="text" id="addCity" name="city">
                 <label for="addZipCode">Zip Code</label>
-                <input class="user-input" type="text" pattern="[0-9]{5}" id="addZipCode" name="zip_code" title="5 digit numeric zip code">
+                <input class="user-input" type="text" pattern="[0-9]{5}" id="addZipCode" name="zip_code" title="e.g. 12345">
                 <label for="addState">State</label>
-                <input class="user-input" type="text" pattern="[a-zA-Z]{2}" id="addState" name="state" title="2 letter state code">
+                <input class="user-input" type="text" pattern="[A-Z]{2}" id="addState" name="state" title="e.g. MD">
                 <label for="addInfo">Additional Info</label>
                 <input class="user-input" type="text" id="addInfo" name="customer_info">
                 <input class="addCustomer" type="submit" value="Add" onclick="addEditRowAJAX(this)">
@@ -136,9 +136,9 @@
                 <label for="editLastName">*Last Name</label>
                 <input class="user-input" type="text" id="editLastName" name="last_name" required>
                 <label for="editPrimaryPhone">*Primary Phone</label>
-                <input class="user-input" type="tel" id="editPrimaryPhone" name="customer_phone_primary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required title="123-456-7890">
+                <input class="user-input" type="tel" id="editPrimaryPhone" name="customer_phone_primary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required title="e.g. 123-456-7890">
                 <label for="editSecondaryPhone">Secondary Phone</label>
-                <input class="user-input" type="tel" id="editSecondaryPhone" name="customer_phone_secondary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="123-456-7890">
+                <input class="user-input" type="tel" id="editSecondaryPhone" name="customer_phone_secondary" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="e.g. 123-456-7890">
                 <label for="editEmail">Email</label>
                 <input class="user-input" type="email" id="editEmail" name="customer_email">
                 <label for="editAddress1">Address Line 1</label>
@@ -148,9 +148,9 @@
                 <label for="editCity">City</label>
                 <input class="user-input" type="text" id="editCity" name="city">
                 <label for="editZipCode">Zip Code</label>
-                <input class="user-input" type="text" pattern="[0-9]{5}" id="editZipCode" name="zip_code" title="5 digit numeric zip code">
+                <input class="user-input" type="text" pattern="[0-9]{5}" id="editZipCode" name="zip_code" title="e.g. 12345">
                 <label for="editState">State</label>
-                <input class="user-input" type="text" pattern="[a-zA-Z]{2}" id="editState" name="state" title="2 letter state code">
+                <input class="user-input" type="text" pattern="[A-Z]{2}" id="editState" name="state" title="e.g. MD">
                 <label for="editInfo">Additional Info</label>
                 <input class="user-input" type="text" id="editInfo" name="customer_info">
                 <input class="editCustomer" type="submit" value="Edit" onclick="addEditRowAJAX(this)">
