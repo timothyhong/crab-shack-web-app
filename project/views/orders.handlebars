@@ -49,7 +49,7 @@
                 <th id="order_picked_up_yn">Order Picked Up</th>
                 <th id="order_paid_yn">Order Paid</th>
                 <th id="datetime_order_placed">Datetime Order Placed</th>
-                <th id="der_total_order_price">Total Price</th>
+                <th id="der_total_order_price">Total Price (USD)</th>
                 <th id="order_detail">Order Details</th>
             </tr>
         </thead>
@@ -66,7 +66,7 @@
                 <td headers="order_picked_up_yn">{{this.order_picked_up_yn}}</td>
                 <td headers="order_paid_yn">{{this.order_paid_yn}}</td>
                 <td headers="datetime_order_placed">{{this.datetime_order_placed}}</td>
-                <td headers="der_total_order_price">{{this.der_total_order_price}}</td>
+                <td headers="der_total_order_price">{{formatUSD this.der_total_order_price}}</td>
                 <td headers="order_detail">{{this.order_detail}}</td>
                 <td><input class="deleteOrder" type="submit" value="Delete" onclick="deleteRowAJAX(this)"></td>
                 <td><input class="modal-open" data-modal="edit-order-modal" type="submit" value="Edit" onclick="setDefaults(this)"></td>
@@ -87,7 +87,7 @@
                 <th id="order_id" class="key">Order ID</th>
                 <th id="product_id" class="key hidden">Product ID</th>
                 <th id="product_name">Product Name</th>
-                <th id="product_unit_price">Unit Price</th>
+                <th id="product_unit_price">Unit Price (USD)</th>
                 <th id="quantity">Quantity</th>
             </tr>
         </thead>
@@ -97,7 +97,7 @@
                 <td headers="order_id" class="key">{{this.order_id}}</td>
                 <td headers="product_id" class="key hidden">{{this.product_id}}</td>
                 <td headers="product_name">{{this.product_name}}</td>
-                <td headers="product_unit_price">{{this.product_unit_price}}</td>
+                <td headers="product_unit_price">${{this.product_unit_price}}</td>
                 <td headers="quantity">{{this.quantity}}</td>
                 <td><input class="deleteOrderProduct" type="submit" value="Delete" onclick="deleteRowAJAX(this)"></td>
                 <td><input class="modal-open" data-modal="edit-order-product-modal" type="submit" value="Edit" onclick="setDefaults(this)"></td>

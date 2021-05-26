@@ -35,7 +35,7 @@
                 <th id="product_id" class="hidden key">Product ID</th>
                 <th id="product_type_code">Product Type</th>
                 <th id="product_name">Product Name</th>
-                <th id="product_unit_price">Unit Price</th>
+                <th id="product_unit_price">Unit Price (USD)</th>
                 <th id="product_unit_size">Unit Size</th>
                 <th id="product_description">Product Description</th>
             </tr>
@@ -46,7 +46,7 @@
                 <td headers="product_id" class="hidden key">{{this.product_id}}</td>
                 <td headers="product_type_code">{{this.product_type_description}}</td>
                 <td headers="product_name">{{this.product_name}}</td>
-                <td headers="product_unit_price">{{this.product_unit_price}}</td>
+                <td headers="product_unit_price">{{formatUSD this.product_unit_price}}</td>
                 <td headers="product_unit_size">{{this.product_unit_size}}</td>
                 <td headers="product_description">{{this.product_description}}</td>
                 <td><input class="deleteProduct" type="submit" value="Delete" onclick="deleteRowAJAX(this)"></td>
