@@ -188,7 +188,7 @@ function deleteRowAJAX(button) {
     xhr.addEventListener("load", () => {
         if (xhr.status >= 200 && xhr.status < 400) {
             row.remove();
-            window.location.assign(window.location.pathname);
+            window.location.reload();
             alert(xhr.response);
         }
         else {
@@ -239,7 +239,7 @@ function addEditRowAJAX(button) {
             }
             else {
                 alert(xhr.response);
-                window.location.assign(window.location.pathname);
+                window.location.reload();
             }
         }
         else {
@@ -269,8 +269,20 @@ function setDefaults(editButton) {
                 }
             });
         }
+        else if (input.classList.contains("currency")) {
+            input.value = fromUSDtoFloat(data[input.getAttribute("name")]);
+        }
         else if (Array.prototype.includes.call(Object.keys(data), input.getAttribute("name"))) {
             input.value = data[input.getAttribute("name")];
         }
     });
+}
+
+function fromUSDtoFloat(value) {
+    if (value) {
+        return value.slice(1);
+    }
+    else {
+        return 0;
+    }
 }

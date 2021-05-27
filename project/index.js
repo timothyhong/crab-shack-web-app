@@ -8,7 +8,14 @@
 
 const mysql = require('./dbcon.js');
 const express = require('express');
-const handlebars = require('express-handlebars').create({defaultLayout: 'index', helpers: {formatUSD: (value) => {return '$' + value.toFixed(2);}}});
+const handlebars = require('express-handlebars').create({defaultLayout: 'index', helpers: {formatUSD: (value) => {
+    if (value) {
+        return "$" + value.toFixed(2);
+    }
+    else {
+        return "$0.00";
+    }
+}}});
 const bodyparser = require('body-parser');
 const app = express();
 const customers = require("./routes/customers");
