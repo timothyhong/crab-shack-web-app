@@ -79,7 +79,7 @@ function getOrders(orderId, customerId) {
 function getOrderProducts(orderId, customerId) {
 	let baseQuery = "SELECT Customer_Orders.order_id, Products.product_id, Products.product_name, " +
     "Products.product_unit_price, Customer_Orders_Products.quantity FROM Customer_Orders " +
-    "JOIN Customer_Orders_Products USING (order_id) JOIN Products USING (product_id) JOIN Customers USING " +
+    "JOIN Customer_Orders_Products USING (order_id) JOIN Products USING (product_id) LEFT JOIN Customers USING " +
     "(customer_id) ";
 	let endQuery = "ORDER BY Customer_Orders.order_id;";	
 	let criteriaQuery = "";

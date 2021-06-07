@@ -116,8 +116,9 @@
                 <legend>*Starred* Fields are Required</legend>
                 <label for="addOrderId" class="hidden key">Order ID</label>
                 <input class="user-input hidden key" type="hidden" id="addOrderId" name="order_id">
-                <label for="addCustomer">*Customer</label>
-                <select class="user-input description" id="addCustomer" name="customer_id" onchange="addNewCustomer(event)" required>
+                <label for="addCustomer">Customer</label>
+                <select class="user-input description" id="addCustomer" name="customer_id" onchange="addNewCustomer(event)">
+                    <option value=""></option>
                     {{#each customers}}
                     <option value={{this.customer_id}}>{{this.customer_desc}}</option>
                     {{/each}}
@@ -161,8 +162,9 @@
                 <legend>*Starred* Fields are Required</legend>
                 <label for="editOrderId" class="hidden key">Order ID</label>
                 <input class="user-input hidden key" type="hidden" id="editOrderId" name="order_id">
-                <label for="editCustomer">*Customer</label>
-                <select class="user-input description" id="editCustomer" name="customer_id" onchange="addNewCustomer(event)" required>
+                <label for="editCustomer">Customer</label>
+                <select class="user-input description" id="editCustomer" name="customer_id" onchange="addNewCustomer(event)">
+                    <option value=""></option>
                     {{#each customers}}
                     <option value={{this.customer_id}}>{{this.customer_desc}}</option>
                     {{/each}}

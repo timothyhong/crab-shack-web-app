@@ -222,6 +222,9 @@ function addEditRowAJAX(button) {
         if (element.classList.contains("key")) {
             ids[element.getAttribute("name")] = element.value;
         }
+        else if (element.value == "") {
+            cols[element.getAttribute("name")] = null;
+        }
         else {
             cols[element.getAttribute("name")] = element.value;
         }

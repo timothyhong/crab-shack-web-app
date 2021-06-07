@@ -290,7 +290,7 @@ editRowServer = (clientSideData, serverSideIdKeys, serverSideColKeys, tableName)
         }
         else {
             for (let i = 0; i < serverSideColKeys.length; i++) {
-                if (clientSideData.cols[serverSideColKeys[i]] != undefined) {
+                if (clientSideData.cols[serverSideColKeys[i]] !== undefined) {
                     // update query
                     if (i == serverSideColKeys.length - 1) {
                         query += "??=? WHERE ";
@@ -584,7 +584,7 @@ module.exports.getColumns = ({tableName, colNames, criteria, distinct = false, a
 // returns true/false
 isValidPhoneNumber = (number) => {
     let format = /^([0-9]{3})-([0-9]{3})-([0-9]{4})$/;
-    if (number.match(format)) {
+    if (number && number.match(format)) {
         return true;
     }
     return false;
@@ -592,7 +592,7 @@ isValidPhoneNumber = (number) => {
 
 isValidZipCode = (zip) => {
     let format = /^[0-9]{5}$/;
-    if (zip.match(format)) {
+    if (zip && zip.match(format)) {
         return true;
     }
     return false;
@@ -601,7 +601,7 @@ isValidZipCode = (zip) => {
 // not a real check, just checking for two capital letters
 isValidState = (state) => {
     let format = /^[A-Z]{2}$/;
-    if (state.match(format)) {
+    if (state && state.match(format)) {
         return true;
     }
     return false;
@@ -609,7 +609,7 @@ isValidState = (state) => {
 
 isValidPrice = (price) => {
     let format = /^\d{0,8}(\.\d{2})?$/;
-    if (price.match(format)) {
+    if (price && price.match(format)) {
         return true;
     }
     return false;
@@ -617,7 +617,7 @@ isValidPrice = (price) => {
 
 isValidQuantity = (quantity) => {
     let format = /^[1-9]\d*$/;
-    if (quantity.match(format)) {
+    if (quantity && quantity.match(format)) {
         return true;
     }
     return false;
@@ -625,7 +625,7 @@ isValidQuantity = (quantity) => {
 
 isValidCardLastFour = (card_last_four) => {
     let format = /^\d{4}$/;
-    if (card_last_four.match(format)) {
+    if (card_last_four && card_last_four.match(format)) {
         return true;
     }
     return false;

@@ -62,14 +62,14 @@ CREATE TABLE `Ref_Card_Types` (
 
 CREATE TABLE Customer_Orders(
   `order_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `customer_id` int(11) NOT NULL,
+  `customer_id` int(11),
   `card_type_code` int(11),
   `card_last_four` char(4),
   `datetime_order_placed` datetime,
   `order_picked_up_yn` tinyint(1) NOT NULL DEFAULT 0,
   `order_paid_yn` tinyint(1) NOT NULL DEFAULT 0,
   `order_detail` varchar(255),
-   FOREIGN KEY (customer_id) REFERENCES Customers(customer_id) ON DELETE CASCADE,
+   FOREIGN KEY (customer_id) REFERENCES Customers(customer_id) ON DELETE SET NULL,
    FOREIGN KEY (card_type_code) REFERENCES Ref_Card_Types(card_type_code) ON DELETE SET NULL
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
@@ -83,25 +83,6 @@ CREATE TABLE Customer_Orders_Products(
    FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE CASCADE,
    CONSTRAINT PRIMARY KEY (order_id, product_id)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
-
--- TO DO: Figure out how to create a generated column for `der_total_order_price`
--- Need to take customer id from customer table, then look up order id, then find product id(s)
--- then mulitply by unit price, then sum all values
-
-
--- alter Customer_Orders Table:
-
--- ALTER `Customer_Orders`
--- ADD COLUMN `sub_price` decimal(10, 2)
--- GENERATED ALWAYS AS
---  		(SELECT `product_unit_price` FROM `Products`WHERE `product_id` =
---          	(SELECT `product_id` FROM `Customer_Orders_Products` WHERE `order_id` = `Customer_Orders.order_id`)
---         )
--- STORED;
-
--- Tim: What if we just delete the column `der_total_order_price` and derive it when we need it?
--- e.g. SUM(Customer_Orders_Products.quantity * Products.product_unit_price) AS der_total_order_price
--- GROUP BY Customer_Orders.order_id
 
 -- Ref_Card_Types
 
