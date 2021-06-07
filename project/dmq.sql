@@ -217,7 +217,7 @@ FROM
     Customer_Orders
 JOIN Customer_Orders_Products USING(order_id)
 JOIN Products USING(product_id)
-JOIN Customers USING(customer_id)
+LEFT JOIN Customers USING(customer_id)
 ORDER BY
     Customer_Orders.order_id;
 
