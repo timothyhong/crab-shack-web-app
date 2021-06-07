@@ -172,7 +172,7 @@ deleteRowServer = (clientSideData, serverSideIdKeys, tableName) => {
         // push each serverSideIdKey and clientSideIdVal to queryVals if it exists
         else {
             for (let i = 0; i < serverSideIdKeys.length; i++) {
-                if (clientSideData.ids[serverSideIdKeys[i]] != undefined) {
+                if (clientSideData.ids[serverSideIdKeys[i]] !== undefined) {
                     // update query
                     if (i == serverSideIdKeys.length - 1) {
                         query += "??=?;";
@@ -246,23 +246,23 @@ editRowServer = (clientSideData, serverSideIdKeys, serverSideColKeys, tableName)
         let invalidCardLastFour = false;
 
         Array.prototype.forEach.call(serverSideColKeys, key => {
-            if ((key == "customer_phone_primary" && !isValidPhoneNumber(clientSideData.cols[key])) || 
-                (key == "customer_phone_secondary" && !isValidPhoneNumber(clientSideData.cols[key]) && clientSideData.cols[key] != "")) {
+            if (clientSideData.cols[key] && ((key == "customer_phone_primary" && !isValidPhoneNumber(clientSideData.cols[key]) || 
+                (key == "customer_phone_secondary" && !isValidPhoneNumber(clientSideData.cols[key]))))) {
                 invalidPhone = true;
             }
-            else if (key == "zip_code" && clientSideData.cols[key] != "" && !isValidZipCode(clientSideData.cols[key])) {
+            else if (key == "zip_code" && clientSideData.cols[key] && !isValidZipCode(clientSideData.cols[key])) {
                 invalidZipCode = true;
             }
-            else if (key == "state" && clientSideData.cols[key] != "" && !isValidState(clientSideData.cols[key])) {
+            else if (key == "state" && clientSideData.cols[key] && !isValidState(clientSideData.cols[key])) {
                 invalidState = true;
             }
-            else if (key == "product_unit_price" && clientSideData.cols[key] != "" && !isValidPrice(clientSideData.cols[key])) {
+            else if (key == "product_unit_price" && clientSideData.cols[key] && !isValidPrice(clientSideData.cols[key])) {
                 invalidPrice = true;
             }
-            else if (key == "quantity" && clientSideData.cols[key] != "" && !isValidQuantity(clientSideData.cols[key])) {
+            else if (key == "quantity" && clientSideData.cols[key] && !isValidQuantity(clientSideData.cols[key])) {
                 invalidQuantity = true;
             }
-            else if (key == "card_last_four" && clientSideData.cols[key] != "" && !isValidCardLastFour(clientSideData.cols[key])) {
+            else if (key == "card_last_four" && clientSideData.cols[key] && !isValidCardLastFour(clientSideData.cols[key])) {
                 invalidCardLastFour = true;
             }
         });
@@ -313,7 +313,7 @@ editRowServer = (clientSideData, serverSideIdKeys, serverSideColKeys, tableName)
                 }
             }
             for (let i = 0; i < serverSideIdKeys.length; i++) {
-                if (clientSideData.ids[serverSideIdKeys[i]] != undefined) {
+                if (clientSideData.ids[serverSideIdKeys[i]] !== undefined) {
                     // update query
                     if (i == serverSideIdKeys.length - 1) {
                         query += "??=?;";
@@ -378,23 +378,23 @@ addRowServer = (clientSideData, serverSideColKeys, tableName) => {
         let invalidCardLastFour = false;
 
         Array.prototype.forEach.call(serverSideColKeys, key => {
-            if ((key == "customer_phone_primary" && !isValidPhoneNumber(clientSideData.cols[key])) || 
-                (key == "customer_phone_secondary" && !isValidPhoneNumber(clientSideData.cols[key]) && clientSideData.cols[key] != "")) {
+            if (clientSideData.cols[key] && ((key == "customer_phone_primary" && !isValidPhoneNumber(clientSideData.cols[key]) || 
+                (key == "customer_phone_secondary" && !isValidPhoneNumber(clientSideData.cols[key]))))) {
                 invalidPhone = true;
             }
-            else if (key == "zip_code" && clientSideData.cols[key] != "" && !isValidZipCode(clientSideData.cols[key])) {
+            else if (key == "zip_code" && clientSideData.cols[key] && !isValidZipCode(clientSideData.cols[key])) {
                 invalidZipCode = true;
             }
-            else if (key == "state" && clientSideData.cols[key] != "" && !isValidState(clientSideData.cols[key])) {
+            else if (key == "state" && clientSideData.cols[key] && !isValidState(clientSideData.cols[key])) {
                 invalidState = true;
             }
-            else if (key == "product_unit_price" && clientSideData.cols[key] != "" && !isValidPrice(clientSideData.cols[key])) {
+            else if (key == "product_unit_price" && clientSideData.cols[key] && !isValidPrice(clientSideData.cols[key])) {
                 invalidPrice = true;
             }
-            else if (key == "quantity" && clientSideData.cols[key] != "" && !isValidQuantity(clientSideData.cols[key])) {
+            else if (key == "quantity" && clientSideData.cols[key] && !isValidQuantity(clientSideData.cols[key])) {
                 invalidQuantity = true;
             }
-            else if (key == "card_last_four" && clientSideData.cols[key] != "" && !isValidCardLastFour(clientSideData.cols[key])) {
+            else if (key == "card_last_four" && clientSideData.cols[key] && !isValidCardLastFour(clientSideData.cols[key])) {
                 invalidCardLastFour = true;
             }
         });
@@ -433,7 +433,7 @@ addRowServer = (clientSideData, serverSideColKeys, tableName) => {
             }
             // continue query and push each value to queryVals
             for (let i = 0; i < serverSideColKeys.length; i++) {
-                if (clientSideData.cols[serverSideColKeys[i]] != undefined) {
+                if (clientSideData.cols[serverSideColKeys[i]] !== undefined) {
                     // update query
                     if (i == serverSideColKeys.length - 1) {
                         query += "?);";

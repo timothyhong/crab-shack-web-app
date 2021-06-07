@@ -205,13 +205,14 @@ function addEditRowAJAX(button) {
     const requiredFields = form.querySelectorAll("[required]");
     let requiredFieldsMissing = false;
     Array.prototype.forEach.call(requiredFields, element => {
-        if (!element.value || element.value == "") {
+        if (!element.value) {
             requiredFieldsMissing = true;
             return;
         }
     });
     if (requiredFieldsMissing) {
-      return;
+        alert("Fill in all required fields.");
+        return;
     }
     const userInput = form.getElementsByClassName("user-input");
     let data = {};
